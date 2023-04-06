@@ -6,8 +6,7 @@
 #include "glimac/cone_vertices.hpp"
 #include "glimac/default_shader.hpp"
 #include "glimac/sphere_vertices.hpp"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/matrix_transform.hpp"
+#include "glm/ext.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
@@ -50,8 +49,9 @@ int main()
     /*Camera*/
     // glimac::TrackballCamera camera;
     glimac::FreeflyCamera camera;
-    float                 movementStrength = 5.f;
-    float                 rotationStrength = 900.f;
+
+    float movementStrength = 5.f;
+    float rotationStrength = 900.f;
 
     mouseHandler(ctx, camera, rotationStrength);
 
@@ -89,7 +89,7 @@ int main()
     glBindVertexArray(0);
 
     /*Loading Shader*/
-    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
+    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/directionalLight.fs.glsl");
 
     /*Location uniform variables*/
     GLint uMVPMatrix = glGetUniformLocation(shader.id(), "uMVPMatrix");
@@ -97,6 +97,24 @@ int main()
     GLint uMVMatrix = glGetUniformLocation(shader.id(), "uMVMatrix");
 
     GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
+
+    GLint uKd             = glGetUniformLocation(shader.id(), "uKd");
+    GLint uKs             = glGetUniformLocation(shader.id(), "uKs");
+    GLint uShininess      = glGetUniformLocation(shader.id(), "uShininess");
+    GLint uLightPos_vs    = glGetUniformLocation(shader.id(), "uLightPos_vs");
+    GLint uLightIntensity = glGetUniformLocation(shader.id(), "uLightIntensity");
+
+    std::vector<glm::vec3> _uKd;
+    std::vector<glm::vec3> _uKs;
+    std::vector<float>     _uShininess;
+    std::vector<glm::vec3> _uLightIntensity;
+
+    _uKd.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+    _uKs.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+    _uLightIntensity.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+    _uShininess.push_back(glm::linearRand(0.f, 1.0f));
+
+    glm::vec3 light = glm::vec3(0.f, 0.f, 0.f);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -113,6 +131,14 @@ int main()
 
         glimac::bind_default_shader();
         shader.use();
+
+        glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(light, 1));
+
+        glUniform3fv(uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
+        glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(5.f, 5.f, 5.f)));
+        glUniform3fv(uKd, 1, glm::value_ptr(_uKd[0]));
+        glUniform3fv(uKs, 1, glm::value_ptr(_uKs[0]));
+        glUniform1f(uShininess, _uShininess[0]);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
