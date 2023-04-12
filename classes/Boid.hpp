@@ -18,15 +18,20 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     GLuint                           m_vbo;
     GLuint                           m_vao;
+    glm::vec3                        m_position;
+    glm::vec3                        m_speed;
 
-    int index;
+    float maxSpeed;
+    float protectedRadius;
+    // int index;
 
 public:
     Boid();
-    Boid(std::vector<glimac::ShapeVertex> vertices, const GLuint& vbo, const GLuint& vao)
-        : m_vertices(std::move(vertices)), m_vbo(vbo), m_vao(vao){};
-    // ~Boid();
-
+    Boid(std::vector<glimac::ShapeVertex> vertices, const GLuint& vbo, const GLuint& vao, const glm::vec3& pos, const glm::vec3& vel)
+        : m_vertices(std::move(vertices)), m_vbo(vbo), m_vao(vao), m_position(pos), m_speed(vel)
+    {
+        initializeBoid();
+    };
     void initializeBoid()
     {
         /*VBO*/
@@ -63,11 +68,11 @@ public:
         glBindVertexArray(0);
     }
 
-    void drawBoid(const p6::Shader& shader, glimac::FreeflyCamera& camera, p6::Context& ctx, GLuint uMVPMatrix, GLuint uMVMatrix, GLuint uNormalMatrix)
+    void drawBoid(const p6::Shader& shader, glm::mat4 viewMatrix, p6::Context& ctx, GLuint uMVPMatrix, GLuint uMVMatrix, GLuint uNormalMatrix)
     {
-        glm::mat4 viewMatrix   = camera.getViewMatrix();
+        // glm::mat4 viewMatrix   = camera.getViewMatrix();
         glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
+        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
         glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         glimac::bind_default_shader();
@@ -87,5 +92,44 @@ public:
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
         glBindVertexArray(0);
+    };
+
+    glm::vec3 getPosition() const
+    {
+        return m_position;
+    }
+    glm::vec3 getSpeed() const
+    {
+        return m_speed;
+    }
+
+    float getProtectedRadius() const
+    {
+        return protectedRadius;
+    }
+
+    float getMaxSpeed() const
+    {
+        return maxSpeed;
+    }
+
+    void addSpeedX(const float speed)
+    {
+        m_speed.x += speed;
+    }
+
+    void addSpeedY(const float speed)
+    {
+        m_speed.y += speed;
+    }
+
+    void setProtectedRadius(const float protRad)
+    {
+        protectedRadius = protRad;
+    }
+
+    void updatePosition(p6::Context& ctx)
+    {
+        m_position += ctx.delta_time() * m_speed;
     }
 };

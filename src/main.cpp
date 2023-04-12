@@ -58,8 +58,9 @@ int main()
 
     // /*VBO*/
     GLuint vbo;
-    // glGenBuffers(1, &vbo);
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // std::vector<GLuint> VBOs;
+    //  glGenBuffers(1, &vbo);
+    //  glBindBuffer(GL_ARRAY_BUFFER, vbo);
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
 
     // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glimac::ShapeVertex), vertices.data(), GL_STATIC_DRAW);
@@ -67,8 +68,9 @@ int main()
 
     // /*VAO*/
     GLuint vao;
-    // glGenVertexArrays(1, &vao);
-    // glBindVertexArray(vao);
+    // std::vector<GLuint> VAOs;
+    //  glGenVertexArrays(1, &vao);
+    //  glBindVertexArray(vao);
 
     // static constexpr GLuint VERTEX_ATTR_POSITION  = 0;
     // static constexpr GLuint VERTEX_ATTR_NORMAL    = 1;
@@ -99,8 +101,10 @@ int main()
 
     GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
 
-    Boid cone(vertices, vbo, vao);
-    cone.initializeBoid();
+    glm::vec3 pos   = {p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1)};
+    glm::vec3 speed = pos + (p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1));
+    Boid      cone(vertices, vbo, vao, pos, speed);
+    // cone.initializeBoid();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -110,30 +114,8 @@ int main()
         /*Events*/
         keyboardHandler(ctx, camera, movementStrength);
 
-        cone.drawBoid(shader, camera, ctx, uMVPMatrix, uMVMatrix, uNormalMatrix);
-
-        // glm::mat4 viewMatrix   = camera.getViewMatrix();
-        // glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        // glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
-        // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-
-        // glimac::bind_default_shader();
-        // shader.use();
-
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // glm::mat4 MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
-        // glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-
-        // glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-        // glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        // glBindVertexArray(vao);
-
-        // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-        // glBindVertexArray(0);
+        cone.drawBoid(shader, camera.getViewMatrix(), ctx, uMVPMatrix, uMVMatrix, uNormalMatrix);
+        cone.updatePosition(ctx);
     };
 
     // Should be done last. It starts the infinite loop.
