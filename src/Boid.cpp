@@ -2,15 +2,17 @@
 
 void Boid::draw(p6::Context& ctx, glm::mat4& viewMatrix)
 {
-    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
-    BoidRenderer                     boid(vertices);
-    // std::cout << m_position.x << " " << m_position.y << " " << m_position.z << std::endl;
-    boid.drawBoid(m_position, viewMatrix, ctx);
+    // std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    // BoidRenderer                     boidRenderer(vertices);
+    // boidRenderer.renderBoid(m_position, viewMatrix, ctx);
 }
 
 void Boid::updatePosition(p6::Context& ctx)
 {
     m_position += ctx.delta_time() * m_speed;
+
+    // std::cout << m_speed.x << " " << m_speed.y << " " << m_speed.z << std::endl;
+    //   std::cout << m_position.x << " " << m_position.y << " " << m_position.z << std::endl;
 }
 
 void Boid::setMaxSpeed(const float& speed)

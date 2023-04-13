@@ -54,7 +54,7 @@ int main()
     // glimac::TrackballCamera camera;
     glimac::FreeflyCamera camera;
 
-    float movementStrength = 5.f;
+    float movementStrength = 10.f;
     float rotationStrength = 900.f;
 
     mouseHandler(ctx, camera, rotationStrength);
@@ -107,8 +107,8 @@ int main()
         // game.setCohesionStrength(cohesionStrength);
         // game.setSeparationStrength(separationStrength);
         // game.setBoidsMaxSpeed(maxSpeed);
-        // game.updateBoids(ctx, viewMatrix);
         game.drawBoids(ctx, viewMatrix);
+        game.updateBoids(ctx, viewMatrix);
     };
 
     // Should be done last. It starts the infinite loop.

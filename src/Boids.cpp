@@ -4,16 +4,18 @@
 
 void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix)
 {
-    m_boids[0].draw(ctx, viewMatrix);
+    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    BoidRenderer                     boidRenderer(vertices);
+    boidRenderer.renderBoids(m_boids, viewMatrix, ctx);
 }
 
 void Boids::fillBoids(p6::Context& ctx)
 {
     for (int i = 0; i < m_numBoids; i++)
     {
-        glm::vec3 pos(p6::random::point(ctx), -5.f);
-        glm::vec3 speed = pos + (p6::random::point(ctx), -5.f);
-        // std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
+        glm::vec3 pos(p6::random::point(ctx), p6::random::number());
+        glm::vec3 speed = pos + (p6::random::point(ctx), p6::random::number());
+        // std::cout << speed.x << " " << speed.y << " " << speed.z << std::endl;
         Boid boid(pos, speed);
 
         m_boids.push_back(boid);
@@ -36,6 +38,15 @@ void Boids::avoidEdges(Boid& boid, const p6::Context& ctx, const float& turnfact
         boid.addSpeedY(-turnfactor);
     }
     if (boid.getPosition().y - boid.getProtectedRadius() < -1)
+    {
+        boid.addSpeedY(turnfactor);
+    }
+
+    if (boid.getPosition().z + boid.getProtectedRadius() > 1)
+    {
+        boid.addSpeedY(-turnfactor);
+    }
+    if (boid.getPosition().z - boid.getProtectedRadius() < -1)
     {
         boid.addSpeedY(turnfactor);
     }

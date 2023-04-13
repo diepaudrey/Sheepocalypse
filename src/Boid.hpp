@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <vector>
 // #include "doctest/doctest.h"
-#include "BoidRenderer.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 

@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <vector>
 #include "Boid.hpp"
+#include "BoidRenderer.hpp"
 #include "p6/p6.h"
 
 class Boids {
@@ -84,9 +85,9 @@ public:
         {
             std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
             boid.updatePosition(ctx);
-            applySteeringForces(boid);
+            // applySteeringForces(boid);
             avoidEdges(boid, ctx, turnfactor);
-            boid.draw(ctx, viewMatrix);
+            // boid.draw(ctx, viewMatrix);
             neighbors.clear();
         }
     };

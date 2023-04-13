@@ -1,6 +1,9 @@
 #pragma once
 
+#include <glm/gtx/vector_angle.hpp>
 #include <utility>
+#include <vector>
+#include "Boid.hpp"
 #include "cstddef"
 #include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"
@@ -73,11 +76,12 @@ public:
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
     }
 
-    void drawBoid(glm::vec3 pos, glm::mat4 viewMatrix, p6::Context& ctx)
+    void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
     {
         // glm::mat4 viewMatrix   = camera.getViewMatrix();
-        glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), pos);
+        glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
+        glm::mat4 MVMatrix   = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
+
         glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         glimac::bind_default_shader();
@@ -86,29 +90,19 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
-        glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-
-        glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-        glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
         glBindVertexArray(m_vao);
 
-        glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-
-        renderBoids(viewMatrix, MVMatrix, ProjMatrix, NormalMatrix, pos);
-
-        glBindVertexArray(0);
-    };
-
-    void renderBoids(glm::mat4& viewMatrix, glm::mat4& MVMatrix, glm::mat4& ProjMatrix, glm::mat4& NormalMatrix, glm::vec3 pos)
-    {
-        for (int i = 0; i < 20; i++)
+        for (auto& boid : m_boids)
         {
-            MVMatrix = glm::translate(MVMatrix, pos);
-            // MVMatrix = glm::scale(MVMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
+            float angle = glm::orientedAngle(glm::vec3(0.f, 1.f, 0.f), normalize(boid.getSpeed()), glm::vec3(0.f, 1.f, 0.f));
+            // std::cout << angle << std::endl;
+            //  std::cout << boid.getPosition().x << " " << boid.getPosition().y << " " << boid.getPosition().z << std::endl;
+            MVMatrix  = glm::rotate(MVMatrix, angle, normalize(boid.getSpeed()));
+            MVMatrix  = glm::translate(MVMatrix, boid.getPosition());
+            MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
-            glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * viewMatrix * MVMatrix));
+            glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
             glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
 
@@ -116,7 +110,26 @@ public:
 
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         }
-    }
+
+        glBindVertexArray(0);
+    };
+
+    // void renderBoids(glm::mat4& viewMatrix, glm::mat4& MVMatrix, glm::mat4& ProjMatrix, glm::mat4& NormalMatrix, glm::vec3 pos)
+    // {
+    //     for (int i = 0; i < 20; i++)
+    //     {
+    //         MVMatrix = glm::translate(MVMatrix, pos);
+    //         // MVMatrix = glm::scale(MVMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
+
+    //         glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * viewMatrix * MVMatrix));
+
+    //         glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+
+    //         glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+    //         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    //     }
+    // }
 
     void deleteBuffers()
     {
