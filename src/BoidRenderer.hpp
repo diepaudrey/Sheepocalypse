@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stddef.h>
 #include <utility>
 #include "cstddef"
 #include "glimac/Freefly.hpp"
@@ -13,7 +12,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
-class Boid {
+class BoidRenderer {
 public:
     std::vector<glimac::ShapeVertex> m_vertices;
     GLuint                           m_vbo;
@@ -26,8 +25,8 @@ public:
     // int index;
 
 public:
-    Boid();
-    Boid(std::vector<glimac::ShapeVertex> vertices, const GLuint& vbo, const GLuint& vao, const glm::vec3& pos, const glm::vec3& vel)
+    BoidRenderer();
+    BoidRenderer(std::vector<glimac::ShapeVertex> vertices, const GLuint& vbo, const GLuint& vao, const glm::vec3& pos, const glm::vec3& vel)
         : m_vertices(std::move(vertices)), m_vbo(vbo), m_vao(vao), m_position(pos), m_speed(vel)
     {
         initializeBoid();
@@ -93,6 +92,12 @@ public:
 
         glBindVertexArray(0);
     };
+
+    void deleteBuffers()
+    {
+        glDeleteBuffers(0, &m_vbo);
+        glDeleteVertexArrays(0, &m_vao);
+    }
 
     glm::vec3 getPosition() const
     {

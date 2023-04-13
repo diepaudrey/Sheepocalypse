@@ -1,6 +1,8 @@
 
 
-#include "../classes/Boid.hpp"
+#include "Boid.hpp"
+#include "BoidRenderer.hpp"
+#include "Boids.hpp"
 #include "cstddef"
 #include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"
@@ -55,41 +57,16 @@ int main()
     float                 rotationStrength = 900.f;
 
     mouseHandler(ctx, camera, rotationStrength);
+    std::vector<Boid> boids;
+    int               nb_boids = 25;
 
-    // /*VBO*/
-    GLuint vbo;
-    // std::vector<GLuint> VBOs;
-    //  glGenBuffers(1, &vbo);
-    //  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
-
-    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glimac::ShapeVertex), vertices.data(), GL_STATIC_DRAW);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // /*VAO*/
-    GLuint vao;
-    // std::vector<GLuint> VAOs;
-    //  glGenVertexArrays(1, &vao);
-    //  glBindVertexArray(vao);
-
-    // static constexpr GLuint VERTEX_ATTR_POSITION  = 0;
-    // static constexpr GLuint VERTEX_ATTR_NORMAL    = 1;
-    // static constexpr GLuint VERTEX_ATTR_TEXCOORDS = 2;
-    // glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    // glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
-    // glEnableVertexAttribArray(VERTEX_ATTR_TEXCOORDS);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    // glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)nullptr);
-
-    // glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, normal)));
-
-    // glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, texCoords)));
-
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // glBindVertexArray(0);
+    Boids game(boids, nb_boids);
+    game.fillBoids(ctx);
+    float protectedRadius    = 0.1f;
+    float separationStrength = 0.1f;
+    float alignmentStrength  = 0.1f;
+    float cohesionStrength   = 0.1f;
+    float maxSpeed           = 1.2f;
 
     /*Loading Shader*/
     const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
@@ -101,26 +78,31 @@ int main()
 
     GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
 
-    glm::vec3 pos   = {p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1)};
-    glm::vec3 speed = pos + (p6::random::number(0, 1), p6::random::number(0, 1), p6::random::number(0, 1));
-    Boid      cone(vertices, vbo, vao, pos, speed);
-    // cone.initializeBoid();
-
     glEnable(GL_DEPTH_TEST);
 
     mouseHandler(ctx, camera, rotationStrength);
     // Declare your infinite update loop.
     ctx.update = [&]() {
+        /*Dear ImGui*/
+        ImGui::Begin("Settings");
+        ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
+        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 1.f);
+        ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 1.f);
+        ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 1.f);
+        ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
+        ImGui::End();
+
         /*Events*/
         keyboardHandler(ctx, camera, movementStrength);
 
-        cone.drawBoid(shader, camera.getViewMatrix(), ctx, uMVPMatrix, uMVMatrix, uNormalMatrix);
-        cone.updatePosition(ctx);
+        game.setProtectedRadius(protectedRadius);
+        game.setAlignmentStrength(alignmentStrength);
+        game.setCohesionStrength(cohesionStrength);
+        game.setSeparationStrength(separationStrength);
+        game.setBoidsMaxSpeed(maxSpeed);
+        game.updateBoids(ctx);
     };
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
-
-    glDeleteBuffers(0, &vbo);
-    glDeleteVertexArrays(0, &vao);
 }
