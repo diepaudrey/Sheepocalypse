@@ -1,5 +1,5 @@
 
-
+#include "Light.hpp"
 #include "cstddef"
 #include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"
@@ -89,20 +89,14 @@ int main()
     glBindVertexArray(0);
 
     /*Loading Shader*/
+
     const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/directionalLight.fs.glsl");
+    Light            light_scene(shader);
 
     /*Location uniform variables*/
-    GLint uMVPMatrix = glGetUniformLocation(shader.id(), "uMVPMatrix");
-
-    GLint uMVMatrix = glGetUniformLocation(shader.id(), "uMVMatrix");
-
+    GLint uMVPMatrix    = glGetUniformLocation(shader.id(), "uMVPMatrix");
+    GLint uMVMatrix     = glGetUniformLocation(shader.id(), "uMVMatrix");
     GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
-
-    GLint uKd             = glGetUniformLocation(shader.id(), "uKd");
-    GLint uKs             = glGetUniformLocation(shader.id(), "uKs");
-    GLint uShininess      = glGetUniformLocation(shader.id(), "uShininess");
-    GLint uLightPos_vs    = glGetUniformLocation(shader.id(), "uLightPos_vs");
-    GLint uLightIntensity = glGetUniformLocation(shader.id(), "uLightIntensity");
 
     std::vector<glm::vec3> _uKd;
     std::vector<glm::vec3> _uKs;
@@ -134,11 +128,11 @@ int main()
 
         glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(light, 1));
 
-        glUniform3fv(uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
-        glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(5.f, 5.f, 5.f)));
-        glUniform3fv(uKd, 1, glm::value_ptr(_uKd[0]));
-        glUniform3fv(uKs, 1, glm::value_ptr(_uKs[0]));
-        glUniform1f(uShininess, _uShininess[0]);
+        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
+        glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(0.3f, 0.7f, 0.5f)));
+        glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(_uKd[0]));
+        glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(_uKs[0]));
+        glUniform1f(light_scene.m_uShininess, _uShininess[0]);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
