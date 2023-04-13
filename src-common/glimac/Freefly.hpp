@@ -75,7 +75,7 @@ public:
         computeDirectionVectors();
     }
 
-    glm::mat4 getViewMatrix() const
+    glm::mat4 getViewMatrix()
     {
         return glm::lookAt(m_position, m_position + m_frontVector, m_upVector);
     }

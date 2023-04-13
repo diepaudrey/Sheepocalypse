@@ -1,18 +1,12 @@
 #include "Boid.hpp"
 
-// void Boid::draw(p6::Context& ctx)
-// {
-//     ctx.circle(m_position, protectedRadius);
-//     ctx.fill = {1.f, 1.f, 1.f, 0.5f};
-
-//     ctx.equilateral_triangle(
-//         p6::Center{m_position},
-//         p6::Radius{0.05f},
-//         p6::Rotation{m_speed}
-//     );
-
-//     ctx.use_stroke = false;
-// }
+void Boid::draw(p6::Context& ctx, glm::mat4& viewMatrix)
+{
+    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    BoidRenderer                     boid(vertices);
+    // std::cout << m_position.x << " " << m_position.y << " " << m_position.z << std::endl;
+    boid.drawBoid(m_position, viewMatrix, ctx);
+}
 
 void Boid::updatePosition(p6::Context& ctx)
 {

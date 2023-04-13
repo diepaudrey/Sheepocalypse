@@ -17,33 +17,29 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     GLuint                           m_vbo;
     GLuint                           m_vao;
-    glm::vec3                        m_position;
-    glm::vec3                        m_speed;
 
-    float maxSpeed;
-    float protectedRadius;
-    // int index;
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl"); // à changer faire une classe shader
+    GLuint     m_uMVPMatrix;
+    GLuint     m_uMVMatrix;
+    GLuint     m_uNormalMatrix;
 
 public:
     BoidRenderer();
-    BoidRenderer(std::vector<glimac::ShapeVertex> vertices, const GLuint& vbo, const GLuint& vao, const glm::vec3& pos, const glm::vec3& vel)
-        : m_vertices(std::move(vertices)), m_vbo(vbo), m_vao(vao), m_position(pos), m_speed(vel)
+    BoidRenderer(std::vector<glimac::ShapeVertex>& vertices)
+        : m_vertices(std::move(vertices))
     {
         initializeBoid();
     };
     void initializeBoid()
     {
         /*VBO*/
-        // GLuint vbo;
         glGenBuffers(1, &m_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        // vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
 
         glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(glimac::ShapeVertex), m_vertices.data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         /*VAO*/
-        // GLuint vao;
         glGenVertexArrays(1, &m_vao);
         glBindVertexArray(m_vao);
 
@@ -65,76 +61,66 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
+
+        /*Loading Shader*/
+        // m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
+
+        /*Location uniform variables*/
+        m_uMVPMatrix = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
+
+        m_uMVMatrix = glGetUniformLocation(m_shader.id(), "uMVMatrix");
+
+        m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
     }
 
-    void drawBoid(const p6::Shader& shader, glm::mat4 viewMatrix, p6::Context& ctx, GLuint uMVPMatrix, GLuint uMVMatrix, GLuint uNormalMatrix)
+    void drawBoid(glm::vec3 pos, glm::mat4 viewMatrix, p6::Context& ctx)
     {
         // glm::mat4 viewMatrix   = camera.getViewMatrix();
         glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
+        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), pos);
         glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         glimac::bind_default_shader();
-        shader.use();
+        m_shader.use();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+        glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
 
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
 
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
         glBindVertexArray(m_vao);
 
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
+        renderBoids(viewMatrix, MVMatrix, ProjMatrix, NormalMatrix, pos);
+
         glBindVertexArray(0);
     };
+
+    void renderBoids(glm::mat4& viewMatrix, glm::mat4& MVMatrix, glm::mat4& ProjMatrix, glm::mat4& NormalMatrix, glm::vec3 pos)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            MVMatrix = glm::translate(MVMatrix, pos);
+            // MVMatrix = glm::scale(MVMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
+
+            glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * viewMatrix * MVMatrix));
+
+            glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+
+            glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+            glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+        }
+    }
 
     void deleteBuffers()
     {
         glDeleteBuffers(0, &m_vbo);
         glDeleteVertexArrays(0, &m_vao);
-    }
-
-    glm::vec3 getPosition() const
-    {
-        return m_position;
-    }
-    glm::vec3 getSpeed() const
-    {
-        return m_speed;
-    }
-
-    float getProtectedRadius() const
-    {
-        return protectedRadius;
-    }
-
-    float getMaxSpeed() const
-    {
-        return maxSpeed;
-    }
-
-    void addSpeedX(const float speed)
-    {
-        m_speed.x += speed;
-    }
-
-    void addSpeedY(const float speed)
-    {
-        m_speed.y += speed;
-    }
-
-    void setProtectedRadius(const float protRad)
-    {
-        protectedRadius = protRad;
-    }
-
-    void updatePosition(p6::Context& ctx)
-    {
-        m_position += ctx.delta_time() * m_speed;
     }
 };

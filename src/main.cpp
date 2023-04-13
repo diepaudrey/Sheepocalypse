@@ -53,8 +53,9 @@ int main()
     /*Camera*/
     // glimac::TrackballCamera camera;
     glimac::FreeflyCamera camera;
-    float                 movementStrength = 5.f;
-    float                 rotationStrength = 900.f;
+
+    float movementStrength = 5.f;
+    float rotationStrength = 900.f;
 
     mouseHandler(ctx, camera, rotationStrength);
     std::vector<Boid> boids;
@@ -68,39 +69,46 @@ int main()
     float cohesionStrength   = 0.1f;
     float maxSpeed           = 1.2f;
 
-    /*Loading Shader*/
-    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
+    // GLuint                           vbo;
+    // GLuint                           vao;
+    // std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    // BoidRenderer                     boid(vertices, vbo, vao);
 
-    /*Location uniform variables*/
-    GLint uMVPMatrix = glGetUniformLocation(shader.id(), "uMVPMatrix");
+    // /*Loading Shader*/
+    // const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
 
-    GLint uMVMatrix = glGetUniformLocation(shader.id(), "uMVMatrix");
+    // /*Location uniform variables*/
+    // GLint uMVPMatrix = glGetUniformLocation(shader.id(), "uMVPMatrix");
 
-    GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
+    // GLint uMVMatrix = glGetUniformLocation(shader.id(), "uMVMatrix");
+
+    // GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
 
     glEnable(GL_DEPTH_TEST);
 
     mouseHandler(ctx, camera, rotationStrength);
     // Declare your infinite update loop.
     ctx.update = [&]() {
+        glm::mat4 viewMatrix = camera.getViewMatrix();
         /*Dear ImGui*/
-        ImGui::Begin("Settings");
-        ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
-        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 1.f);
-        ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 1.f);
-        ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 1.f);
-        ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
-        ImGui::End();
+        // ImGui::Begin("Settings");
+        // ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
+        // ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 1.f);
+        // ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 1.f);
+        // ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 1.f);
+        // ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
+        // ImGui::End();
 
         /*Events*/
         keyboardHandler(ctx, camera, movementStrength);
 
-        game.setProtectedRadius(protectedRadius);
-        game.setAlignmentStrength(alignmentStrength);
-        game.setCohesionStrength(cohesionStrength);
-        game.setSeparationStrength(separationStrength);
-        game.setBoidsMaxSpeed(maxSpeed);
-        game.updateBoids(ctx);
+        // game.setProtectedRadius(protectedRadius);
+        // game.setAlignmentStrength(alignmentStrength);
+        // game.setCohesionStrength(cohesionStrength);
+        // game.setSeparationStrength(separationStrength);
+        // game.setBoidsMaxSpeed(maxSpeed);
+        // game.updateBoids(ctx, viewMatrix);
+        game.drawBoids(ctx, viewMatrix);
     };
 
     // Should be done last. It starts the infinite loop.

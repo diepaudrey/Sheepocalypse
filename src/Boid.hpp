@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <vector>
 // #include "doctest/doctest.h"
+#include "BoidRenderer.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
@@ -54,7 +55,7 @@ public:
         protectedRadius = protRad;
     }
 
-    // void draw(p6::Context& ctx);
+    void draw(p6::Context& ctx, glm::mat4& viewMatrix);
     void updatePosition(p6::Context& ctx);
     void setMaxSpeed(const float& speed);
     void applyForce(const glm::vec3 force);

@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <vector>
 #include "Boid.hpp"
-// #include "doctest/doctest.h"
 #include "p6/p6.h"
 
 class Boids {
@@ -56,7 +55,7 @@ public:
     }
 
     // draw the boid
-    void drawBoids(/*p6::Context& ctx*/);
+    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges
     void avoidEdges(Boid& boid, const p6::Context& ctx, const float& turnfactor);
@@ -78,7 +77,7 @@ public:
     void applySteeringForces(Boid& boid);
     // void updatePosition(p6::Context& ctx);
 
-    void updateBoids(p6::Context& ctx)
+    void updateBoids(p6::Context& ctx, glm::mat4& viewMatrix)
     {
         float turnfactor = 0.3f;
         for (auto& boid : m_boids)
@@ -87,7 +86,7 @@ public:
             boid.updatePosition(ctx);
             applySteeringForces(boid);
             avoidEdges(boid, ctx, turnfactor);
-            // boid.draw(ctx);
+            boid.draw(ctx, viewMatrix);
             neighbors.clear();
         }
     };

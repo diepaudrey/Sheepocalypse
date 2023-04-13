@@ -2,23 +2,19 @@
 #include <vcruntime.h>
 #include <iterator>
 
-void Boids::drawBoids(/*p6::Context& ctx*/)
+void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix)
 {
-    for (auto& boid : m_boids)
-    {
-        // boid.draw(ctx);
-        // ctx.circle(boid.getPosition(), boid.getProtectedRadius());
-        // ctx.fill = {1.f, 1.f, 1.f, 0.5f};
-    }
+    m_boids[0].draw(ctx, viewMatrix);
 }
 
 void Boids::fillBoids(p6::Context& ctx)
 {
     for (int i = 0; i < m_numBoids; i++)
     {
-        glm::vec3 pos(p6::random::point(ctx), p6::random::number(0.f, 5.f));
-        glm::vec3 speed = pos + (p6::random::point(ctx), p6::random::number(0.f, 5.f));
-        Boid      boid(pos, speed);
+        glm::vec3 pos(p6::random::point(ctx), -5.f);
+        glm::vec3 speed = pos + (p6::random::point(ctx), -5.f);
+        // std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
+        Boid boid(pos, speed);
 
         m_boids.push_back(boid);
     }
@@ -147,3 +143,11 @@ void Boids::applySteeringForces(Boid& boid)
     boid.applyForce(separation(boid));
     boid.limitSpeed();
 }
+
+// void Boids::deleteAllBuffers()
+// {
+//     for (const auto& boid : m_boids)
+//     {
+//         boid.delete()
+//     }
+// }
