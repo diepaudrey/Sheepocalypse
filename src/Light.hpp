@@ -1,3 +1,4 @@
+#pragma once
 #include "cstddef"
 #include "glimac/common.hpp"
 #include "glimac/cone_vertices.hpp"

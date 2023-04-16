@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Light.hpp"
+#include "VertexBuffer.hpp"
 #include "glimac/Freefly.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/ext/scalar_constants.hpp"
@@ -48,13 +49,9 @@ int main()
     Light            light_scene(shader);
 
     /*VBO*/
-    GLuint vbo = 0;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     // cone
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
-
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glimac::ShapeVertex), vertices.data(), GL_STATIC_DRAW);
+    VertexBuffer                     vbo(vertices.data(), vertices.size());
     glEnable(GL_DEPTH_TEST);
 
     /*VAO*/
@@ -113,7 +110,7 @@ int main()
         glClearColor(0.2f, 0.2f, 0.2f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         keyboardHandler(ctx, camera, movementStrength);
-
+        vbo.Bind();
         glBindVertexArray(vao);
         shader.use();
 
@@ -167,8 +164,7 @@ int main()
     ctx.start();
 
     // Clear vbo & vao & texture
-    glDeleteBuffers(0, &vbo);
-    glDeleteVertexArrays(0, &vao);
+    glDeleteVertexArrays(1, &vao);
 
     return 0;
 }
