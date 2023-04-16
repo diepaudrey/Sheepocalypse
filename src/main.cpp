@@ -1,14 +1,12 @@
-
+#include <iostream>
+#include <vector>
 #include "Light.hpp"
-#include "cstddef"
 #include "glimac/Freefly.hpp"
-#include "glimac/common.hpp"
-#include "glimac/cone_vertices.hpp"
-#include "glimac/default_shader.hpp"
 #include "glimac/sphere_vertices.hpp"
-#include "glm/ext.hpp"
-#include "glm/glm.hpp"
+#include "glm/ext/scalar_constants.hpp"
+#include "glm/gtc/random.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "img/src/Image.h"
 #include "p6/p6.h"
 
 void mouseHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const float& rotationStrength)
@@ -43,29 +41,24 @@ void keyboardHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const floa
 
 int main()
 {
-    auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
+    auto ctx = p6::Context{{1280, 720, "Light"}};
     ctx.maximize_window();
 
-    /*Camera*/
-    // glimac::TrackballCamera camera;
-    glimac::FreeflyCamera camera;
-
-    float movementStrength = 5.f;
-    float rotationStrength = 900.f;
-
-    mouseHandler(ctx, camera, rotationStrength);
+    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
+    Light            light_scene(shader);
 
     /*VBO*/
-    GLuint vbo;
+    GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // cone
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glimac::ShapeVertex), vertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnable(GL_DEPTH_TEST);
 
     /*VAO*/
-    GLuint vao;
+    GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
@@ -76,76 +69,96 @@ int main()
     glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
     glEnableVertexAttribArray(VERTEX_ATTR_TEXCOORDS);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
     glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)nullptr);
-
     glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, normal)));
-
     glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, texCoords)));
 
+    // debind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     glBindVertexArray(0);
 
-    /*Loading Shader*/
+    // MVP
 
-    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/directionalLight.fs.glsl");
-    Light            light_scene(shader);
+    glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
+    float                 movementStrength = 5.f;
+    float                 rotationStrength = 900.f;
+    mouseHandler(ctx, camera, rotationStrength);
 
-    /*Location uniform variables*/
-    GLint uMVPMatrix    = glGetUniformLocation(shader.id(), "uMVPMatrix");
-    GLint uMVMatrix     = glGetUniformLocation(shader.id(), "uMVMatrix");
-    GLint uNormalMatrix = glGetUniformLocation(shader.id(), "uNormalMatrix");
+    glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
+    glm::mat4 MVMatrix;
+    glm::mat4 NormalMatrix;
+    glm::vec3 light = glm::vec3(1.f, 1.f, 1.f);
 
+    // For the light
+    glm::mat4              MVMatrix_light;
+    glm::mat4              NormalMatrix_light;
+    std::vector<glm::vec3> RotAxes;
+    std::vector<glm::vec3> RotDir;
+    std::vector<glm::vec3> _uKa;
     std::vector<glm::vec3> _uKd;
     std::vector<glm::vec3> _uKs;
     std::vector<float>     _uShininess;
-    std::vector<glm::vec3> _uLightIntensity;
+    for (int i = 0; i < 32; i++)
+    {
+        RotAxes.push_back(glm::ballRand(2.f));
+        RotDir.push_back(glm::vec3(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1)));
+        _uKa.push_back(glm::vec3(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f)));
+        _uKd.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+        _uKs.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+        _uShininess.push_back(glm::linearRand(0.f, 1.0f));
+    }
 
-    _uKd.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
-    _uKs.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
-    _uLightIntensity.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
-    _uShininess.push_back(glm::linearRand(0.f, 1.0f));
-
-    glm::vec3 light = glm::vec3(0.f, 0.f, 0.f);
-
-    glEnable(GL_DEPTH_TEST);
-
-    mouseHandler(ctx, camera, rotationStrength);
-    // Declare your infinite update loop.
+    /* Loop until the user closes the window */
     ctx.update = [&]() {
-        /*Events*/
+        glClearColor(0.2f, 0.2f, 0.2f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         keyboardHandler(ctx, camera, movementStrength);
 
-        glm::mat4 viewMatrix   = camera.getViewMatrix();
-        glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
-        glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-
-        glimac::bind_default_shader();
+        glBindVertexArray(vao);
         shader.use();
 
-        glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(light, 1));
+        glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), ctx.delta_time(), glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
+        glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(uLightPos, 1));
+        MVMatrix              = camera.getViewMatrix();
+        MVMatrix              = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
+        NormalMatrix          = glm::transpose(glm::inverse(MVMatrix));
 
-        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
-        glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(0.3f, 0.7f, 0.5f)));
-        glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(_uKd[0]));
-        glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(_uKs[0]));
-        glUniform1f(light_scene.m_uShininess, _uShininess[0]);
+        glUniformMatrix4fv(light_scene.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+        glUniformMatrix4fv(light_scene.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        glUniformMatrix4fv(light_scene.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUniform3fv(light_scene.m_uKa, 1, glm::value_ptr(glm::vec3(0.0215, 0.1745, 0.0215)));
+        glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(glm::vec3(0.07568, 0.61424, 0.07568)));
+        glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(glm::vec3(0.633, 0.727811, 0.633)));
+        glUniform1f(light_scene.m_uShininess, 0.6);
 
-        glm::mat4 MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
-        glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-
-        glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-        glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        glBindVertexArray(vao);
+        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::rotate(camera.getViewMatrix(), ctx.time(), glm::vec3(0, 1, 0)) * glm::vec4(1, 1, 0, 1))));
+        glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
+        for (int i = 0; i < 32; i++)
+        {
+            MVMatrix_light     = camera.getViewMatrix();
+            MVMatrix_light     = glm::rotate(MVMatrix_light, ctx.time(), glm::vec3(RotDir[i][0], RotDir[i][1], RotDir[i][2]));
+            MVMatrix_light     = glm::translate(MVMatrix_light, RotAxes[i]);
+            MVMatrix_light     = glm::scale(MVMatrix_light, glm::vec3(0.2, 0.2, 0.2));
+            NormalMatrix_light = glm::transpose(glm::inverse(MVMatrix_light));
+
+            glUniformMatrix4fv(light_scene.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix_light));
+            glUniformMatrix4fv(light_scene.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix_light));
+            glUniformMatrix4fv(light_scene.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix_light));
+
+            glUniform3fv(light_scene.m_uKa, 1, glm::value_ptr(_uKa[i]));
+            glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(_uKd[i]));
+            glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(_uKs[i]));
+            glUniform1f(light_scene.m_uShininess, _uShininess[i]);
+
+            glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
+            glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
+
+            glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        }
 
         glBindVertexArray(0);
     };
@@ -153,6 +166,9 @@ int main()
     // Should be done last. It starts the infinite loop.
     ctx.start();
 
+    // Clear vbo & vao & texture
     glDeleteBuffers(0, &vbo);
     glDeleteVertexArrays(0, &vao);
+
+    return 0;
 }
