@@ -1,6 +1,5 @@
 #include "VertexBuffer.hpp"
-#include "Light.hpp"
-#include "glimac/common.hpp"
+#include "Renderer.hpp"
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {

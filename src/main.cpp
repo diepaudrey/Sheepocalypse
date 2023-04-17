@@ -84,7 +84,7 @@ int main()
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
     glm::mat4 MVMatrix;
     glm::mat4 NormalMatrix;
-    glm::vec3 light = glm::vec3(1.f, 1.f, 1.f);
+    glm::vec3 light = glm::vec3(1.f, 0.f, 0.f);
 
     // For the light
     glm::mat4              MVMatrix_light;
@@ -156,7 +156,7 @@ int main()
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
         }
-
+        vbo.UnBind();
         glBindVertexArray(0);
     };
 
