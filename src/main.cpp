@@ -1,8 +1,8 @@
 
 
 #include "Boid.hpp"
-#include "BoidRenderer.hpp"
 #include "Boids.hpp"
+#include "Renderer.hpp"
 #include "cstddef"
 #include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"

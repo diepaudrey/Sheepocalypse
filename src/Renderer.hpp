@@ -15,7 +15,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
-class BoidRenderer {
+class Renderer {
 public:
     std::vector<glimac::ShapeVertex> m_vertices;
     GLuint                           m_vbo;
@@ -27,8 +27,8 @@ public:
     GLuint     m_uNormalMatrix;
 
 public:
-    BoidRenderer();
-    BoidRenderer(std::vector<glimac::ShapeVertex>& vertices)
+    Renderer();
+    Renderer(std::vector<glimac::ShapeVertex>& vertices)
         : m_vertices(std::move(vertices))
     {
         initializeBoid();
@@ -114,26 +114,9 @@ public:
         glBindVertexArray(0);
     };
 
-    // void renderBoids(glm::mat4& viewMatrix, glm::mat4& MVMatrix, glm::mat4& ProjMatrix, glm::mat4& NormalMatrix, glm::vec3 pos)
-    // {
-    //     for (int i = 0; i < 20; i++)
-    //     {
-    //         MVMatrix = glm::translate(MVMatrix, pos);
-    //         // MVMatrix = glm::scale(MVMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
-
-    //         glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * viewMatrix * MVMatrix));
-
-    //         glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-    //         glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-    //         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-    //     }
-    // }
-
     void deleteBuffers()
     {
-        glDeleteBuffers(0, &m_vbo);
-        glDeleteVertexArrays(0, &m_vao);
+        glDeleteBuffers(1, &m_vbo);
+        glDeleteVertexArrays(1, &m_vao);
     }
 };
