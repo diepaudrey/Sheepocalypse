@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
+#include "Boid.hpp"
+#include "Boids.hpp"
 #include "Light.hpp"
+#include "Renderer.hpp"
 #include "VertexBuffer.hpp"
 #include "glimac/Freefly.hpp"
 #include "glimac/sphere_vertices.hpp"
@@ -44,15 +47,30 @@ int main()
 {
     auto ctx = p6::Context{{1280, 720, "Light"}};
     ctx.maximize_window();
-
     const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
     Light            light_scene(shader);
+
+    std::vector<Boid> boids;
+    int               nb_boids = 25;
+
+    Boids game(boids, nb_boids);
+    game.fillBoids(ctx);
+    float protectedRadius    = 0.1f;
+    float separationStrength = 0.1f;
+    float alignmentStrength  = 0.1f;
+    float cohesionStrength   = 0.1f;
+    float maxSpeed           = 1.2f;
 
     /*VBO*/
     // cone
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
     VertexBuffer                     vbo(vertices.data(), vertices.size());
     glEnable(GL_DEPTH_TEST);
+
+    // GLuint                           vbo;
+    // GLuint                           vao;
+    // std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    // BoidRenderer                     boid(vertices, vbo, vao);
 
     /*VAO*/
     GLuint vao = 0;
@@ -83,6 +101,7 @@ int main()
 
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
     glm::mat4 MVMatrix;
+    glm::mat4 MVBMatrix;
     glm::mat4 NormalMatrix;
     glm::vec3 light = glm::vec3(1.f, 0.f, 0.f);
 
@@ -107,8 +126,7 @@ int main()
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
-        glClearColor(0.2f, 0.2f, 0.2f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        /*Events*/
         keyboardHandler(ctx, camera, movementStrength);
         vbo.Bind();
         glBindVertexArray(vao);
@@ -117,6 +135,7 @@ int main()
         glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), ctx.delta_time(), glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
         glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(uLightPos, 1));
         MVMatrix              = camera.getViewMatrix();
+        MVBMatrix             = camera.getViewMatrix();
         MVMatrix              = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
         NormalMatrix          = glm::transpose(glm::inverse(MVMatrix));
 
@@ -156,6 +175,8 @@ int main()
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
         }
+        game.drawBoids(ctx, MVBMatrix);
+        game.updateBoids(ctx, MVBMatrix);
         vbo.UnBind();
         glBindVertexArray(0);
     };
@@ -163,8 +184,5 @@ int main()
     // Should be done last. It starts the infinite loop.
     ctx.start();
 
-    // Clear vbo & vao & texture
-    glDeleteVertexArrays(1, &vao);
-
-    return 0;
+    glDeleteVertexArrays(0, &vao);
 }
