@@ -49,6 +49,11 @@ public:
         m_speed.y += speed;
     }
 
+    void addSpeedZ(const float speed)
+    {
+        m_speed.z += speed;
+    }
+
     void setProtectedRadius(const float protRad)
     {
         protectedRadius = protRad;

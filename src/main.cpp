@@ -128,6 +128,8 @@ int main()
     ctx.update = [&]() {
         /*Events*/
         keyboardHandler(ctx, camera, movementStrength);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         vbo.Bind();
         glBindVertexArray(vao);
         shader.use();

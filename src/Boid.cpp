@@ -12,7 +12,7 @@ void Boid::updatePosition(p6::Context& ctx)
     m_position += ctx.delta_time() * m_speed;
 
     // std::cout << m_speed.x << " " << m_speed.y << " " << m_speed.z << std::endl;
-    //   std::cout << m_position.x << " " << m_position.y << " " << m_position.z << std::endl;
+    //  std::cout << m_position.x << " " << m_position.y << " " << m_position.z << std::endl;
 }
 
 void Boid::setMaxSpeed(const float& speed)

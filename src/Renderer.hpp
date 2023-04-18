@@ -79,27 +79,36 @@ public:
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
     {
         // glm::mat4 viewMatrix   = camera.getViewMatrix();
-        glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix   = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
 
-        glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // glm::mat4 MVMatrix   = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
+        // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         glimac::bind_default_shader();
         m_shader.use();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glm::mat4 MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
+        glm::mat4 MVMatrix;
+        glm::mat4 MVPMatrix;
+        glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
 
         glBindVertexArray(m_vao);
 
         for (auto& boid : m_boids)
         {
-            float angle = glm::orientedAngle(glm::vec3(0.f, 1.f, 0.f), normalize(boid.getSpeed()), glm::vec3(0.f, 1.f, 0.f));
+            // float angle = glm::orientedAngle(glm::vec3(0.f, 1.f, 0.f), normalize(boid.getSpeed()), glm::vec3(0.f, 1.f, 0.f));
+            // glm::mat4 OrientMatrix = glm::lookAt(boid.getPosition(), boid.getPosition() + boid.getSpeed(), glm::vec3(0.f, 1.f, 0.f));
+            // glm::quat orientation  = glm::quat_cast(OrientMatrix);
+            // glm::vec3 euler        = glm::eulerAngles(orientation);
+            // float     angle        = euler.y;
             // std::cout << angle << std::endl;
-            //  std::cout << boid.getPosition().x << " " << boid.getPosition().y << " " << boid.getPosition().z << std::endl;
-            MVMatrix  = glm::rotate(MVMatrix, angle, normalize(boid.getSpeed()));
-            MVMatrix  = glm::translate(MVMatrix, boid.getPosition());
+            // std::cout << boid.getPosition().x << " " << boid.getPosition().y << " " << boid.getPosition().z << std::endl;
+
+            MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
+            // MVMatrix = glm::rotate(MVMatrix, angle, normalize(boid.getSpeed()));
+            //  MVMatrix = glm::translate(MVMatrix, boid.getSpeed());
+
+            glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+
             MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
             glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
