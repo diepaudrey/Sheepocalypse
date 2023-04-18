@@ -127,8 +127,12 @@ int main()
     /* Loop until the user closes the window */
     ctx.update = [&]() {
         /*Events*/
-        keyboardHandler(ctx, camera, movementStrength);
+        glClearColor(0.2f, 0.2f, 0.2f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        keyboardHandler(ctx, camera, movementStrength);
+
+        game.drawBoids(ctx, MVBMatrix);
+        game.updateBoids(ctx, MVBMatrix);
 
         vbo.Bind();
         glBindVertexArray(vao);
@@ -177,8 +181,7 @@ int main()
 
             glDrawArrays(GL_TRIANGLES, 0, vertices.size());
         }
-        game.drawBoids(ctx, MVBMatrix);
-        game.updateBoids(ctx, MVBMatrix);
+
         vbo.UnBind();
         glBindVertexArray(0);
     };
