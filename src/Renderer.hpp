@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 #include "Boid.hpp"
+#include "Light.hpp"
 #include "cstddef"
 #include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"
@@ -67,9 +68,6 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
-
-        /*Loading Shader*/
-        // m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl");
 
         /*Location uniform variables*/
         m_uMVPMatrix = glGetUniformLocation(m_shader.id(), "uMVPMatrix");

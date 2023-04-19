@@ -4,6 +4,7 @@
 #include "Boids.hpp"
 #include "Light.hpp"
 #include "Renderer.hpp"
+#include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "glimac/Freefly.hpp"
 #include "glimac/sphere_vertices.hpp"
@@ -61,39 +62,18 @@ int main()
     float cohesionStrength   = 0.1f;
     float maxSpeed           = 1.2f;
 
-    /*VBO*/
+    /*VBO*/ /*VAO*/
     // cone
-    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
+    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 32, 16);
     VertexBuffer                     vbo(vertices.data(), vertices.size());
     glEnable(GL_DEPTH_TEST);
 
-    // GLuint                           vbo;
-    // GLuint                           vao;
-    // std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 5, 5);
-    // BoidRenderer                     boid(vertices, vbo, vao);
-
-    /*VAO*/
-    GLuint vao = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    static constexpr GLuint VERTEX_ATTR_POSITION  = 0;
-    static constexpr GLuint VERTEX_ATTR_NORMAL    = 1;
-    static constexpr GLuint VERTEX_ATTR_TEXCOORDS = 2;
-    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
-    glEnableVertexAttribArray(VERTEX_ATTR_TEXCOORDS);
-
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)nullptr);
-    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, normal)));
-    glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(glimac::ShapeVertex), (const GLvoid*)(offsetof(glimac::ShapeVertex, texCoords)));
-
-    // debind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    VertexArray vao;
+    vao.AddBuffer(vbo);
+    vbo.Bind();
+    vao.UnBind();
 
     // MVP
-
     glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
     float                 movementStrength = 5.f;
     float                 rotationStrength = 900.f;
@@ -103,7 +83,7 @@ int main()
     glm::mat4 MVMatrix;
     glm::mat4 MVBMatrix;
     glm::mat4 NormalMatrix;
-    glm::vec3 light = glm::vec3(1.f, 0.f, 0.f);
+    glm::vec3 light = glm::vec3(1.f, 1.f, 1.f);
 
     // For the light
     glm::mat4              MVMatrix_light;
@@ -117,10 +97,10 @@ int main()
     for (int i = 0; i < 32; i++)
     {
         RotAxes.push_back(glm::ballRand(2.f));
-        RotDir.push_back(glm::vec3(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1)));
-        _uKa.push_back(glm::vec3(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f)));
-        _uKd.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
-        _uKs.push_back(glm::vec3(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f)));
+        RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
+        _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
+        _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
+        _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
         _uShininess.push_back(glm::linearRand(0.f, 1.0f));
     }
 
@@ -135,7 +115,7 @@ int main()
         game.updateBoids(ctx, MVBMatrix);
 
         vbo.Bind();
-        glBindVertexArray(vao);
+        vao.Bind();
         shader.use();
 
         glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), ctx.delta_time(), glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
@@ -183,11 +163,12 @@ int main()
         }
 
         vbo.UnBind();
-        glBindVertexArray(0);
+
+        vao.UnBind();
     };
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
-
-    glDeleteVertexArrays(0, &vao);
+    // delete vbo
+    // glDeleteVertexArrays(0, &vao);
 }
