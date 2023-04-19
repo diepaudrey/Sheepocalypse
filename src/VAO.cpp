@@ -1,28 +1,28 @@
-#include "VertexArray.hpp"
+#include "VAO.hpp"
 #include "Renderer.hpp"
 
-VertexArray::VertexArray()
+Vao::Vao()
 {
     glGenVertexArrays(1, &m_RendererID);
     glBindVertexArray(m_RendererID);
 }
 
-VertexArray::~VertexArray()
+void Vao::DeleteVao() const
 {
     glDeleteVertexArrays(1, &m_RendererID);
 }
 
-void VertexArray::Bind() const
+void Vao::Bind() const
 {
     glBindVertexArray(m_RendererID);
 }
 
-void VertexArray::UnBind() const
+void Vao::UnBind() const
 {
     glBindVertexArray(0);
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& vb)
+void Vao::AddBuffer(const Vbo& vb)
 {
     Bind();
     vb.Bind();

@@ -4,8 +4,8 @@
 #include "Boids.hpp"
 #include "Light.hpp"
 #include "Renderer.hpp"
-#include "VertexArray.hpp"
-#include "VertexBuffer.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
 #include "glimac/Freefly.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/ext/scalar_constants.hpp"
@@ -65,10 +65,10 @@ int main()
     /*VBO*/ /*VAO*/
     // cone
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 32, 16);
-    VertexBuffer                     vbo(vertices.data(), vertices.size());
+    Vbo                              vbo(vertices.data(), vertices.size());
     glEnable(GL_DEPTH_TEST);
 
-    VertexArray vao;
+    Vao vao;
     vao.AddBuffer(vbo);
     vbo.Bind();
     vao.UnBind();
@@ -170,5 +170,6 @@ int main()
     // Should be done last. It starts the infinite loop.
     ctx.start();
     // delete vbo
-    // glDeleteVertexArrays(0, &vao);
+    vbo.DeleteVbo();
+    vao.DeleteVao();
 }

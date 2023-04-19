@@ -1,22 +1,22 @@
-#include "VertexBuffer.hpp"
+#include "VBO.hpp"
 #include "Renderer.hpp"
 
-VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+Vbo::Vbo(const void* data, unsigned int size)
 {
     glGenBuffers(1, &m_RendererID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     glBufferData(GL_ARRAY_BUFFER, size * sizeof(glimac::ShapeVertex), data, GL_STATIC_DRAW);
 }
-VertexBuffer::~VertexBuffer()
+void Vbo::DeleteVbo() const
 {
     glDeleteBuffers(1, &m_RendererID);
 }
 
-void VertexBuffer::Bind() const
+void Vbo::Bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 }
-void VertexBuffer::UnBind() const
+void Vbo::UnBind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
