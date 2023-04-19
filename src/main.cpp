@@ -16,7 +16,7 @@
 
 void mouseHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const float& rotationStrength)
 {
-    glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     ctx.mouse_moved = [&](p6::MouseMove data) {
         (camera).rotateLeft(data.delta.x * rotationStrength);
@@ -52,7 +52,7 @@ int main()
     Light            light_scene(shader);
 
     std::vector<Boid> boids;
-    int               nb_boids = 25;
+    int               nb_boids = 40;
 
     Boids game(boids, nb_boids);
     game.fillBoids(ctx);
@@ -76,7 +76,7 @@ int main()
     // MVP
     glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
     float                 movementStrength = 5.f;
-    float                 rotationStrength = 900.f;
+    float                 rotationStrength = 1000.f;
     mouseHandler(ctx, camera, rotationStrength);
 
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
@@ -110,9 +110,6 @@ int main()
         glClearColor(0.2f, 0.2f, 0.2f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         keyboardHandler(ctx, camera, movementStrength);
-
-        game.drawBoids(ctx, MVBMatrix);
-        game.updateBoids(ctx, MVBMatrix);
 
         vbo.Bind();
         vao.Bind();
@@ -165,6 +162,27 @@ int main()
         vbo.UnBind();
 
         vao.UnBind();
+        glBindVertexArray(0);
+
+        /*Dear ImGui*/
+        ImGui::Begin("Settings");
+        ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
+        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
+        ImGui::End();
+
+        /*GAME*/
+
+        game.setProtectedRadius(protectedRadius);
+        game.setAlignmentStrength(alignmentStrength);
+        game.setCohesionStrength(cohesionStrength);
+        game.setSeparationStrength(separationStrength);
+        game.setBoidsMaxSpeed(maxSpeed);
+
+        game.drawBoids(ctx, MVBMatrix);
+        game.updateBoids(ctx);
     };
 
     // Should be done last. It starts the infinite loop.

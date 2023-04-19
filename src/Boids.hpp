@@ -15,6 +15,13 @@ private:
     float alignmentStrength;
     float cohesionStrength;
 
+    // float separationStrength = 0.2f;
+    // float alignmentStrength  = 0.1f;
+    // float cohesionStrength   = 0.1f;
+
+    float turnfactor = 0.015f;
+    float limit      = 5.f;
+
 public:
     Boids() = default;
 
@@ -59,7 +66,7 @@ public:
     void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges
-    void avoidEdges(Boid& boid, const p6::Context& ctx, const float& turnfactor);
+    void avoidEdges(Boid& boid, const float& limit, const float& turnfactor);
 
     // check distance between this boid and the boid in argument
     static bool isTooClose(const Boid& boid1, const Boid& boid2, const float& radius);
@@ -78,16 +85,14 @@ public:
     void applySteeringForces(Boid& boid);
     // void updatePosition(p6::Context& ctx);
 
-    void updateBoids(p6::Context& ctx, glm::mat4& viewMatrix)
+    void updateBoids(p6::Context& ctx)
     {
-        float turnfactor = 0.3f;
         for (auto& boid : m_boids)
         {
             std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
             boid.updatePosition(ctx);
-            // applySteeringForces(boid);
-            avoidEdges(boid, ctx, turnfactor);
-            // boid.draw(ctx, viewMatrix);
+            applySteeringForces(boid);
+            avoidEdges(boid, limit, turnfactor);
             neighbors.clear();
         }
     };
