@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/vector_angle.hpp>
 #include <utility>
 #include <vector>
@@ -11,6 +13,7 @@
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/geometric.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
@@ -95,17 +98,13 @@ public:
 
         for (auto& boid : m_boids)
         {
-            // float angle = glm::orientedAngle(glm::vec3(0.f, 1.f, 0.f), normalize(boid.getSpeed()), glm::vec3(0.f, 1.f, 0.f));
-            // glm::mat4 OrientMatrix = glm::lookAt(boid.getPosition(), boid.getPosition() + boid.getSpeed(), glm::vec3(0.f, 1.f, 0.f));
-            // glm::quat orientation  = glm::quat_cast(OrientMatrix);
-            // glm::vec3 euler        = glm::eulerAngles(orientation);
-            // float     angle        = euler.y;
-            // std::cout << angle << std::endl;
-            // std::cout << boid.getPosition().x << " " << boid.getPosition().y << " " << boid.getPosition().z << std::endl;
+            glm::vec3 start        = glm::vec3(0.f, 1.f, 0.f);
+            glm::vec3 direction    = normalize(boid.getSpeed());
+            glm::vec3 rotationAxis = glm::cross(start, direction);
+            float     angle        = glm::orientedAngle(start, direction, start);
 
             MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
-            // MVMatrix = glm::rotate(MVMatrix, angle, normalize(boid.getSpeed()));
-            //  MVMatrix = glm::translate(MVMatrix, boid.getSpeed());
+            MVMatrix = glm::rotate(MVMatrix, angle, rotationAxis);
 
             glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
@@ -128,4 +127,38 @@ public:
         glDeleteBuffers(1, &m_vbo);
         glDeleteVertexArrays(1, &m_vao);
     }
+
+    // glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest)
+    // {
+    //     start = normalize(start);
+    //     dest  = normalize(dest);
+
+    //     float     cosTheta = dot(start, dest);
+    //     glm::vec3 rotationAxis;
+
+    //     if (cosTheta < -1 + 0.001f)
+    //     {
+    //         // cas spécifique lorsque les vecteurs ont des directions opposées :
+    //         // il n'y pas d'axe de rotation "idéal"
+    //         // Donc, devinez-en un, n'importe lequel fonctionnera tant qu'il est perpendiculaire avec start
+    //         rotationAxis = cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
+    //         if (glm::gtx::norm::length2(rotationAxis) < 0.01) // pas de chance, ils sont parallèles, essayez encore !
+    //             rotationAxis = cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
+
+    //         rotationAxis = normalize(rotationAxis);
+    //         return glm::gtx::quaternion::angleAxis(180.0f, rotationAxis);
+    //     }
+
+    //     rotationAxis = cross(start, dest);
+
+    //     float s    = sqrt((1 + cosTheta) * 2);
+    //     float invs = 1 / s;
+
+    //     return glm::quat(
+    //         s * 0.5f,
+    //         rotationAxis.x * invs,
+    //         rotationAxis.y * invs,
+    //         rotationAxis.z * invs
+    //     );
+    // }
 };
