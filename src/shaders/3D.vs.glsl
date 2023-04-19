@@ -17,8 +17,8 @@ out vec2 vTexCoords; // Coordonnées de texture du sommet
 
 void main() {
     // Passage en coordonnées homogènes
-    vec4 vertexPosition = vec4(aVertexPosition, 1.);
-    vec4 vertexNormal = vec4(aVertexNormal, 0.);
+    vec4 vertexPosition = vec4(aVertexPosition, 1.f);
+    vec4 vertexNormal = vec4(aVertexNormal, 0.f);
 
     // Calcul des valeurs de sortie
     vPosition_vs = vec3(uMVMatrix * vertexPosition);

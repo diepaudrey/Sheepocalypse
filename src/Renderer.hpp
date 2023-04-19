@@ -127,38 +127,4 @@ public:
         glDeleteBuffers(1, &m_vbo);
         glDeleteVertexArrays(1, &m_vao);
     }
-
-    // glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest)
-    // {
-    //     start = normalize(start);
-    //     dest  = normalize(dest);
-
-    //     float     cosTheta = dot(start, dest);
-    //     glm::vec3 rotationAxis;
-
-    //     if (cosTheta < -1 + 0.001f)
-    //     {
-    //         // cas spécifique lorsque les vecteurs ont des directions opposées :
-    //         // il n'y pas d'axe de rotation "idéal"
-    //         // Donc, devinez-en un, n'importe lequel fonctionnera tant qu'il est perpendiculaire avec start
-    //         rotationAxis = cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
-    //         if (glm::gtx::norm::length2(rotationAxis) < 0.01) // pas de chance, ils sont parallèles, essayez encore !
-    //             rotationAxis = cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
-
-    //         rotationAxis = normalize(rotationAxis);
-    //         return glm::gtx::quaternion::angleAxis(180.0f, rotationAxis);
-    //     }
-
-    //     rotationAxis = cross(start, dest);
-
-    //     float s    = sqrt((1 + cosTheta) * 2);
-    //     float invs = 1 / s;
-
-    //     return glm::quat(
-    //         s * 0.5f,
-    //         rotationAxis.x * invs,
-    //         rotationAxis.y * invs,
-    //         rotationAxis.z * invs
-    //     );
-    // }
 };

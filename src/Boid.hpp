@@ -10,12 +10,12 @@ private:
     glm::vec3 m_position;
     glm::vec3 m_speed;
 
+    // float maxSpeed        = 5.f;
+    // float protectedRadius = 1.5f;
     float maxSpeed;
     float protectedRadius;
 
 public:
-    // friend class Boids;
-
     Boid() = default;
     Boid(const glm::vec3& pos, const glm::vec3 vel)
         : m_position(pos), m_speed(vel){};
@@ -59,7 +59,7 @@ public:
         protectedRadius = protRad;
     }
 
-    void draw(p6::Context& ctx, glm::mat4& viewMatrix);
+    // void draw(p6::Context& ctx, glm::mat4& viewMatrix);
     void updatePosition(p6::Context& ctx);
     void setMaxSpeed(const float& speed);
     void applyForce(const glm::vec3 force);
