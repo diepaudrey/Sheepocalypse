@@ -3,7 +3,8 @@
 #include "Boid.hpp"
 #include "Boids.hpp"
 #include "Light.hpp"
-#include "Renderer.hpp"
+#include "RendererBoids.hpp"
+#include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "glimac/Freefly.hpp"
@@ -71,6 +72,8 @@ int main()
     Vao vao;
     vao.AddBuffer(vbo);
     vbo.Bind();
+    Texture texture("textures/AUDREY.jpg");
+    texture.Bind();
     vao.UnBind();
 
     // MVP

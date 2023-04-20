@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <vector>
 #include "Boid.hpp"
-#include "Renderer.hpp"
+#include "RendererBoids.hpp"
 #include "p6/p6.h"
 
 class Boids {

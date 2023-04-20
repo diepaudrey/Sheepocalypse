@@ -1,12 +1,11 @@
 #pragma once
 
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/vector_angle.hpp>
 #include <utility>
 #include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
+#include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "cstddef"
@@ -21,29 +20,54 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
-class Renderer {
+class RendererBoids {
 public:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
+    Texture                          m_texture;
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl"); // à changer faire une classe shader
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
     GLuint     m_uMVPMatrix;
     GLuint     m_uMVMatrix;
     GLuint     m_uNormalMatrix;
+    GLuint     m_uBoidTexture;
+    GLuint     uvtex = 0;
+    GLint      uTexture;
 
 public:
-    Renderer();
-    Renderer(std::vector<glimac::ShapeVertex>& vertices)
+    RendererBoids();
+    RendererBoids(std::vector<glimac::ShapeVertex>& vertices)
         : m_vertices(std::move(vertices))
     {
         initializeBoid();
     };
     void initializeBoid()
     {
+        img::Image m_image = p6::load_image_buffer("assets/textures/AUDREY.jpg");
+
         this->m_vbo = Vbo(m_vertices.data(), m_vertices.size());
-        m_vao.AddBuffer(m_vbo);
         m_vbo.UnBind();
+
+        // this->m_texture = Texture("textures/joconde.png");
+        // m_texture.UnBind();
+        glGenTextures(1, &uvtex);
+        // texture_2D is for simple 2D
+        glBindTexture(GL_TEXTURE_2D, uvtex);
+
+        // a little transparency...
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // specify the texture
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image.width(), m_image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_image.data());
+        // needed for pixel overlapping (I guess)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        // debind the texture
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        m_vao.AddBuffer(m_vbo);
         m_vao.UnBind();
 
         /*Location uniform variables*/
@@ -52,19 +76,28 @@ public:
         m_uMVMatrix = glGetUniformLocation(m_shader.id(), "uMVMatrix");
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
+
+        m_uBoidTexture = glGetUniformLocation(m_shader.id(), "uTexture0");
+
+        uTexture = glGetUniformLocation(m_shader.id(), "uTexture");
     }
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
     {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glimac::bind_default_shader();
         m_shader.use();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 MVMatrix;
         glm::mat4 MVPMatrix;
         glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
 
         m_vao.Bind();
+        glUniform1i(uTexture, 0);
+        glBindTexture(GL_TEXTURE_2D, uvtex);
+
+        // glUniform1i(m_uBoidTexture, 0);
+        // m_texture.Bind();
 
         for (auto& boid : m_boids)
         {
@@ -88,12 +121,14 @@ public:
 
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         }
-
+        // m_texture.UnBind();
+        glBindTexture(GL_TEXTURE_2D, 0);
         m_vao.UnBind();
     };
 
     void deleteBuffers()
     {
+        glDeleteTextures(1, &uvtex);
         m_vbo.DeleteVbo();
         m_vao.DeleteVao();
     }
