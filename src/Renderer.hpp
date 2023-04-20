@@ -1,16 +1,12 @@
 #pragma once
-
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/vector_angle.hpp>
-#include <utility>
+// #include <utility>
 #include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "cstddef"
-#include "glimac/Freefly.hpp"
 #include "glimac/common.hpp"
 #include "glimac/cone_vertices.hpp"
 #include "glimac/default_shader.hpp"
@@ -22,7 +18,7 @@
 #include "p6/p6.h"
 
 class Renderer {
-public:
+private:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
@@ -91,6 +87,71 @@ public:
 
         m_vao.UnBind();
     };
+
+    void RenderBorders(const float& radius, glm::mat4 viewMatrix, p6::Context& ctx)
+    {
+        glm::vec3 A = {-radius, radius, -radius};
+        glm::vec3 B = {radius, radius, -radius};
+        glm::vec3 C = {radius, -radius, -radius};
+        glm::vec3 D = {-radius, -radius, -radius};
+        glm::vec3 E = {-radius, -radius, radius};
+        glm::vec3 F = {-radius, radius, radius};
+        glm::vec3 G = {radius, radius, radius};
+        glm::vec3 H = {radius, -radius, radius};
+
+        GLuint vbo;
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        std::vector<glm::vec3> vertices = {
+            A, B, C, C, D, A,
+            A, D, E, E, F, A,
+            F, E, G, G, H, E,
+            G, H, B, B, C, H};
+
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
+
+        GLuint vao;
+        glGenVertexArrays(1, &vao);
+        // glBindVertexArray(vao);
+
+        static constexpr GLuint vertex_attr_position = 0;
+        glEnableVertexAttribArray(vertex_attr_position);
+
+        static constexpr GLuint vertex_attr_color = 1;
+        glEnableVertexAttribArray(vertex_attr_color);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindVertexArray(vao);
+
+        glVertexAttribPointer(vertex_attr_position, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+
+        glVertexAttribPointer(vertex_attr_color, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // glm::mat4 MVMatrix;
+        // glm::mat4 MVPMatrix;
+        // glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
+        // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        // MVPMatrix              = ProjMatrix * viewMatrix * MVMatrix;
+
+        // glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+
+        // glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+
+        // glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+        glimac::bind_default_shader();
+        m_shader.use();
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // glDeleteBuffers(0, &vbo);
+        // glDeleteVertexArrays(0, &vao);
+    }
 
     void deleteBuffers()
     {
