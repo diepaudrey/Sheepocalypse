@@ -46,7 +46,7 @@ private:
 
 public:
     FreeflyCamera()
-        : m_position(glm::vec3(0.f, 0.f, -5.f)), m_phi(glm::pi<float>()), m_theta(0.f)
+        : m_position(glm::vec3(-20.f, 0.f, -20.f)), m_phi(glm::pi<float>()), m_theta(0.f)
     {
         computeDirectionVectors();
     };
