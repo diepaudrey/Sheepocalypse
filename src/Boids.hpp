@@ -4,10 +4,10 @@
 #include <iterator>
 #include <vector>
 #include "Boid.hpp"
-#include "Renderer.hpp"
 #include "glimac/plan_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
+#include "RendererBoids.hpp"
 #include "p6/p6.h"
 
 class Boids {

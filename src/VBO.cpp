@@ -1,5 +1,5 @@
 #include "VBO.hpp"
-#include "Renderer.hpp"
+#include "RendererBoids.hpp"
 
 Vbo::Vbo(const void* data, unsigned int size)
 {

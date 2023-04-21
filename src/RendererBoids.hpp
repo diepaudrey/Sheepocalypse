@@ -1,9 +1,14 @@
 #pragma once
+<<<<<<< HEAD:src/Renderer.hpp
+=======
+
+>>>>>>> main:src/RendererBoids.hpp
 #include <glm/gtx/vector_angle.hpp>
 // #include <utility>
 #include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
+#include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "cstddef"
@@ -17,20 +22,27 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
+<<<<<<< HEAD:src/Renderer.hpp
 class Renderer {
 private:
+=======
+class RendererBoids {
+public:
+>>>>>>> main:src/RendererBoids.hpp
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
+    Texture                          m_texture{p6::load_image_buffer("assets/textures/AUDREY.jpg")};
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl"); // à changer faire une classe shader
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
     GLuint     m_uMVPMatrix;
     GLuint     m_uMVMatrix;
     GLuint     m_uNormalMatrix;
+    GLint      m_uTexture;
 
 public:
-    Renderer();
-    Renderer(std::vector<glimac::ShapeVertex>& vertices)
+    RendererBoids();
+    RendererBoids(std::vector<glimac::ShapeVertex>& vertices)
         : m_vertices(std::move(vertices))
     {
         initializeBoid();
@@ -38,8 +50,9 @@ public:
     void initializeBoid()
     {
         this->m_vbo = Vbo(m_vertices.data(), m_vertices.size());
-        m_vao.AddBuffer(m_vbo);
         m_vbo.UnBind();
+
+        m_vao.AddBuffer(m_vbo);
         m_vao.UnBind();
 
         /*Location uniform variables*/
@@ -48,19 +61,23 @@ public:
         m_uMVMatrix = glGetUniformLocation(m_shader.id(), "uMVMatrix");
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
+
+        m_uTexture = glGetUniformLocation(m_shader.id(), "uTexture");
     }
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
     {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glimac::bind_default_shader();
         m_shader.use();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 MVMatrix;
         glm::mat4 MVPMatrix;
         glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
 
         m_vao.Bind();
+        glUniform1i(m_uTexture, 0);
+        m_texture.Bind();
 
         for (auto& boid : m_boids)
         {
@@ -85,6 +102,7 @@ public:
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         }
 
+        m_texture.UnBind();
         m_vao.UnBind();
     };
 
@@ -155,6 +173,7 @@ public:
 
     void deleteBuffers()
     {
+        m_texture.DeleteTexture();
         m_vbo.DeleteVbo();
         m_vao.DeleteVao();
     }
