@@ -1,8 +1,4 @@
 #pragma once
-<<<<<<< HEAD:src/Renderer.hpp
-=======
-
->>>>>>> main:src/RendererBoids.hpp
 #include <glm/gtx/vector_angle.hpp>
 // #include <utility>
 #include <vector>
@@ -22,13 +18,8 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
-<<<<<<< HEAD:src/Renderer.hpp
-class Renderer {
-private:
-=======
 class RendererBoids {
 public:
->>>>>>> main:src/RendererBoids.hpp
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
