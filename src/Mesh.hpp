@@ -56,7 +56,7 @@ private:
         m_vbo.UnBind();
     }
 
-    void InitModelMatrix()
+    void InitModelMatrix(p6::Context& ctx)
     {
         m_position    = glm::vec3(0.f);
         m_rotation    = glm::vec3(0.f);
@@ -68,14 +68,15 @@ private:
         m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_rotation.y), glm::vec3(0.f, 1.f, 0.f));
         m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(m_rotation.z), glm::vec3(0.f, 0.f, 1.f));
         m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
+
+        ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
     }
 
     void UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
     {
-        glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
-        glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        glm::mat4 MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
+        MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
     }
 
     void InitUniforms()
@@ -97,12 +98,12 @@ private:
     }
 
 public:
-    Mesh(std::vector<glimac::ShapeVertex> vertices, const unsigned int& nbVertices)
+    Mesh(std::vector<glimac::ShapeVertex> vertices, const unsigned int& nbVertices, p6::Context& ctx)
     {
         InitVertexData(vertices, nbVertices);
         InitVao();
         InitUniforms();
-        InitModelMatrix();
+        InitModelMatrix(ctx);
     }
 
     ~Mesh()
@@ -117,34 +118,35 @@ public:
 
     void render(glm::mat4& viewMatrix, p6::Context& ctx)
     {
-        // // UpdateMatrices(viewMatrix, ctx);
+        UpdateMatrices(viewMatrix, ctx);
         // glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
         // glm::mat4 MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -2.f, 0.f));
         // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
         // glm::mat4 MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
-        // m_shader.use();
-        // // UpdateUniforms();
-        // glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-
-        // glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-        // glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-        // m_vao.Bind();
-        // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-        // m_vao.UnBind();
-
-        glm::mat4 modelViewMatrix = viewMatrix * m_modelMatrix;
-        glm::mat4 normalMatrix    = glm::transpose(glm::inverse(modelViewMatrix));
-        glm::mat4 projMatrix      = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
-        glm::mat4 MVPMatrix       = projMatrix * modelViewMatrix;
-
         m_shader.use();
+        // // UpdateUniforms();
         glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-        glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-        glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+        glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+
+        glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
         m_vao.Bind();
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         m_vao.UnBind();
+
+        // glm::mat4 modelViewMatrix = viewMatrix * m_modelMatrix;
+        // glm::mat4 normalMatrix    = glm::transpose(glm::inverse(modelViewMatrix));
+
+        // glm::mat4 MVPMatrix = ProjMatrix * modelViewMatrix;
+
+        // m_shader.use();
+        // glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+        // glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
+        // glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+        // m_vao.Bind();
+        // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+        // m_vao.UnBind();
     }
 };

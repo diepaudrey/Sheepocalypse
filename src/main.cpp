@@ -116,7 +116,7 @@ int main()
     /*Test class Mesh*/
     std::vector<glimac::ShapeVertex> verticesSphere = glimac::sphere_vertices(2.f, 32.f, 16);
 
-    Mesh sphere(verticesSphere, verticesSphere.size());
+    Mesh sphere(verticesSphere, verticesSphere.size(), ctx);
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
