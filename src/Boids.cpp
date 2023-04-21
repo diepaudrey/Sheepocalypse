@@ -7,7 +7,6 @@ void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix)
     /* Pour faire un plan, vertices = sphere(surface plan, 2 , 2)*/
     // std::vector<glimac::ShapeVertex> vertices = glimac::sphere_vertices(20.f, 4.f, 2.f);
     RendererBoids boidRenderer(vertices);
-    boidRenderer.RenderBorders(10.f, viewMatrix, ctx);
     boidRenderer.renderBoids(m_boids, viewMatrix, ctx);
     boidRenderer.deleteBuffers();
 }
