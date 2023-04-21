@@ -1,7 +1,12 @@
 #pragma once
+#include <vcruntime.h>
 #include <cstdlib>
+#include <iterator>
 #include <vector>
 #include "Boid.hpp"
+#include "glimac/plan_vertices.hpp"
+#include "glimac/sphere_vertices.hpp"
+#include "glm/fwd.hpp"
 #include "RendererBoids.hpp"
 #include "p6/p6.h"
 
@@ -64,6 +69,7 @@ public:
 
     // draw the boid
     void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix);
+    void drawBorders(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges
     void avoidEdges(Boid& boid, const float& limit, const float& turnfactor);

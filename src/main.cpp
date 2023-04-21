@@ -3,6 +3,7 @@
 #include "Boid.hpp"
 #include "Boids.hpp"
 #include "Light.hpp"
+#include "Mesh.hpp"
 #include "RendererBoids.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
@@ -83,9 +84,10 @@ int main()
     vao.UnBind();
 
     // MVP
-    glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
-    float                 movementStrength = 100.f;
-    float                 rotationStrength = 1000.f;
+    glimac::FreeflyCamera camera = glimac::FreeflyCamera();
+    // glm::mat4             viewMatrix       = camera.getViewMatrix();
+    float movementStrength = 100.f;
+    float rotationStrength = 1000.f;
     mouseHandler(ctx, camera, rotationStrength);
 
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
@@ -112,6 +114,11 @@ int main()
         _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
         _uShininess.push_back(glm::linearRand(0.f, 1.0f));
     }
+
+    /*Test class Mesh*/
+    std::vector<glimac::ShapeVertex> verticesSphere = glimac::sphere_vertices(2.f, 32.f, 16);
+
+    Mesh sphere(verticesSphere, verticesSphere.size());
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
@@ -192,6 +199,8 @@ int main()
 
         game.updateBoids(ctx);
         game.drawBoids(ctx, MVBMatrix);
+
+        sphere.render(MVBMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.
