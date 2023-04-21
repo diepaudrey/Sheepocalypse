@@ -58,6 +58,7 @@ int main()
     ctx.maximize_window();
     const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
     Light            light_scene(shader);
+    std::cout << GL_TEXTURE0 + 1 << std::endl;
 
     std::vector<Boid> boids;
     int               nb_boids = 50;

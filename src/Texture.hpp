@@ -5,16 +5,14 @@ class Texture {
 private:
     unsigned int      m_RendererID;
     const img::Image& m_Image;
-    // unsigned char* m_LocalBuffer;
 
 public:
     Texture() = default;
-    Texture(img::Image img);
+    Texture(img::Image img, unsigned int slot = 0);
 
-    void SetImage(img::Image img);
     void DeleteTexture();
-    void Bind() const;
-    void UnBind() const;
+    void Bind(unsigned int slot = 0) const;
+    void UnBind(unsigned int slot = 0) const;
 
     inline int GetWidth() const { return m_Image.width(); }
     inline int GetHeight() const { return m_Image.height(); }

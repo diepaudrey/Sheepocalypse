@@ -9,7 +9,7 @@ void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix)
     std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(5.f, 3.f, 32, 16);
 
     // std::vector<glimac::ShapeVertex> vertices = glimac::sphere_vertices(0.5f, 5, 5);
-    Renderer boidRenderer(vertices);
+    RendererBoids boidRenderer(vertices);
     boidRenderer.renderBoids(m_boids, viewMatrix, ctx);
     boidRenderer.deleteBuffers();
 }

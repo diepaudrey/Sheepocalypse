@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/gtx/vector_angle.hpp>
+#include <iostream>
 #include <utility>
 #include <vector>
 #include "Boid.hpp"
@@ -25,13 +26,16 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
-    Texture                          m_texture{p6::load_image_buffer("assets/textures/AUDREY.jpg")};
+    Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
+    Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
+    Texture                          m_textureS{p6::load_image_buffer("assets/textures/salade.jpg")};
 
     p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
     GLuint     m_uMVPMatrix;
     GLuint     m_uMVMatrix;
     GLuint     m_uNormalMatrix;
-    GLint      m_uTexture;
+    GLint      m_uTextureLila;
+    GLint      m_uTextureDrake;
 
 public:
     RendererBoids();
@@ -55,7 +59,9 @@ public:
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
 
-        m_uTexture = glGetUniformLocation(m_shader.id(), "uTexture");
+        m_uTextureDrake = glGetUniformLocation(m_shader.id(), "uTexture1");
+
+        m_uTextureLila = glGetUniformLocation(m_shader.id(), "uTexture2");
     }
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
@@ -69,8 +75,16 @@ public:
         glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
 
         m_vao.Bind();
-        glUniform1i(m_uTexture, 0);
-        m_texture.Bind();
+        // glUniform1i(m_uTextureSalade, 0);
+        // m_textureS.Bind();
+
+        // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+        // m_textureS.UnBind();
+
+        glUniform1i(m_uTextureDrake, 0);
+        glUniform1i(m_uTextureLila, 1);
+        m_textureD.Bind();
+        m_textureL.Bind(1);
 
         for (auto& boid : m_boids)
         {
@@ -94,14 +108,15 @@ public:
 
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         }
-
-        m_texture.UnBind();
+        m_textureD.UnBind();
+        m_textureL.UnBind(1);
         m_vao.UnBind();
     };
 
     void deleteBuffers()
     {
-        m_texture.DeleteTexture();
+        m_textureD.DeleteTexture();
+        m_textureL.DeleteTexture();
         m_vbo.DeleteVbo();
         m_vao.DeleteVao();
     }
