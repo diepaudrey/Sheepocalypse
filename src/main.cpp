@@ -72,8 +72,6 @@ int main()
     Vao vao;
     vao.AddBuffer(vbo);
     vbo.Bind();
-    Texture texture("textures/AUDREY.jpg");
-    texture.Bind();
     vao.UnBind();
 
     // MVP
