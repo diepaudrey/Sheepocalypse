@@ -66,7 +66,7 @@ public:
 
         glm::mat4 MVMatrix;
         glm::mat4 MVPMatrix;
-        glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
+        glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
 
         m_vao.Bind();
         glUniform1i(m_uTexture, 0);

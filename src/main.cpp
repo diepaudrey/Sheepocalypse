@@ -17,9 +17,16 @@
 
 void mouseHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const float& rotationStrength)
 {
-    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    /*La caméra sans souris*/
 
-    ctx.mouse_moved = [&](p6::MouseMove data) {
+    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // ctx.mouse_moved = [&](p6::MouseMove data) {
+    //     (camera).rotateLeft(data.delta.x * rotationStrength);
+    //     (camera).rotateUp(-data.delta.y * rotationStrength);
+    // };
+
+    /*La caméra avec cliquer + glisser*/
+    ctx.mouse_dragged = [&](p6::MouseDrag data) {
         (camera).rotateLeft(data.delta.x * rotationStrength);
         (camera).rotateUp(-data.delta.y * rotationStrength);
     };
@@ -53,7 +60,7 @@ int main()
     Light            light_scene(shader);
 
     std::vector<Boid> boids;
-    int               nb_boids = 40;
+    int               nb_boids = 50;
 
     Boids game(boids, nb_boids);
     game.fillBoids(ctx);
@@ -61,7 +68,7 @@ int main()
     float separationStrength = 0.1f;
     float alignmentStrength  = 0.1f;
     float cohesionStrength   = 0.1f;
-    float maxSpeed           = 1.2f;
+    float maxSpeed           = 10.f;
 
     /*VBO*/ /*VAO*/
     // cone
@@ -76,7 +83,7 @@ int main()
 
     // MVP
     glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
-    float                 movementStrength = 5.f;
+    float                 movementStrength = 100.f;
     float                 rotationStrength = 1000.f;
     mouseHandler(ctx, camera, rotationStrength);
 
@@ -168,7 +175,7 @@ int main()
         /*Dear ImGui*/
         ImGui::Begin("Settings");
         ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
-        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 10.f);
         ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
         ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
         ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
@@ -182,8 +189,8 @@ int main()
         game.setSeparationStrength(separationStrength);
         game.setBoidsMaxSpeed(maxSpeed);
 
-        game.drawBoids(ctx, MVBMatrix);
         game.updateBoids(ctx);
+        game.drawBoids(ctx, MVBMatrix);
     };
 
     // Should be done last. It starts the infinite loop.

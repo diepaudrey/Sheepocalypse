@@ -19,8 +19,8 @@ private:
     // float alignmentStrength  = 0.1f;
     // float cohesionStrength   = 0.1f;
 
-    float turnfactor = 0.015f;
-    float limit      = 5.f;
+    float turnfactor = 0.5f;
+    float limit      = 40.f;
 
 public:
     Boids() = default;
