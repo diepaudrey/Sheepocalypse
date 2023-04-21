@@ -4,6 +4,7 @@
 #include "Boids.hpp"
 #include "Light.hpp"
 #include "Mesh.hpp"
+#include "OBJLoader.hpp"
 #include "RendererBoids.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
@@ -116,9 +117,14 @@ int main()
     }
 
     /*Test class Mesh*/
-    std::vector<glimac::ShapeVertex> verticesSphere = glimac::sphere_vertices(2.f, 32.f, 16);
+    // std::vector<glimac::ShapeVertex> verticesSphere = glimac::sphere_vertices(2.f, 32.f, 16);
 
-    Mesh sphere(verticesSphere, verticesSphere.size());
+    // Mesh sphere(verticesSphere, verticesSphere.size());
+
+    /*Test OBJ loader*/
+    std::vector<glimac::ShapeVertex> verticesWolf;
+    verticesWolf = LoadOBJ("./assets/models/Wolf_One_obj.obj");
+    Mesh loup(verticesWolf, verticesWolf.size());
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
@@ -200,7 +206,7 @@ int main()
         game.updateBoids(ctx);
         game.drawBoids(ctx, MVBMatrix);
 
-        sphere.render(MVBMatrix, ctx);
+        loup.Render(MVBMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.

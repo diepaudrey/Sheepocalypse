@@ -112,7 +112,7 @@ public:
     {
     }
 
-    void render(glm::mat4& viewMatrix, p6::Context& ctx)
+    void Render(glm::mat4& viewMatrix, p6::Context& ctx)
     {
         UpdateMatrices(viewMatrix, ctx);
         m_shader.use();
