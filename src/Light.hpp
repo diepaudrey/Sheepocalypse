@@ -23,6 +23,7 @@ public:
     GLint m_uShininess;
     GLint m_uLightPos_vs;
     GLint m_uLightIntensity;
+    GLint m_uLightColor;
 
     Light(const p6::Shader& shader)
         : m_shader(shader)
@@ -36,5 +37,13 @@ public:
         m_uShininess      = glGetUniformLocation(this->m_shader.id(), "uShininess");
         m_uLightPos_vs    = glGetUniformLocation(this->m_shader.id(), "uLightPos_vs");
         m_uLightIntensity = glGetUniformLocation(this->m_shader.id(), "uLightIntensity");
+        m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
+    }
+
+    void setLight(const glm::vec3& position, float intensity, const glm::vec3& color) const
+    {
+        glUniform3fv(m_uLightPos_vs, 1, glm::value_ptr(position));
+        glUniform1f(m_uLightIntensity, intensity);
+        glUniform3fv(m_uLightColor, 1, glm::value_ptr(color));
     }
 };

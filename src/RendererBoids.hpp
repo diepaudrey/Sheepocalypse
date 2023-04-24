@@ -12,6 +12,7 @@
 #include "glimac/common.hpp"
 #include "glimac/cone_vertices.hpp"
 #include "glimac/default_shader.hpp"
+#include "glm/detail/qualifier.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/geometric.hpp"
@@ -24,16 +25,25 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
-    Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
-    Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
-    Texture                          m_textureS{p6::load_image_buffer("assets/textures/salade.jpg")};
+    // Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
+    // Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl"); // à changer faire une classe shader
+    Light      light_boid{p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl")};
     GLuint     m_uMVPMatrix;
     GLuint     m_uMVMatrix;
     GLuint     m_uNormalMatrix;
-    GLint      m_uTextureLila;
-    GLint      m_uTextureDrake;
+    // GLint                  m_uTextureLila;
+    // GLint                  m_uTextureDrake;
+    glm::mat4              MVMatrix_light;
+    glm::mat4              NormalMatrix_light;
+    std::vector<glm::vec3> RotAxes;
+    std::vector<glm::vec3> RotDir;
+    std::vector<glm::vec3> _uKa;
+    std::vector<glm::vec3> _uKd;
+    std::vector<glm::vec3> _uKs;
+    std::vector<float>     _uShininess;
+    glm::vec3              light = glm::vec3(20.f, 20.f, 20.f);
 
 public:
     RendererBoids();
@@ -57,9 +67,20 @@ public:
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
 
-        m_uTextureDrake = glGetUniformLocation(m_shader.id(), "uTexture1");
+        // m_uTextureDrake = glGetUniformLocation(m_shader.id(), "uTexture1");
 
-        m_uTextureLila = glGetUniformLocation(m_shader.id(), "uTexture2");
+        // m_uTextureLila = glGetUniformLocation(m_shader.id(), "uTexture2");
+
+        // For the light
+        for (int i = 0; i < 32; i++)
+        {
+            RotAxes.push_back(glm::ballRand(2.f));
+            RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
+            _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
+            _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
+            _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
+            _uShininess.push_back(glm::linearRand(0.5f, 1.0f));
+        }
     }
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
@@ -67,119 +88,69 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glimac::bind_default_shader();
         m_shader.use();
+        glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), 50.0f, glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
+        glm::vec3 uMVLightPos = glm::vec3(viewMatrix * glm::vec4(uLightPos, 1));
 
         glm::mat4 MVMatrix;
         glm::mat4 MVPMatrix;
         glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
+        for (int i = 0; i < 32; i++)
+        {
+            RotAxes.push_back(glm::ballRand(2.f));
+            RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
+            _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
+            _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
+            _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
+            _uShininess.push_back(glm::linearRand(0.f, 1.0f));
+        }
 
         m_vao.Bind();
-        // glUniform1i(m_uTextureSalade, 0);
-        // m_textureS.Bind();
 
-        // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-        // m_textureS.UnBind();
-
-        glUniform1i(m_uTextureDrake, 0);
-        glUniform1i(m_uTextureLila, 1);
-        m_textureD.Bind();
-        m_textureL.Bind(1);
-
-        for (auto& boid : m_boids)
+        // glUniform1i(m_uTextureDrake, 0);
+        // glUniform1i(m_uTextureLila, 1);
+        // m_textureD.Bind();
+        // m_textureL.Bind(1);
+        for (int i = 0; i < 32; i++)
         {
             glm::vec3 start        = glm::vec3(0.f, 1.f, 0.f);
-            glm::vec3 direction    = normalize(boid.getSpeed());
+            glm::vec3 direction    = normalize(m_boids[i].getSpeed());
             glm::vec3 rotationAxis = glm::cross(start, direction);
             float     angle        = glm::orientedAngle(start, direction, start);
 
-            MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
+            MVMatrix = glm::translate(glm::mat4(1.f), m_boids[i].getPosition() + m_boids[i].getSpeed());
             MVMatrix = glm::rotate(MVMatrix, angle, rotationAxis);
 
             glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+            MVPMatrix              = ProjMatrix * viewMatrix * MVMatrix;
 
-            MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
+            glUniformMatrix4fv(light_boid.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+            glUniformMatrix4fv(light_boid.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+            glUniformMatrix4fv(light_boid.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 
-            glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+            glUniform3fv(light_boid.m_uKa, 1, glm::value_ptr(_uKa[i]));
 
-            glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+            glUniform3fv(light_boid.m_uKd, 1, glm::value_ptr(_uKd[i]));
+            glUniform3fv(light_boid.m_uKs, 1, glm::value_ptr(_uKs[i]));
+            glUniform1f(light_boid.m_uShininess, _uShininess[i]);
+            // std::cout << "_uKa[" << i << "] = " << _uKa[i].r << ", " << _uKa[i].g << ", " << _uKa[i].b << std::endl;
+            // std::cout << "_uKd[" << i << "] = " << _uKd[i].r << ", " << _uKd[i].g << ", " << _uKd[i].b << std::endl;
+            // std::cout << "_uKs[" << i << "] = " << _uKs[i].r << ", " << _uKs[i].g << ", " << _uKs[i].b << std::endl;
+            // std::cout << "_uShininess[" << i << "] = " << _uShininess[i] << std::endl;
 
-            glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+            glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
+            glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
 
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
         }
-        m_textureD.UnBind();
-        m_textureL.UnBind(1);
+        // m_textureD.UnBind();
+        // m_textureL.UnBind(1);
         m_vao.UnBind();
     };
 
-    // void RenderBorders(const float& radius, glm::mat4 viewMatrix, p6::Context& ctx)
-    // {
-    //     glm::vec3 A = {-radius, radius, -radius};
-    //     glm::vec3 B = {radius, radius, -radius};
-    //     glm::vec3 C = {radius, -radius, -radius};
-    //     glm::vec3 D = {-radius, -radius, -radius};
-    //     glm::vec3 E = {-radius, -radius, radius};
-    //     glm::vec3 F = {-radius, radius, radius};
-    //     glm::vec3 G = {radius, radius, radius};
-    //     glm::vec3 H = {radius, -radius, radius};
-
-    //     GLuint vbo;
-    //     glGenBuffers(1, &vbo);
-    //     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //     std::vector<glm::vec3> vertices = {
-    //         A, B, C, C, D, A,
-    //         A, D, E, E, F, A,
-    //         F, E, G, G, H, E,
-    //         G, H, B, B, C, H};
-
-    //     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
-
-    //     GLuint vao;
-    //     glGenVertexArrays(1, &vao);
-    //     // glBindVertexArray(vao);
-
-    //     static constexpr GLuint vertex_attr_position = 0;
-    //     glEnableVertexAttribArray(vertex_attr_position);
-
-    //     static constexpr GLuint vertex_attr_color = 1;
-    //     glEnableVertexAttribArray(vertex_attr_color);
-
-    //     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //     glBindVertexArray(vao);
-
-    //     glVertexAttribPointer(vertex_attr_position, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
-
-    //     glVertexAttribPointer(vertex_attr_color, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
-
-    //     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //     glBindVertexArray(0);
-
-    //     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //     // glm::mat4 MVMatrix;
-    //     // glm::mat4 MVPMatrix;
-    //     // glm::mat4 ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
-    //     // glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-    //     // MVPMatrix              = ProjMatrix * viewMatrix * MVMatrix;
-
-    //     // glUniformMatrix4fv(m_uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-
-    //     // glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-
-    //     // glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-    //     glimac::bind_default_shader();
-    //     m_shader.use();
-    //     glBindVertexArray(vao);
-    //     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-    //     glBindVertexArray(0);
-    //     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    //     // glDeleteBuffers(0, &vbo);
-    //     // glDeleteVertexArrays(0, &vao);
-    // }
-
     void deleteBuffers()
     {
-        m_textureD.DeleteTexture();
-        m_textureL.DeleteTexture();
+        // m_textureD.DeleteTexture();
+        // m_textureL.DeleteTexture();
         m_vbo.DeleteVbo();
         m_vao.DeleteVao();
     }

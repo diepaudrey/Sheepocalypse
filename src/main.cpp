@@ -59,7 +59,6 @@ int main()
     ctx.maximize_window();
     const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
     Light            light_scene(shader);
-    std::cout << GL_TEXTURE0 + 1 << std::endl;
 
     std::vector<Boid> boids;
     int               nb_boids = 50;
@@ -131,7 +130,7 @@ int main()
         vao.Bind();
         shader.use();
 
-        glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), ctx.delta_time(), glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
+        glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), 80.0f, glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
         glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(uLightPos, 1));
         MVMatrix              = camera.getViewMatrix();
         MVBMatrix             = camera.getViewMatrix();
@@ -147,7 +146,7 @@ int main()
         glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(glm::vec3(0.633, 0.727811, 0.633)));
         glUniform1f(light_scene.m_uShininess, 0.6);
 
-        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(glm::vec3(glm::rotate(camera.getViewMatrix(), ctx.time(), glm::vec3(0, 1, 0)) * glm::vec4(1, 1, 0, 1))));
+        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
         glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size());

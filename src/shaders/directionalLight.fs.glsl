@@ -18,7 +18,7 @@ vec3 blinnPhong(){
     vec3 N = vNormal_vs;
     vec3 wo = normalize(-vPosition_vs);
     vec3 halfVector =(wo + wi)/2.f;
-    return Li*(uKD*max(dot(wi,N),0.) + uKs*max(pow(dot(halfVector,N), 0.), uShininess));
+    return Li*(uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess));
     
 }
 
