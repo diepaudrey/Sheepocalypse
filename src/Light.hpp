@@ -39,11 +39,4 @@ public:
         m_uLightIntensity = glGetUniformLocation(this->m_shader.id(), "uLightIntensity");
         m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
     }
-
-    void setLight(const glm::vec3& position, float intensity, const glm::vec3& color) const
-    {
-        glUniform3fv(m_uLightPos_vs, 1, glm::value_ptr(position));
-        glUniform1f(m_uLightIntensity, intensity);
-        glUniform3fv(m_uLightColor, 1, glm::value_ptr(color));
-    }
 };

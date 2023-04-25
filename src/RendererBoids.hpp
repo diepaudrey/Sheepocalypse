@@ -37,13 +37,13 @@ public:
     // GLint                  m_uTextureDrake;
     glm::mat4              MVMatrix_light;
     glm::mat4              NormalMatrix_light;
-    std::vector<glm::vec3> RotAxes;
-    std::vector<glm::vec3> RotDir;
     std::vector<glm::vec3> _uKa;
     std::vector<glm::vec3> _uKd;
     std::vector<glm::vec3> _uKs;
     std::vector<float>     _uShininess;
-    glm::vec3              light = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3              light     = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3              white     = glm::vec3(1.0f, 1.0f, 1.0f);
+    float                  shininess = 32.0f;
 
 public:
     RendererBoids();
@@ -70,17 +70,6 @@ public:
         // m_uTextureDrake = glGetUniformLocation(m_shader.id(), "uTexture1");
 
         // m_uTextureLila = glGetUniformLocation(m_shader.id(), "uTexture2");
-
-        // For the light
-        for (int i = 0; i < 32; i++)
-        {
-            RotAxes.push_back(glm::ballRand(2.f));
-            RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
-            _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
-            _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-            _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-            _uShininess.push_back(glm::linearRand(0.5f, 1.0f));
-        }
     }
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
@@ -94,15 +83,6 @@ public:
         glm::mat4 MVMatrix;
         glm::mat4 MVPMatrix;
         glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 250.f);
-        for (int i = 0; i < 32; i++)
-        {
-            RotAxes.push_back(glm::ballRand(2.f));
-            RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
-            _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
-            _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-            _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-            _uShininess.push_back(glm::linearRand(0.f, 1.0f));
-        }
 
         m_vao.Bind();
 
@@ -110,6 +90,10 @@ public:
         // glUniform1i(m_uTextureLila, 1);
         // m_textureD.Bind();
         // m_textureL.Bind(1);
+        _uKa.assign(50, white);
+        _uKd.assign(50, white);
+        _uKs.assign(50, white);
+        _uShininess.assign(50, shininess);
         std::cout << "Light position: " << uMVLightPos.x << ", " << uMVLightPos.y << ", " << uMVLightPos.z << std::endl;
         for (int i = 0; i < 32; i++)
         {
@@ -139,7 +123,7 @@ public:
             // std::cout << "_uShininess[" << i << "] = " << _uShininess[i] << std::endl;
 
             glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
-            glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
+            glm::vec3 lightIntensity = glm::vec3(10.0, 10.0, 10.0);
             glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(lightIntensity));
 
             glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
