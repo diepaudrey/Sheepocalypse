@@ -6,7 +6,6 @@
 #include "Light.hpp"
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
-#include "Renderer.hpp"
 #include "RendererBoids.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
