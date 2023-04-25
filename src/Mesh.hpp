@@ -41,16 +41,18 @@ private:
     glm::mat4 NormalMatrix;
     glm::mat4 MVPMatrix;
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl");
     // Texture    m_texture{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
     //   Texture    m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
     //    Texture    m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"),2};
     //    Texture    m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"),3};
 
-    GLuint              m_uMVPMatrix;
-    GLuint              m_uMVMatrix;
-    GLuint              m_uNormalMatrix;
-    std::vector<GLuint> m_uTextures;
+    GLuint m_uMVPMatrix;
+    GLuint m_uMVMatrix;
+    GLuint m_uNormalMatrix;
+    GLuint m_uNumTextures;
+    std::vector<GLuint>
+        m_uTextures;
 
     // Fill the m_vertices, instead of copying them
     void InitVertexData(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices)
@@ -80,7 +82,7 @@ private:
 
     void UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
     {
-        this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 100.f);
+        this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
         this->MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
         this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
         this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
@@ -94,13 +96,17 @@ private:
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
 
+        m_uNumTextures = glGetUniformLocation(m_shader.id(), "uNumTextures");
+
         // initialize each of the uniform variable needed
-        std::cout << "size de textures : " << m_textures.size() << std::endl;
         for (size_t i = 0; i < m_textures.size(); i++)
         {
-            std::string name = "uTexture" + std::to_string(i + 1);
-            std::cout << name.c_str() << std::endl;
-            GLuint location = glGetUniformLocation(m_shader.id(), name.c_str());
+            // std::string name     = "uTexture" + std::to_string(i + 1);
+            // GLuint      location = glGetUniformLocation(m_shader.id(), name.c_str());
+            // m_uTextures.push_back(location);
+
+            std::string name     = "uTextures[" + std::to_string(i) + "]";
+            GLuint      location = glGetUniformLocation(m_shader.id(), name.c_str());
             m_uTextures.push_back(location);
         }
     }
@@ -112,6 +118,8 @@ private:
         glUniformMatrix4fv(m_uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
 
         glUniformMatrix4fv(m_uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+        glUniform1i(m_uNumTextures, m_textures.size());
     }
 
 public:
@@ -127,6 +135,8 @@ public:
     {
         m_vao.UnBind();
         m_vbo.UnBind();
+        m_vao.DeleteVao();
+        m_vbo.DeleteVbo();
     }
 
     void update()
@@ -135,26 +145,23 @@ public:
 
     void Render(glm::mat4& viewMatrix, p6::Context& ctx)
     {
-        UpdateMatrices(viewMatrix, ctx);
         m_shader.use();
+        UpdateMatrices(viewMatrix, ctx);
         UpdateUniforms();
         m_vao.Bind();
 
         for (size_t i = 0; i < m_textures.size(); ++i)
         {
             glUniform1i(m_uTextures[i], i);
-            m_textures[i].Bind();
+            m_textures[i].Bind(i);
         }
 
-        // m_texture.Bind();
-        //  m_textureD.Bind();
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
         for (size_t i = 0; i < m_textures.size(); ++i)
         {
-            m_textures[i].UnBind();
+            m_textures[i].UnBind(i);
         }
-        // m_texture.UnBind();
         m_vao.UnBind();
     }
 };
