@@ -1,10 +1,12 @@
 #include "Mesh.hpp"
+#include "glm/gtx/transform.hpp"
 
-Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices, std::vector<Texture>& textures, const unsigned int& nbTextures)
+Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+    : m_position(position), m_rotation(rotation), m_scale(scale)
 {
-    InitVertexData(vertices, nbVertices);
+    InitVertexData(vertices, vertices.size());
     InitVao();
-    InitTextures(textures, nbTextures);
+    InitTextures(textures, textures.size());
     InitUniforms();
 }
 
@@ -35,7 +37,11 @@ void Mesh::InitVao()
 void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
 {
     this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
-    this->MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
+    this->MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.x, glm::vec3(1.0f, 0.f, 0.f));
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.y, glm::vec3(0.f, 1.f, 0.f));
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+    MVMatrix           = glm::scale(MVMatrix, m_scale);
     this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
     this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
 }
