@@ -57,8 +57,6 @@ int main()
 {
     auto ctx = p6::Context{{1280, 720, "Light"}};
     ctx.maximize_window();
-    const p6::Shader shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl");
-    Light            light_scene(shader);
 
     std::vector<Boid> boids;
     int               nb_boids = 50;
@@ -71,48 +69,15 @@ int main()
     float cohesionStrength   = 0.1f;
     float maxSpeed           = 10.f;
 
-    /*VBO*/ /*VAO*/
-    // cone
-    std::vector<glimac::ShapeVertex> vertices = glimac::cone_vertices(1.f, 0.5f, 32, 16);
-    Vbo                              vbo(vertices.data(), vertices.size());
-    glEnable(GL_DEPTH_TEST);
-
-    Vao vao;
-    vao.AddBuffer(vbo);
-    vbo.Bind();
-    vao.UnBind();
-
     // MVP
-    glimac::FreeflyCamera camera = glimac::FreeflyCamera();
-    // glm::mat4             viewMatrix       = camera.getViewMatrix();
-    float movementStrength = 100.f;
-    float rotationStrength = 1000.f;
+    glimac::FreeflyCamera camera           = glimac::FreeflyCamera();
+    float                 movementStrength = 100.f;
+    float                 rotationStrength = 1000.f;
     mouseHandler(ctx, camera, rotationStrength);
 
-    glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), 1280 / static_cast<float>(720), 0.1f, 100.f);
     glm::mat4 MVMatrix;
     glm::mat4 MVBMatrix;
     glm::mat4 NormalMatrix;
-    glm::vec3 light = glm::vec3(1.f, 1.f, 1.f);
-
-    // For the light
-    glm::mat4              MVMatrix_light;
-    glm::mat4              NormalMatrix_light;
-    std::vector<glm::vec3> RotAxes;
-    std::vector<glm::vec3> RotDir;
-    std::vector<glm::vec3> _uKa;
-    std::vector<glm::vec3> _uKd;
-    std::vector<glm::vec3> _uKs;
-    std::vector<float>     _uShininess;
-    for (int i = 0; i < 32; i++)
-    {
-        RotAxes.push_back(glm::ballRand(2.f));
-        RotDir.emplace_back(glm::linearRand(0, 1), glm::linearRand(0, 1), glm::linearRand(0, 1));
-        _uKa.emplace_back(glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f), glm::linearRand(0.f, 0.05f));
-        _uKd.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-        _uKs.emplace_back(glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f), glm::linearRand(0.f, 1.0f));
-        _uShininess.push_back(glm::linearRand(0.f, 1.0f));
-    }
 
     /*Test class Mesh*/
     std::vector<glimac::ShapeVertex> verticesSphere = glimac::sphere_vertices(2.f, 32.f, 16);
@@ -126,58 +91,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         keyboardHandler(ctx, camera, movementStrength);
 
-        vbo.Bind();
-        vao.Bind();
-        shader.use();
-
-        glm::vec3 uLightPos   = glm::vec3(glm::rotate(glm::mat4(1.f), 80.0f, glm::vec3(0, 1, 0)) * glm::vec4(light, 1));
-        glm::vec3 uMVLightPos = glm::vec3(camera.getViewMatrix() * glm::vec4(uLightPos, 1));
-        MVMatrix              = camera.getViewMatrix();
-        MVBMatrix             = camera.getViewMatrix();
-        MVMatrix              = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
-        NormalMatrix          = glm::transpose(glm::inverse(MVMatrix));
-
-        glUniformMatrix4fv(light_scene.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
-        glUniformMatrix4fv(light_scene.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(light_scene.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
-        glUniform3fv(light_scene.m_uKa, 1, glm::value_ptr(glm::vec3(0.0215, 0.1745, 0.0215)));
-        glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(glm::vec3(0.07568, 0.61424, 0.07568)));
-        glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(glm::vec3(0.633, 0.727811, 0.633)));
-        glUniform1f(light_scene.m_uShininess, 0.6);
-
-        glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
-        glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
-
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-        for (int i = 0; i < 32; i++)
-        {
-            MVMatrix_light     = camera.getViewMatrix();
-            MVMatrix_light     = glm::rotate(MVMatrix_light, ctx.time(), glm::vec3(RotDir[i][0], RotDir[i][1], RotDir[i][2]));
-            MVMatrix_light     = glm::translate(MVMatrix_light, RotAxes[i]);
-            MVMatrix_light     = glm::scale(MVMatrix_light, glm::vec3(0.2, 0.2, 0.2));
-            NormalMatrix_light = glm::transpose(glm::inverse(MVMatrix_light));
-
-            glUniformMatrix4fv(light_scene.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix_light));
-            glUniformMatrix4fv(light_scene.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix_light));
-            glUniformMatrix4fv(light_scene.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix_light));
-
-            glUniform3fv(light_scene.m_uKa, 1, glm::value_ptr(_uKa[i]));
-            glUniform3fv(light_scene.m_uKd, 1, glm::value_ptr(_uKd[i]));
-            glUniform3fv(light_scene.m_uKs, 1, glm::value_ptr(_uKs[i]));
-            glUniform1f(light_scene.m_uShininess, _uShininess[i]);
-
-            glUniform3fv(light_scene.m_uLightPos_vs, 1, glm::value_ptr(uMVLightPos));
-            glUniform3fv(light_scene.m_uLightIntensity, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
-
-            glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-        }
-
-        vbo.UnBind();
-
-        vao.UnBind();
-        glBindVertexArray(0);
+        MVMatrix     = camera.getViewMatrix();
+        MVBMatrix    = camera.getViewMatrix();
+        MVMatrix     = glm::rotate(MVMatrix, -ctx.time(), glm::vec3(0, 1, 0));
+        NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         /*Dear ImGui*/
         ImGui::Begin("Settings");
@@ -204,7 +121,4 @@ int main()
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
-    // delete vbo
-    vbo.DeleteVbo();
-    vao.DeleteVao();
 }

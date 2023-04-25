@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/gtx/vector_angle.hpp>
+#include <iostream>
 #include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
@@ -18,6 +19,7 @@
 #include "glm/geometric.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/string_cast.hpp"
 #include "p6/p6.h"
 
 class Mesh {
@@ -72,6 +74,7 @@ private:
         this->MVMatrix     = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -5.0f));
         this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
         this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
+        // std::cout << "bonjour " << glm::to_string(MVPMatrix) << std::endl;
     }
 
     void InitUniforms()
@@ -118,6 +121,7 @@ public:
         m_shader.use();
         UpdateUniforms();
         m_vao.Bind();
+        glEnable(GL_DEPTH_TEST);
         // glUniform1i(m_uTexture, 0);
         // m_texture.Bind();
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
