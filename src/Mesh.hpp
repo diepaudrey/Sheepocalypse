@@ -17,8 +17,11 @@ private:
     glm::mat4 NormalMatrix;
     glm::mat4 MVPMatrix;
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/normals.fs.glsl"); // à changer faire une classe shader
-    Texture    m_texture{p6::load_image_buffer("assets/textures/AUDREY.jpg")};
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
+    Texture    m_textureD{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
+    // Texture    m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
+    //  Texture    m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"),2};
+    //  Texture    m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"),3};
 
     GLuint m_uMVPMatrix;
     GLuint m_uMVMatrix;
