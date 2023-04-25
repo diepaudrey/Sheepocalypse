@@ -26,7 +26,7 @@ public:
     Vao                              m_vao;
     Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
     Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
-    Texture                          m_textureS{p6::load_image_buffer("assets/textures/salade.jpg")};
+    // Texture                          m_textureS{p6::load_image_buffer("assets/textures/salade.jpg")};
 
     p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
     GLuint     m_uMVPMatrix;

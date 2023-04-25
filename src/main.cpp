@@ -123,7 +123,7 @@ int main()
 
     /*Test OBJ loader*/
     std::vector<glimac::ShapeVertex> verticesWolf;
-    verticesWolf = LoadOBJ("./assets/models/Wolf_One_obj.obj");
+    verticesWolf = LoadOBJ("./assets/models/SmallArch_Obj.obj");
     Mesh loup(verticesWolf, verticesWolf.size());
 
     /* Loop until the user closes the window */
