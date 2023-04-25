@@ -12,7 +12,7 @@ Mesh::~Mesh()
     m_vbo.UnBind();
 }
 
-void Mesh::render(glm::mat4& viewMatrix, p6::Context& ctx)
+void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx)
 {
     UpdateMatrices(viewMatrix, ctx);
     m_shader.use();
