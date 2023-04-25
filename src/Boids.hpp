@@ -4,11 +4,12 @@
 #include <iterator>
 #include <vector>
 #include "Boid.hpp"
+#include "RendererBoids.hpp"
 #include "glimac/plan_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
-#include "RendererBoids.hpp"
 #include "p6/p6.h"
+
 
 class Boids {
 private:
@@ -91,15 +92,5 @@ public:
     void applySteeringForces(Boid& boid);
     // void updatePosition(p6::Context& ctx);
 
-    void updateBoids(p6::Context& ctx)
-    {
-        for (auto& boid : m_boids)
-        {
-            std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
-            boid.updatePosition(ctx);
-            applySteeringForces(boid);
-            avoidEdges(boid, limit, turnfactor);
-            neighbors.clear();
-        }
-    };
+    void updateBoids(p6::Context& ctx);
 };

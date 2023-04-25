@@ -181,3 +181,15 @@ void Boids::applySteeringForces(Boid& boid)
     boid.applyForce(separation(boid));
     boid.limitSpeed();
 }
+
+void Boids::updateBoids(p6::Context& ctx)
+{
+    for (auto& boid : m_boids)
+    {
+        std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
+        boid.updatePosition(ctx);
+        applySteeringForces(boid);
+        avoidEdges(boid, limit, turnfactor);
+        neighbors.clear();
+    }
+};
