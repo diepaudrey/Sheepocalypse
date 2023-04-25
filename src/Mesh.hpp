@@ -25,6 +25,7 @@ private:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
+    std::vector<Texture>             m_textures;
 
     glm::mat4 m_modelMatrix;
     // glm::vec3 m_position;
@@ -41,22 +42,30 @@ private:
     glm::mat4 MVPMatrix;
 
     p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"); // à changer faire une classe shader
-    Texture    m_textureD{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
-    // Texture    m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
-    //  Texture    m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"),2};
-    //  Texture    m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"),3};
+    // Texture    m_texture{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
+    //   Texture    m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
+    //    Texture    m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"),2};
+    //    Texture    m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"),3};
 
-    GLuint m_uMVPMatrix;
-    GLuint m_uMVMatrix;
-    GLuint m_uNormalMatrix;
-    GLuint m_uTexture;
+    GLuint              m_uMVPMatrix;
+    GLuint              m_uMVMatrix;
+    GLuint              m_uNormalMatrix;
+    std::vector<GLuint> m_uTextures;
 
     // Fill the m_vertices, instead of copying them
-    void InitVertexData(std::vector<glimac::ShapeVertex> vertices, const unsigned int& nbVertices)
+    void InitVertexData(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices)
     {
         for (size_t i = 0; i < nbVertices; i++)
         {
             this->m_vertices.push_back(vertices[i]);
+        }
+    }
+
+    void InitTextures(std::vector<Texture>& textures, const unsigned int& nbTextures)
+    {
+        for (size_t i = 0; i < nbTextures; i++)
+        {
+            this->m_textures.push_back(textures[i]);
         }
     }
 
@@ -85,7 +94,15 @@ private:
 
         m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
 
-        m_uTexture = glGetUniformLocation(m_shader.id(), "uTexture");
+        // initialize each of the uniform variable needed
+        std::cout << "size de textures : " << m_textures.size() << std::endl;
+        for (size_t i = 0; i < m_textures.size(); i++)
+        {
+            std::string name = "uTexture" + std::to_string(i + 1);
+            std::cout << name.c_str() << std::endl;
+            GLuint location = glGetUniformLocation(m_shader.id(), name.c_str());
+            m_uTextures.push_back(location);
+        }
     }
 
     void UpdateUniforms()
@@ -98,10 +115,11 @@ private:
     }
 
 public:
-    Mesh(std::vector<glimac::ShapeVertex> vertices, const unsigned int& nbVertices)
+    Mesh(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices, std::vector<Texture>& textures, const unsigned int& nbTextures)
     {
         InitVertexData(vertices, nbVertices);
         InitVao();
+        InitTextures(textures, nbTextures);
         InitUniforms();
     }
 
@@ -121,11 +139,22 @@ public:
         m_shader.use();
         UpdateUniforms();
         m_vao.Bind();
-        glUniform1i(m_uTexture, 0);
-        m_textureD.Bind();
-        // m_textureD.Bind();
+
+        for (size_t i = 0; i < m_textures.size(); ++i)
+        {
+            glUniform1i(m_uTextures[i], i);
+            m_textures[i].Bind();
+        }
+
+        // m_texture.Bind();
+        //  m_textureD.Bind();
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-        m_textureD.UnBind();
+
+        for (size_t i = 0; i < m_textures.size(); ++i)
+        {
+            m_textures[i].UnBind();
+        }
+        // m_texture.UnBind();
         m_vao.UnBind();
     }
 };

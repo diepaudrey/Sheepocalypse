@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <iostream>
 #include <vector>
 #include "Boid.hpp"
@@ -124,7 +125,18 @@ int main()
     /*Test OBJ loader*/
     std::vector<glimac::ShapeVertex> verticesWolf;
     verticesWolf = LoadOBJ("./assets/models/SmallArch_Obj.obj");
-    Mesh loup(verticesWolf, verticesWolf.size());
+    std::vector<Texture> textures;
+    Texture              m_texture{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
+    Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
+    Texture              m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"), 2};
+    Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 1};
+    textures.push_back(m_texture);
+    textures.push_back(m_textureH);
+    textures.push_back(m_textureN);
+    textures.push_back(m_textureS);
+    std::cout << "vector textures size : " << textures.size() << std::endl;
+
+    Mesh loup(verticesWolf, verticesWolf.size(), textures, textures.size());
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
