@@ -42,8 +42,10 @@ public:
     std::vector<glm::vec3> _uKs;
     std::vector<float>     _uShininess;
     glm::vec3              light     = glm::vec3(0.f, 0.f, 0.f);
-    glm::vec3              white     = glm::vec3(1.0f, 1.0f, 1.0f);
-    float                  shininess = 32.0f;
+    const glm::vec3        Ka        = glm::vec3(0.05, 0.05, 0.05);
+    const glm::vec3        Kd        = glm::vec3(1.0, 1.0, 1.0);
+    const glm::vec3        Ks        = glm::vec3(1.0, 1.0, 1.0);
+    const float            shininess = 0.5f;
 
 public:
     RendererBoids();
