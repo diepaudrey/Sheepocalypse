@@ -93,7 +93,7 @@ int main()
     textures.push_back(m_textureH);
     textures.push_back(m_texture);
 
-    // textures.push_back(m_textureN);
+    textures.push_back(m_textureN);
     textures.push_back(m_textureS);
 
     Mesh loup(verticesWolf, verticesWolf.size(), textures, textures.size());
