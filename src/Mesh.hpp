@@ -9,9 +9,9 @@ private:
     std::vector<Texture>             m_textures;
 
     glm::mat4 m_modelMatrix;
-    glm::vec3 m_position = glm::vec3(0.f);
-    glm::vec3 m_rotation = glm::vec3(0.f);
-    glm::vec3 m_scale    = glm::vec3(1.f);
+    glm::vec3 m_position;
+    glm::vec3 m_rotation;
+    glm::vec3 m_scale;
 
     glm::mat4 ProjMatrix;
     glm::mat4 MVMatrix;
@@ -42,7 +42,7 @@ private:
     void UpdateUniforms();
 
 public:
-    Mesh(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices, std::vector<Texture>& textures, const unsigned int& nbTextures);
+    Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
     ~Mesh();
 
