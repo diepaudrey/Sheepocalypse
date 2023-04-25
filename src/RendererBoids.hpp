@@ -25,16 +25,16 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
-    // Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
-    // Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
+    Texture                          m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
+    Texture                          m_textureL{p6::load_image_buffer("assets/textures/lila.png"), 1};
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl"); // à changer faire une classe shader
-    Light      light_boid{p6::load_shader("shaders/3D.vs.glsl", "shaders/pointLight.fs.glsl")};
-    GLuint     m_uMVPMatrix;
-    GLuint     m_uMVMatrix;
-    GLuint     m_uNormalMatrix;
-    // GLint                  m_uTextureLila;
-    // GLint                  m_uTextureDrake;
+    p6::Shader             m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl"); // à changer faire une classe shader
+    Light                  light_boid{p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl")};
+    GLuint                 m_uMVPMatrix;
+    GLuint                 m_uMVMatrix;
+    GLuint                 m_uNormalMatrix;
+    GLint                  m_uTextureLila;
+    GLint                  m_uTextureDrake;
     glm::mat4              MVMatrix_light;
     glm::mat4              NormalMatrix_light;
     std::vector<glm::vec3> _uKa;
@@ -46,6 +46,7 @@ public:
     const glm::vec3        Kd        = glm::vec3(1.0, 1.0, 1.0);
     const glm::vec3        Ks        = glm::vec3(1.0, 1.0, 1.0);
     const float            shininess = 0.5f;
+    GLuint                 m_uNumTextures;
 
 public:
     RendererBoids();

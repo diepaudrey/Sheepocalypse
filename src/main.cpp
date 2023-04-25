@@ -88,8 +88,6 @@ int main()
     Texture              m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png")};
     Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 1};
 
-    // Texture m_texture{p6::load_image_buffer("assets/textures/Drake.jpg")};
-    // Texture m_textureH{p6::load_image_buffer("assets/textures/lila.png"), 1};
     textures.push_back(m_textureH);
     textures.push_back(m_texture);
 
@@ -133,7 +131,7 @@ int main()
 
         game.updateBoids(ctx);
         game.drawBoids(ctx, viewMatrix);
-        loup.Render(viewMatrix, ctx);
+        // loup.Render(viewMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.
