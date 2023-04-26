@@ -16,12 +16,14 @@ void RendererBoids::initializeBoid()
     m_vao.UnBind();
 
     /*Location uniform variables*/
-    m_uMVPMatrix    = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
-    m_uMVMatrix     = glGetUniformLocation(m_shader.id(), "uMVMatrix");
-    m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
-    m_uNumTextures  = glGetUniformLocation(m_shader.id(), "uNumTextures");
-    m_uTextureDrake = glGetUniformLocation(m_shader.id(), "uTexture1");
-    m_uTextureLila  = glGetUniformLocation(m_shader.id(), "uTexture2");
+    m_uMVPMatrix     = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
+    m_uMVMatrix      = glGetUniformLocation(m_shader.id(), "uMVMatrix");
+    m_uNormalMatrix  = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
+    m_uNumTextures   = glGetUniformLocation(m_shader.id(), "uNumTextures");
+    m_uTextureDrake  = glGetUniformLocation(m_shader.id(), "uTexture1");
+    m_uTextureDrake2 = glGetUniformLocation(m_shader.id(), "uTexture2");
+    m_uTextureWings  = glGetUniformLocation(m_shader.id(), "uTexture3");
+    m_uTextureLila   = glGetUniformLocation(m_shader.id(), "uTexture4");
 
     _uKa.emplace_back(Ka);
     _uKd.emplace_back(Kd);
@@ -42,11 +44,15 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 500.f);
 
     m_vao.Bind();
-    glUniform1i(m_uNumTextures, 2);
+    glUniform1i(m_uNumTextures, 4);
     glUniform1i(m_uTextureDrake, 0);
-    glUniform1i(m_uTextureLila, 1);
+    glUniform1i(m_uTextureDrake2, 1);
+    glUniform1i(m_uTextureWings, 2);
+    glUniform1i(m_uTextureLila, 3);
     m_textureD.Bind();
-    m_textureL.Bind(1);
+    m_textureD2.Bind(1);
+    m_textureW.Bind(2);
+    m_textureL.Bind(3);
     for (auto& boid : m_boids)
     {
         glm::vec3 start        = glm::vec3(0.f, 1.f, 0.f);
@@ -77,7 +83,9 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     }
     m_textureD.UnBind();
-    m_textureL.UnBind(1);
+    m_textureD2.UnBind(1);
+    m_textureW.UnBind(2);
+    m_textureL.UnBind(3);
     m_vao.UnBind();
 };
 
