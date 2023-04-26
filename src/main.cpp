@@ -76,7 +76,7 @@ int main()
     float cohesionStrength   = 0.1f;
     float maxSpeed           = 10.f;
 
-    std::vector<glimac::ShapeVertex> vertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+    std::vector<glimac::ShapeVertex> vertices = LoadOBJ("./assets/models/Drake_Obj.obj");
 
     Environment world;
     world.InitBorders();
