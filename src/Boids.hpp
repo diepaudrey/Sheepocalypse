@@ -25,7 +25,7 @@ private:
     // float cohesionStrength   = 0.1f;
 
     float turnfactor = 0.5f;
-    float limit      = 25.f;
+    float limit      = 50.f;
 
 public:
     Boids() = default;

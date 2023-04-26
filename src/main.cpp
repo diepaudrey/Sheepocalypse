@@ -3,11 +3,11 @@
 #include <vector>
 #include "Boid.hpp"
 #include "Boids.hpp"
+#include "Environment.hpp"
 #include "Light.hpp"
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
 #include "RendererBoids.hpp"
-#include "RendererBorders.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
@@ -77,26 +77,27 @@ int main()
     float maxSpeed           = 10.f;
 
     /*Test OBJ loader*/
-    std::vector<glimac::ShapeVertex> verticesWolf;
-    verticesWolf = LoadOBJ("./assets/models/SmallArch_Obj.obj");
-    std::vector<Texture> textures;
-    Texture              m_texture{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
-    Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
-    Texture              m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"), 3};
-    Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 2};
+    // std::vector<glimac::ShapeVertex> verticesWolf;
+    // verticesWolf = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+    // std::vector<Texture> textures;
+    // Texture              m_texture{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
+    // Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
+    // Texture              m_textureN{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Normal.png"), 3};
+    // Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 2};
 
-    // Texture m_texture{p6::load_image_buffer("assets/textures/Drake.jpg")};
-    // Texture m_textureH{p6::load_image_buffer("assets/textures/lila.png"), 1};
+    // // Texture m_texture{p6::load_image_buffer("assets/textures/Drake.jpg")};
+    // // Texture m_textureH{p6::load_image_buffer("assets/textures/lila.png"), 1};
 
-    textures.push_back(m_textureN);
-    textures.push_back(m_textureS);
-    textures.push_back(m_textureH);
-    textures.push_back(m_texture);
+    // textures.push_back(m_textureN);
+    // textures.push_back(m_textureS);
+    // textures.push_back(m_textureH);
+    // textures.push_back(m_texture);
 
-    Mesh loup(verticesWolf, textures, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(0.5f));
+    // Mesh loup(verticesWolf, textures, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(0.5f));
 
-    RendererBorders r;
-    r.InitBorders();
+    Environment world;
+    world.InitBorders();
+    world.InitArche();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -133,9 +134,9 @@ int main()
 
         game.updateBoids(ctx);
         game.drawBoids(ctx, viewMatrix);
-        loup.Render(viewMatrix, ctx);
 
-        r.RenderBorders(viewMatrix, ctx);
+        world.RenderBorders(viewMatrix, ctx);
+        world.RenderArche(viewMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.
