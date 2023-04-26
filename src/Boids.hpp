@@ -4,6 +4,7 @@
 #include <iterator>
 #include <vector>
 #include "Boid.hpp"
+#include "OBJLoader.hpp"
 #include "RendererBoids.hpp"
 #include "glimac/plan_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
@@ -68,7 +69,7 @@ public:
     }
 
     // draw the boid
-    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix);
+    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices);
     void drawBorders(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges
