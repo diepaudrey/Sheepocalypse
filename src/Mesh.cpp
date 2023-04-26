@@ -10,6 +10,15 @@ Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& tex
     InitUniforms();
 }
 
+Mesh::Mesh(const Mesh& mesh)
+    : m_position(mesh.m_position), m_rotation(mesh.m_rotation), m_scale(mesh.m_scale), m_vertices(mesh.m_vertices), m_textures(mesh.m_textures)
+{
+    InitVertexData(m_vertices, m_vertices.size());
+    InitVao();
+    InitTextures(m_textures, m_textures.size());
+    InitUniforms();
+}
+
 void Mesh::InitVertexData(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices)
 {
     for (size_t i = 0; i < nbVertices; i++)

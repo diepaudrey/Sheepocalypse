@@ -7,6 +7,7 @@
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
 #include "RendererBoids.hpp"
+#include "RendererBorders.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
@@ -94,39 +95,8 @@ int main()
 
     Mesh loup(verticesWolf, textures, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(0.5f));
 
-    // test renderer class
-    std::vector<glimac::ShapeVertex> plan_vertices = glimac::plan_vertices(100.f, 100.f, 32, 32);
-    Texture                          floor{p6::load_image_buffer("assets/textures/Grass.jpg")};
-    std::vector<Texture>             plansTex;
-    plansTex.push_back(floor);
-    Mesh plan(plan_vertices, plansTex, glm::vec3(0.f, -50.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-
-    // std::vector<glimac::ShapeVertex> sky_vertices = glimac::plan_vertices(100.f, 100.f, 32, 32);
-    Texture              skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> skyTextures;
-    skyTextures.push_back(skyTex);
-    Mesh sky(plan_vertices, skyTextures, glm::vec3(0.f, 50.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-
-    // std::vector<glimac::ShapeVertex> wall1_vertices = glimac::plan_vertices(100.f, 100.f, 32, 32);
-    Texture              wall1Tex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> wall1Textures;
-    wall1Textures.push_back(skyTex);
-    Mesh wall1(plan_vertices, skyTextures, glm::vec3(50.f, 0.f, 0.f), glm::vec3(0.f, 0.f, glm::radians(90.f)), glm::vec3(1.f));
-
-    Texture              wall2Tex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> wall2Textures;
-    wall1Textures.push_back(skyTex);
-    Mesh wall2(plan_vertices, skyTextures, glm::vec3(-50.f, 0.f, 0.f), glm::vec3(0.f, 0.f, glm::radians(90.f)), glm::vec3(1.f));
-
-    Texture              wall3Tex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> wall3Textures;
-    wall1Textures.push_back(skyTex);
-    Mesh wall3(plan_vertices, skyTextures, glm::vec3(0.f, 0.f, 50.f), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f));
-
-    Texture              wall4Tex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> wall4Textures;
-    wall1Textures.push_back(skyTex);
-    Mesh wall4(plan_vertices, skyTextures, glm::vec3(0.f, 0.f, -50.f), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f));
+    RendererBorders r;
+    r.InitBorders();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -165,12 +135,7 @@ int main()
         game.drawBoids(ctx, viewMatrix);
         loup.Render(viewMatrix, ctx);
 
-        plan.Render(viewMatrix, ctx);
-        sky.Render(viewMatrix, ctx);
-        wall1.Render(viewMatrix, ctx);
-        wall2.Render(viewMatrix, ctx);
-        wall3.Render(viewMatrix, ctx);
-        wall4.Render(viewMatrix, ctx);
+        r.RenderBorders(viewMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.

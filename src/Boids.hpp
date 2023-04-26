@@ -10,7 +10,6 @@
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
-
 class Boids {
 private:
     /*Attributes*/
@@ -26,7 +25,7 @@ private:
     // float cohesionStrength   = 0.1f;
 
     float turnfactor = 0.5f;
-    float limit      = 40.f;
+    float limit      = 25.f;
 
 public:
     Boids() = default;

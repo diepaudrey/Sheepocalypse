@@ -42,9 +42,28 @@ private:
     void UpdateUniforms();
 
 public:
+    Mesh() = default;
     Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
+    Mesh(const Mesh& mesh);
     ~Mesh();
 
     void Render(glm::mat4& viewMatrix, p6::Context& ctx);
+
+    Mesh& operator=(const Mesh& mesh)
+    {
+        m_position = mesh.m_position;
+        m_rotation = mesh.m_rotation;
+        m_scale    = mesh.m_scale;
+        m_vertices = mesh.m_vertices;
+        for (int i = 0; i < mesh.m_textures.size(); i++)
+        {
+            Texture texture = mesh.m_textures[i];
+            m_textures.push_back(texture);
+        }
+        InitVertexData(m_vertices, m_vertices.size());
+        InitVao();
+        InitTextures(m_textures, m_textures.size());
+        InitUniforms();
+        return *this;
+    }
 };
