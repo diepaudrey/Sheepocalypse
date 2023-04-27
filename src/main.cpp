@@ -81,9 +81,9 @@ struct setImGui {
     {
         ImGui::Begin("Settings");
         ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 3.f);
-        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 10.f);
-        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 5.f);
         ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.1f, 30.f);
         ImGui::Checkbox("LOD 1", &lod1);
         ImGui::End();
@@ -137,15 +137,8 @@ int main()
         keyboardHandler(ctx, camera, movementStrength);
         viewMatrix = camera.getViewMatrix();
 
-        /*Dear ImGui*/
-        // ImGui::Begin("Settings");
-        // ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
-        // ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 10.f);
-        // ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
-        // ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
-        // ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
-        // ImGui::End();
         IHM.updateImGui();
+
         if (IHM.lod1 == true)
         {
             vertices_ptr = &vertices_wolf;
