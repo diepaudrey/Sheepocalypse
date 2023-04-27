@@ -37,7 +37,7 @@ public:
     std::vector<GLuint>  m_uTextures;
 
     // parameters for light
-    Light           light_boid{p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl")};
+    Light           light_boid{m_shader};
     glm::vec3       light     = glm::vec3(0.f, 0.f, 0.f);
     const glm::vec3 Ka        = glm::vec3(0.05, 0.05, 0.05);
     const glm::vec3 Kd        = glm::vec3(1.0, 1.0, 1.0);
@@ -49,9 +49,15 @@ public:
 
     RendererBoids(std::vector<glimac::ShapeVertex>& vertices);
 
-    void InitTextures(std::vector<Texture>& textures, const unsigned int& nbTextures);
+    void InitVao();
+
+    void InitTextures();
 
     void initializeBoid();
+
+    void BindTexture();
+
+    void UnBindTexture();
 
     void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx);
 

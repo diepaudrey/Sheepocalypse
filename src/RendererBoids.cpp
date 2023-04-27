@@ -7,23 +7,16 @@ RendererBoids::RendererBoids(std::vector<glimac::ShapeVertex>& vertices)
     initializeBoid();
 }
 
-void RendererBoids::InitTextures(std::vector<Texture>& textures, const unsigned int& nbTextures)
-{
-    for (size_t i = 0; i < nbTextures; i++)
-    {
-        this->m_textures.push_back(textures[i]);
-    }
-}
-
-void RendererBoids::initializeBoid()
+void RendererBoids::InitVao()
 {
     this->m_vbo = Vbo(m_vertices.data(), m_vertices.size());
     m_vbo.UnBind();
-
     m_vao.AddBuffer(m_vbo);
     m_vao.UnBind();
+}
 
-    /*Location uniform variables*/
+void RendererBoids::InitTextures()
+{
     m_uNumTextures = glGetUniformLocation(m_shader.id(), "uNumTextures");
     for (size_t i = 0; i < m_textures.size(); i++)
     {
@@ -31,7 +24,30 @@ void RendererBoids::initializeBoid()
         GLuint      location = glGetUniformLocation(m_shader.id(), name.c_str());
         m_uTextures.push_back(location);
     }
+}
 
+void RendererBoids::BindTexture()
+{
+    glUniform1i(m_uNumTextures, m_textures.size());
+    for (unsigned int i = 0; i < m_textures.size(); ++i)
+    {
+        glUniform1i(m_uTextures[i], i);
+        m_textures[i].Bind(i);
+    }
+}
+
+void RendererBoids::UnBindTexture()
+{
+    for (unsigned int i = 0; i < m_textures.size(); ++i)
+    {
+        m_textures[i].UnBind(i);
+    }
+}
+
+void RendererBoids::initializeBoid()
+{
+    InitVao();
+    InitTextures();
     light_boid.initLight(Ka, Kd, Ks, shininess);
 }
 
@@ -46,12 +62,8 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 500.f);
 
     m_vao.Bind();
-    glUniform1i(m_uNumTextures, m_textures.size());
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        glUniform1i(m_uTextures[i], i);
-        m_textures[i].Bind(i);
-    }
+    BindTexture();
+
     for (auto& boid : m_boids)
     {
         glm::vec3 start        = glm::vec3(0.f, 1.f, 0.f);
@@ -67,10 +79,8 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         light_boid.setLight(light_boid, light, MVMatrix, MVPMatrix);
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     }
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        m_textures[i].UnBind(i);
-    }
+
+    UnBindTexture();
     m_vao.UnBind();
 };
 
