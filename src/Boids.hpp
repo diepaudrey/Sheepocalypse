@@ -1,4 +1,5 @@
 #pragma once
+#include <imgui.h>
 #include <vcruntime.h>
 #include <cstdlib>
 #include <iterator>
@@ -9,13 +10,42 @@
 #include "glimac/plan_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/fwd.hpp"
+#include "glm/geometric.hpp"
 #include "p6/p6.h"
+
+
+struct BoidsParameters {
+    float protectedRadius;
+    float separationStrength;
+    float alignmentStrength;
+    float cohesionStrength;
+    float maxSpeed;
+    bool  lodLow  = false;
+    bool  lodMid  = false;
+    bool  lodHigh = false;
+
+    void updateBoidsParam()
+    {
+        ImGui::Begin("Settings");
+        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 3.f);
+        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.1f, 30.f);
+        ImGui::Checkbox("LoD Low", &lodLow);
+        ImGui::Checkbox("LoD Medium", &lodMid);
+        ImGui::Checkbox("LoD High", &lodHigh);
+        ImGui::End();
+    }
+};
 
 class Boids {
 private:
     /*Attributes*/
     std::vector<Boid> m_boids;
     int               m_numBoids;
+
+    // BoidsParameters boidParam;
 
     float separationStrength;
     float alignmentStrength;
@@ -31,7 +61,7 @@ private:
 public:
     Boids() = default;
 
-    Boids(const std::vector<Boid>& boids, const int& numBoids)
+    Boids(const std::vector<Boid>& boids, const int& numBoids, BoidsParameters& boidParam)
         : m_boids(boids), m_numBoids(numBoids){};
 
     void fillBoids(p6::Context& ctx);
@@ -78,7 +108,7 @@ public:
     void drawBorders(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges
-    void avoidEdges(Boid& boid, const float& limit, const float& turnfactor);
+    void avoidEdges(Boid& boid, const float& limit, const float& turnfactor, BoidsParameters& boidParam);
 
     // check distance between this boid and the boid in argument
     static bool isTooClose(const Boid& boid1, const Boid& boid2, const float& radius);
@@ -89,13 +119,13 @@ public:
     void displayCollision(const std::vector<Boids>& neighbors, p6::Context& ctx) const;
 
     /*3 rules*/
-    glm::vec3 separation(const Boid& boid) const;
-    glm::vec3 alignment(const Boid& boid) const;
-    glm::vec3 cohesion(const Boid& boid) const;
+    glm::vec3 separation(const Boid& boid, BoidsParameters& boidParam) const;
+    glm::vec3 alignment(const Boid& boid, BoidsParameters& boidParam) const;
+    glm::vec3 cohesion(const Boid& boid, BoidsParameters& boidParam) const;
 
     // apply the 3 rules(separation, alignment, cohesion)
-    void applySteeringForces(Boid& boid);
+    void applySteeringForces(Boid& boid, BoidsParameters& boidParam);
     // void updatePosition(p6::Context& ctx);
 
-    void updateBoids(p6::Context& ctx);
+    void updateBoids(p6::Context& ctx, BoidsParameters& boidParam);
 };

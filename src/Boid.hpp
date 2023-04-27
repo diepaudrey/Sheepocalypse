@@ -1,9 +1,9 @@
 #pragma once
 #include <cstdlib>
 #include <vector>
-// #include "doctest/doctest.h"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
+
 
 class Boid {
 private:
@@ -65,7 +65,7 @@ public:
     void applyForce(const glm::vec3 force);
 
     // limit the speed
-    void limitSpeed();
+    void limitSpeed(const float& maxSpeed);
 
     friend bool operator==(const Boid& a, const Boid& b);
     friend bool operator!=(const Boid& a, const Boid& b);

@@ -1,5 +1,4 @@
 #include "Boids.hpp"
-#include "glm/geometric.hpp"
 
 void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices)
 {
@@ -27,31 +26,32 @@ void Boids::fillBoids(p6::Context& ctx)
     }
 }
 
-void Boids::avoidEdges(Boid& boid, const float& limit, const float& turnfactor)
+void Boids::avoidEdges(Boid& boid, const float& limit, const float& turnfactor, BoidsParameters& boidParam)
 {
-    if (boid.getPosition().x + boid.getProtectedRadius() > limit)
+    // std::cout << "boid pos : " << boid.getPosition().x << " " << boid.getPosition().y << " " << boid.getPosition().z << std::endl;
+    if (boid.getPosition().x + boidParam.protectedRadius > limit)
     {
         boid.addSpeedX(-turnfactor);
     }
-    if (boid.getPosition().x - boid.getProtectedRadius() < -limit)
+    if (boid.getPosition().x - boidParam.protectedRadius < -limit)
     {
         boid.addSpeedX(turnfactor);
     }
 
-    if (boid.getPosition().y + boid.getProtectedRadius() > limit)
+    if (boid.getPosition().y + boidParam.protectedRadius > limit)
     {
         boid.addSpeedY(-turnfactor);
     }
-    if (boid.getPosition().y - boid.getProtectedRadius() < -limit)
+    if (boid.getPosition().y - boidParam.protectedRadius < -limit)
     {
         boid.addSpeedY(turnfactor);
     }
 
-    if (boid.getPosition().z + boid.getProtectedRadius() > limit)
+    if (boid.getPosition().z + boidParam.protectedRadius > limit)
     {
         boid.addSpeedZ(-turnfactor);
     }
-    if (boid.getPosition().z - boid.getProtectedRadius() < -limit)
+    if (boid.getPosition().z - boidParam.protectedRadius < -limit)
     {
         boid.addSpeedZ(turnfactor);
     }
@@ -78,7 +78,7 @@ std::vector<Boid> Boids::fillNeighbors(const Boid& boid, p6::Context& ctx)
 
 /* 3 Rules of the game*/
 
-glm::vec3 Boids::separation(const Boid& boid) const
+glm::vec3 Boids::separation(const Boid& boid, BoidsParameters& boidParam) const
 {
     glm::vec3   steeringForce(0.f, 0.f, 0.f);
     const float separationRange   = 8.f;
@@ -98,14 +98,14 @@ glm::vec3 Boids::separation(const Boid& boid) const
     if (numberOfNeighbors != 0)
     {
         steeringForce /= numberOfNeighbors;
-        steeringForce = steeringForce * separationStrength;
+        steeringForce = steeringForce * boidParam.separationStrength;
     }
     // std::cout << "Steering force : " << steeringForce.x << " " << steeringForce.y << " " << steeringForce.z << std::endl;
 
     return steeringForce;
 }
 
-glm::vec3 Boids::alignment(const Boid& boid) const
+glm::vec3 Boids::alignment(const Boid& boid, BoidsParameters& boidParam) const
 {
     glm::vec3 averageDirection(0.f, 0.f, 0.f);
     float     alignmentRange = 10.f;
@@ -131,13 +131,13 @@ glm::vec3 Boids::alignment(const Boid& boid) const
     {
         averageDirection /= numberOfNeighbors;
         averageDirection = normalize(averageDirection);
-        averageDirection *= alignmentStrength;
+        averageDirection *= boidParam.alignmentStrength;
     }
     // std::cout << "Average direction : " << averageDirection.x << " " << averageDirection.y << " " << averageDirection.z << std::endl;
     return averageDirection;
 }
 
-glm::vec3 Boids::cohesion(const Boid& boid) const
+glm::vec3 Boids::cohesion(const Boid& boid, BoidsParameters& boidParam) const
 {
     glm::vec3 averageLocation(0.f, 0.f, 0.f);
     float     cohesionRange     = 25.f;
@@ -157,29 +157,29 @@ glm::vec3 Boids::cohesion(const Boid& boid) const
     if (numberOfNeighbors != 0)
     {
         averageLocation /= numberOfNeighbors;
-        averageLocation = normalize(averageLocation - boid.getPosition()) * cohesionStrength;
+        averageLocation = normalize(averageLocation - boid.getPosition()) * boidParam.cohesionStrength;
     }
     // std::cout << "Average location : " << averageLocation.x << " " << averageLocation.y << " " << averageLocation.z << std::endl;
 
     return averageLocation;
 }
 
-void Boids::applySteeringForces(Boid& boid)
+void Boids::applySteeringForces(Boid& boid, BoidsParameters& boidParam)
 {
-    boid.applyForce(alignment(boid));
-    boid.applyForce(cohesion(boid));
-    boid.applyForce(separation(boid));
-    boid.limitSpeed();
+    boid.applyForce(alignment(boid, boidParam));
+    boid.applyForce(cohesion(boid, boidParam));
+    boid.applyForce(separation(boid, boidParam));
+    boid.limitSpeed(boidParam.maxSpeed);
 }
 
-void Boids::updateBoids(p6::Context& ctx)
+void Boids::updateBoids(p6::Context& ctx, BoidsParameters& boidParam)
 {
     for (auto& boid : m_boids)
     {
         std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
         boid.updatePosition(ctx);
-        applySteeringForces(boid);
-        avoidEdges(boid, limit, turnfactor);
+        applySteeringForces(boid, boidParam);
+        avoidEdges(boid, limit, turnfactor, boidParam);
         neighbors.clear();
     }
 };

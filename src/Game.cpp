@@ -1,14 +1,13 @@
 #include "Game.hpp"
-#include <iostream>
 
-Game::Game(p6::Context& ctx)
+Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    InitBoids(ctx);
+    InitBoids(ctx, boidParam);
     InitCamera();
     mouseHandler(ctx);
-    // InitImGui();
+    InitImGui(boidParam);
     InitEnvironment();
-    std::cout << "Game initialized" << std::endl;
+    // std::cout << "Game initialized" << std::endl;
 }
 
 void Game::mouseHandler(p6::Context& ctx)
@@ -48,10 +47,10 @@ void Game::keyboardHandler(p6::Context& ctx)
     }
 }
 
-void Game::InitBoids(p6::Context& ctx)
+void Game::InitBoids(p6::Context& ctx, BoidsParameters& boidParam)
 {
     std::vector<Boid> vecBoids;
-    m_boids = Boids(vecBoids, m_nbBoids);
+    m_boids = Boids(vecBoids, m_nbBoids, boidParam);
     m_boids.fillBoids(ctx);
 }
 
@@ -60,27 +59,30 @@ void Game::InitCamera()
     m_cam = glimac::FreeflyCamera();
 }
 
-// void Game::InitImGui()
-// {
-//     IHM = sImGui(protectedRadius, separationStrength, alignmentStrength, cohesionStrength, maxSpeed, lodDragon);
-// }
+void Game::InitImGui(BoidsParameters& boidParam)
+{
+    boidParam.protectedRadius    = protectedRadius;
+    boidParam.alignmentStrength  = alignmentStrength;
+    boidParam.cohesionStrength   = cohesionStrength;
+    boidParam.separationStrength = separationStrength;
+    boidParam.maxSpeed           = maxSpeed;
+    boidParam.lodLow             = lodLow;
+    boidParam.lodMid             = lodMid;
+    boidParam.lodHigh            = lodHigh;
+}
 
 void Game::InitEnvironment()
 {
     m_environment.InitMeshes();
 }
 
-void Game::Render(p6::Context& ctx)
+void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
     keyboardHandler(ctx);
     viewMatrix  = m_cam.getViewMatrix();
     verticesPtr = &verticesHigh;
-    m_boids.setProtectedRadius(protectedRadius);
-    m_boids.setAlignmentStrength(alignmentStrength);
-    m_boids.setCohesionStrength(cohesionStrength);
-    m_boids.setSeparationStrength(separationStrength);
-    m_boids.setBoidsMaxSpeed(maxSpeed);
-    m_boids.updateBoids(ctx);
+    boidParam.updateBoidsParam();
+    m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr);
     m_environment.RenderMeshes(viewMatrix, ctx);
 }
