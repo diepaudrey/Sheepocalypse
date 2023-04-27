@@ -32,7 +32,7 @@ void main() {
     vec2 fCorrectCoords = vec2(vTexCoords.x, 1.0 - vTexCoords.y);
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 0.0);
     for (int i = 0; i < uNumTextures; ++i) {
-        textureColor += texture(uTextures[i+1], fCorrectCoords);
+        textureColor += texture(uTextures[i], fCorrectCoords);
     }
 
     // Combinaison des couleurs de la lumière et des textures

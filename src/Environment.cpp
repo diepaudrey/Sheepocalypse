@@ -54,6 +54,6 @@ void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx)
 
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx)
 {
-    RenderBorders(viewMatrix, ctx);
+    // RenderBorders(viewMatrix, ctx);
     RenderArche(viewMatrix, ctx);
 }
