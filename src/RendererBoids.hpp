@@ -53,7 +53,7 @@ public:
     GLuint          m_uNumTextures;
 
 public:
-    RendererBoids();
+    RendererBoids() = default;
 
     RendererBoids(std::vector<glimac::ShapeVertex>& vertices);
 

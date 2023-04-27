@@ -29,6 +29,14 @@ void Environment::InitArche()
     m_archeMesh = Mesh(arche);
 }
 
+void Environment::InitMeshes()
+{
+    InitBorders();
+    InitArche();
+
+    glEnable(GL_DEPTH_TEST);
+}
+
 void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx)
 {
     m_floorMesh.Render(viewMatrix, ctx);
@@ -42,4 +50,10 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx)
 void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx)
 {
     m_archeMesh.Render(viewMatrix, ctx);
+}
+
+void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx)
+{
+    RenderBorders(viewMatrix, ctx);
+    RenderArche(viewMatrix, ctx);
 }

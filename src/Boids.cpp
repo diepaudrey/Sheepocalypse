@@ -11,16 +11,6 @@ void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glima
     boidRenderer.deleteBuffers();
 }
 
-// void Boids::drawBorders(p6::Context& ctx, glm::mat4& viewMatrix)
-// {
-//     Glfloat vertices[] = {
-
-//     };
-//     Renderer borders(vertices);
-//     borders.Render();
-//     borders.deleteBuffers();
-// }
-
 void Boids::fillBoids(p6::Context& ctx)
 {
     const float& min = 20.f;

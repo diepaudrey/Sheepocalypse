@@ -51,8 +51,11 @@ public:
     void InitBorders();
 
     void InitArche();
+    void InitMeshes();
 
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx);
 
     void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx);
+
+    void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx);
 };
