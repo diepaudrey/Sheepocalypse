@@ -16,19 +16,20 @@ void RendererBoids::initializeBoid()
     m_vao.UnBind();
 
     /*Location uniform variables*/
-    m_uMVPMatrix     = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
-    m_uMVMatrix      = glGetUniformLocation(m_shader.id(), "uMVMatrix");
-    m_uNormalMatrix  = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
+    // m_uMVPMatrix     = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
+    // m_uMVMatrix      = glGetUniformLocation(m_shader.id(), "uMVMatrix");
+    // m_uNormalMatrix  = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
     m_uNumTextures   = glGetUniformLocation(m_shader.id(), "uNumTextures");
     m_uTextureDrake  = glGetUniformLocation(m_shader.id(), "uTexture1");
     m_uTextureDrake2 = glGetUniformLocation(m_shader.id(), "uTexture2");
     m_uTextureWings  = glGetUniformLocation(m_shader.id(), "uTexture3");
     m_uTextureLila   = glGetUniformLocation(m_shader.id(), "uTexture4");
 
-    _uKa.emplace_back(Ka);
-    _uKd.emplace_back(Kd);
-    _uKs.emplace_back(Ks);
-    _uShininess.push_back(shininess);
+    light_boid.initLight(Ka, Kd, Ks, shininess);
+    // _uKa.emplace_back(Ka);
+    // _uKd.emplace_back(Kd);
+    // _uKs.emplace_back(Ks);
+    // _uShininess.push_back(shininess);
 }
 
 void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
@@ -36,7 +37,7 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glimac::bind_default_shader();
     m_shader.use();
-    glm::vec3 uLightPos = glm::vec4(light, 1);
+    // glm::vec3 uLightPos   = glm::vec4(light, 1);
     // glm::vec3 uMVLightPos = glm::vec3(glm::vec4(uLightPos, 1));
 
     glm::mat4 MVMatrix;
@@ -64,21 +65,23 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         MVMatrix = glm::rotate(MVMatrix, angle, rotationAxis);
         MVMatrix = glm::scale(MVMatrix, glm::vec3(2.0f));
 
-        glm::mat4 NormalMatrix_light = glm::transpose(glm::inverse(MVMatrix));
-        MVPMatrix                    = ProjMatrix * viewMatrix * MVMatrix;
+        // glm::mat4 NormalMatrix_light = glm::transpose(glm::inverse(MVMatrix));
+        MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
-        glUniformMatrix4fv(light_boid.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-        glUniformMatrix4fv(light_boid.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-        glUniformMatrix4fv(light_boid.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix_light));
+        light_boid.setLight(light_boid, light, MVMatrix, MVPMatrix);
 
-        glUniform3fv(light_boid.m_uKa, 1, glm::value_ptr(_uKa[0]));
-        glUniform3fv(light_boid.m_uKd, 1, glm::value_ptr(_uKd[0]));
-        glUniform3fv(light_boid.m_uKs, 1, glm::value_ptr(_uKs[0]));
-        glUniform1f(light_boid.m_uShininess, _uShininess[0]);
+        // glUniformMatrix4fv(light_boid.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
+        // glUniformMatrix4fv(light_boid.uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+        // glUniformMatrix4fv(light_boid.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix_light));
 
-        glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uLightPos));
-        glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
-        glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(lightIntensity));
+        // glUniform3fv(light_boid.m_uKa, 1, glm::value_ptr(_uKa[0]));
+        // glUniform3fv(light_boid.m_uKd, 1, glm::value_ptr(_uKd[0]));
+        // glUniform3fv(light_boid.m_uKs, 1, glm::value_ptr(_uKs[0]));
+        // glUniform1f(light_boid.m_uShininess, _uShininess[0]);
+
+        // glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uLightPos));
+        // glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
+        // glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(lightIntensity));
 
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     }

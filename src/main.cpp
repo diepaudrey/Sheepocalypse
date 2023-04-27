@@ -116,9 +116,9 @@ int main()
     std::vector<glimac::ShapeVertex>  vertices      = LoadOBJ("./assets/models/Drake_Obj.obj");
     std::vector<glimac::ShapeVertex>  vertices_wolf = LoadOBJ("./assets/models/Wolf_One_obj.obj");
 
-    Environment world;
-    world.InitBorders();
-    world.InitArche();
+    // Environment world;
+    // world.InitBorders();
+    // world.InitArche();
 
     glEnable(GL_DEPTH_TEST);
 
@@ -158,8 +158,8 @@ int main()
         game.updateBoids(ctx);
         game.drawBoids(ctx, viewMatrix, *vertices_ptr);
 
-        world.RenderBorders(viewMatrix, ctx);
-        world.RenderArche(viewMatrix, ctx);
+        // world.RenderBorders(viewMatrix, ctx);
+        // world.RenderArche(viewMatrix, ctx);
     };
 
     // Should be done last. It starts the infinite loop.

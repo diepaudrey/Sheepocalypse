@@ -25,18 +25,13 @@ public:
     GLint m_uLightIntensity;
     GLint m_uLightColor;
 
-    Light(const p6::Shader& shader)
-        : m_shader(shader)
-    {
-        uMVPMatrix        = glGetUniformLocation(this->m_shader.id(), "uMVPMatrix");
-        uMVMatrix         = glGetUniformLocation(this->m_shader.id(), "uMVMatrix");
-        uNormalMatrix     = glGetUniformLocation(this->m_shader.id(), "uNormalMatrix");
-        m_uKa             = glGetUniformLocation(this->m_shader.id(), "uKa");
-        m_uKd             = glGetUniformLocation(this->m_shader.id(), "uKd");
-        m_uKs             = glGetUniformLocation(this->m_shader.id(), "uKs");
-        m_uShininess      = glGetUniformLocation(this->m_shader.id(), "uShininess");
-        m_uLightPos_vs    = glGetUniformLocation(this->m_shader.id(), "uLightPos_vs");
-        m_uLightIntensity = glGetUniformLocation(this->m_shader.id(), "uLightIntensity");
-        m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
-    }
+    std::vector<glm::vec3> _uKa;
+    std::vector<glm::vec3> _uKd;
+    std::vector<glm::vec3> _uKs;
+    std::vector<float>     _uShininess;
+
+public:
+    Light(const p6::Shader& shader);
+    void initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess);
+    void setLight(Light light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
 };
