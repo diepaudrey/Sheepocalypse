@@ -1,4 +1,5 @@
 #include "Boids.hpp"
+#include "glm/geometric.hpp"
 
 void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices)
 {
@@ -90,7 +91,7 @@ std::vector<Boid> Boids::fillNeighbors(const Boid& boid, p6::Context& ctx)
 glm::vec3 Boids::separation(const Boid& boid) const
 {
     glm::vec3   steeringForce(0.f, 0.f, 0.f);
-    const float separationRange   = 4.5f;
+    const float separationRange   = 8.f;
     int         numberOfNeighbors = 0;
 
     for (const auto& otherBoid : m_boids)
@@ -117,7 +118,7 @@ glm::vec3 Boids::separation(const Boid& boid) const
 glm::vec3 Boids::alignment(const Boid& boid) const
 {
     glm::vec3 averageDirection(0.f, 0.f, 0.f);
-    float     alignmentRange = 5.f;
+    float     alignmentRange = 10.f;
     // float     meanAlignment     = 0.0f;
     int numberOfNeighbors = 0;
 
@@ -138,9 +139,9 @@ glm::vec3 Boids::alignment(const Boid& boid) const
 
     if (numberOfNeighbors != 0)
     {
-        averageDirection *= alignmentStrength;
         averageDirection /= numberOfNeighbors;
         averageDirection = normalize(averageDirection);
+        averageDirection *= alignmentStrength;
     }
     // std::cout << "Average direction : " << averageDirection.x << " " << averageDirection.y << " " << averageDirection.z << std::endl;
     return averageDirection;
@@ -149,7 +150,7 @@ glm::vec3 Boids::alignment(const Boid& boid) const
 glm::vec3 Boids::cohesion(const Boid& boid) const
 {
     glm::vec3 averageLocation(0.f, 0.f, 0.f);
-    float     cohesionRange     = 2.f;
+    float     cohesionRange     = 25.f;
     int       numberOfNeighbors = 0;
 
     for (const auto& otherBoid : m_boids)

@@ -1,3 +1,4 @@
+#include <imgui.h>
 #include <stddef.h>
 #include <iostream>
 #include <vector>
@@ -57,6 +58,38 @@ void keyboardHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const floa
     }
 }
 
+struct setImGui {
+    float protectedRadius;
+    float separationStrength;
+    float alignmentStrength;
+    float cohesionStrength;
+    float maxSpeed;
+    bool  lod1;
+    // float sizeWorld          = 100.f;
+
+    setImGui(float protecRad, float separaStrength, float alignStrength, float coheStrength, float mSpeed, bool lod)
+    {
+        protectedRadius    = protecRad;
+        separationStrength = separaStrength;
+        alignmentStrength  = alignStrength;
+        cohesionStrength   = coheStrength;
+        maxSpeed           = mSpeed;
+        lod1               = lod;
+    };
+
+    void updateImGui()
+    {
+        ImGui::Begin("Settings");
+        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 3.f);
+        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 5.f);
+        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.1f, 30.f);
+        ImGui::Checkbox("LOD 1", &lod1);
+        ImGui::End();
+    }
+};
+
 int main()
 {
     auto ctx = p6::Context{{1280, 720, "Light"}};
@@ -70,13 +103,18 @@ int main()
 
     Boids game(boids, nb_boids);
     game.fillBoids(ctx);
-    float protectedRadius    = 0.1f;
-    float separationStrength = 0.1f;
-    float alignmentStrength  = 0.1f;
-    float cohesionStrength   = 0.1f;
-    float maxSpeed           = 10.f;
 
-    std::vector<glimac::ShapeVertex> vertices = LoadOBJ("./assets/models/Drake_Obj.obj");
+    float    protectedRadius    = 0.1f;
+    float    separationStrength = 0.1f;
+    float    alignmentStrength  = 0.1f;
+    float    cohesionStrength   = 0.1f;
+    float    maxSpeed           = 10.f;
+    bool     lodDragon          = false;
+    setImGui IHM(protectedRadius, separationStrength, alignmentStrength, cohesionStrength, maxSpeed, lodDragon);
+
+    std::vector<glimac::ShapeVertex>* vertices_ptr; // pointeur pour pouvoir rediriger sur le bon lod
+    std::vector<glimac::ShapeVertex>  vertices      = LoadOBJ("./assets/models/Drake_Obj.obj");
+    std::vector<glimac::ShapeVertex>  vertices_wolf = LoadOBJ("./assets/models/Wolf_One_obj.obj");
 
     Environment world;
     world.InitBorders();
@@ -99,24 +137,26 @@ int main()
         keyboardHandler(ctx, camera, movementStrength);
         viewMatrix = camera.getViewMatrix();
 
-        /*Dear ImGui*/
-        ImGui::Begin("Settings");
-        ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
-        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 10.f);
-        ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
-        ImGui::End();
+        IHM.updateImGui();
+
+        if (IHM.lod1 == true)
+        {
+            vertices_ptr = &vertices_wolf;
+        }
+        else
+        {
+            vertices_ptr = &vertices;
+        }
 
         /*GAME*/
-        game.setProtectedRadius(protectedRadius);
-        game.setAlignmentStrength(alignmentStrength);
-        game.setCohesionStrength(cohesionStrength);
-        game.setSeparationStrength(separationStrength);
-        game.setBoidsMaxSpeed(maxSpeed);
+        game.setProtectedRadius(IHM.protectedRadius);
+        game.setAlignmentStrength(IHM.alignmentStrength);
+        game.setCohesionStrength(IHM.cohesionStrength);
+        game.setSeparationStrength(IHM.separationStrength);
+        game.setBoidsMaxSpeed(IHM.maxSpeed);
 
         game.updateBoids(ctx);
-        game.drawBoids(ctx, viewMatrix, vertices);
+        game.drawBoids(ctx, viewMatrix, *vertices_ptr);
 
         world.RenderBorders(viewMatrix, ctx);
         world.RenderArche(viewMatrix, ctx);
