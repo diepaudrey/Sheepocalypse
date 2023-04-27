@@ -57,6 +57,36 @@ void keyboardHandler(p6::Context& ctx, glimac::FreeflyCamera& camera, const floa
     }
 }
 
+struct setImGui {
+    float protectedRadius;
+    float separationStrength;
+    float alignmentStrength;
+    float cohesionStrength;
+    float maxSpeed;
+    // float sizeWorld          = 100.f;
+
+    setImGui(float protecRad, float separaStrength, float alignStrength, float coheStrength, float mSpeed)
+    {
+        protectedRadius    = protecRad;
+        separationStrength = separaStrength;
+        alignmentStrength  = alignStrength;
+        cohesionStrength   = coheStrength;
+        maxSpeed           = mSpeed;
+    };
+
+    void updateImGui()
+    {
+        std::cout << "update imgui" << std::endl;
+        ImGui::Begin("Settings");
+        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 2.f);
+        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 2.f);
+        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.f, 5.f);
+        ImGui::End();
+    }
+};
+
 int main()
 {
     auto ctx = p6::Context{{1280, 720, "Light"}};
@@ -70,11 +100,13 @@ int main()
 
     Boids game(boids, nb_boids);
     game.fillBoids(ctx);
-    float protectedRadius    = 0.1f;
-    float separationStrength = 0.1f;
-    float alignmentStrength  = 0.1f;
-    float cohesionStrength   = 0.1f;
-    float maxSpeed           = 10.f;
+
+    float    protectedRadius    = 0.1f;
+    float    separationStrength = 0.1f;
+    float    alignmentStrength  = 0.1f;
+    float    cohesionStrength   = 0.1f;
+    float    maxSpeed           = 10.f;
+    setImGui IHM(protectedRadius, separationStrength, alignmentStrength, cohesionStrength, maxSpeed);
 
     std::vector<glimac::ShapeVertex> vertices = LoadOBJ("./assets/models/Drake_Obj.obj");
 
@@ -100,20 +132,21 @@ int main()
         viewMatrix = camera.getViewMatrix();
 
         /*Dear ImGui*/
-        ImGui::Begin("Settings");
-        ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
-        ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 10.f);
-        ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
-        ImGui::End();
+        // ImGui::Begin("Settings");
+        // ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.f, 2.f);
+        // ImGui::SliderFloat("Separation Strength", &separationStrength, 0.f, 10.f);
+        // ImGui::SliderFloat("Alignment Strength", &alignmentStrength, 0.f, 2.f);
+        // ImGui::SliderFloat("Cohesion Strength", &cohesionStrength, 0.f, 2.f);
+        // ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
+        // ImGui::End();
+        IHM.updateImGui();
 
         /*GAME*/
-        game.setProtectedRadius(protectedRadius);
-        game.setAlignmentStrength(alignmentStrength);
-        game.setCohesionStrength(cohesionStrength);
-        game.setSeparationStrength(separationStrength);
-        game.setBoidsMaxSpeed(maxSpeed);
+        game.setProtectedRadius(IHM.protectedRadius);
+        game.setAlignmentStrength(IHM.alignmentStrength);
+        game.setCohesionStrength(IHM.cohesionStrength);
+        game.setSeparationStrength(IHM.separationStrength);
+        game.setBoidsMaxSpeed(IHM.maxSpeed);
 
         game.updateBoids(ctx);
         game.drawBoids(ctx, viewMatrix, vertices);
