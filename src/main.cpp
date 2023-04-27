@@ -1,3 +1,4 @@
+#include <imgui.h>
 #include <stddef.h>
 #include <iostream>
 #include <vector>
@@ -63,26 +64,28 @@ struct setImGui {
     float alignmentStrength;
     float cohesionStrength;
     float maxSpeed;
+    bool  lod1;
     // float sizeWorld          = 100.f;
 
-    setImGui(float protecRad, float separaStrength, float alignStrength, float coheStrength, float mSpeed)
+    setImGui(float protecRad, float separaStrength, float alignStrength, float coheStrength, float mSpeed, bool lod)
     {
         protectedRadius    = protecRad;
         separationStrength = separaStrength;
         alignmentStrength  = alignStrength;
         cohesionStrength   = coheStrength;
         maxSpeed           = mSpeed;
+        lod1               = lod;
     };
 
     void updateImGui()
     {
-        std::cout << "update imgui" << std::endl;
         ImGui::Begin("Settings");
-        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 2.f);
+        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 3.f);
         ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 10.f);
         ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 2.f);
-        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.f, 5.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.1f, 30.f);
+        ImGui::Checkbox("LOD 1", &lod1);
         ImGui::End();
     }
 };
@@ -106,9 +109,12 @@ int main()
     float    alignmentStrength  = 0.1f;
     float    cohesionStrength   = 0.1f;
     float    maxSpeed           = 10.f;
-    setImGui IHM(protectedRadius, separationStrength, alignmentStrength, cohesionStrength, maxSpeed);
+    bool     lodDragon          = false;
+    setImGui IHM(protectedRadius, separationStrength, alignmentStrength, cohesionStrength, maxSpeed, lodDragon);
 
-    std::vector<glimac::ShapeVertex> vertices = LoadOBJ("./assets/models/Drake_Obj.obj");
+    std::vector<glimac::ShapeVertex>* vertices_ptr; // pointeur pour pouvoir rediriger sur le bon lod
+    std::vector<glimac::ShapeVertex>  vertices      = LoadOBJ("./assets/models/Drake_Obj.obj");
+    std::vector<glimac::ShapeVertex>  vertices_wolf = LoadOBJ("./assets/models/Wolf_One_obj.obj");
 
     Environment world;
     world.InitBorders();
@@ -140,6 +146,14 @@ int main()
         // ImGui::SliderFloat("Max Speed", &maxSpeed, 0.f, 5.f);
         // ImGui::End();
         IHM.updateImGui();
+        if (IHM.lod1 == true)
+        {
+            vertices_ptr = &vertices_wolf;
+        }
+        else
+        {
+            vertices_ptr = &vertices;
+        }
 
         /*GAME*/
         game.setProtectedRadius(IHM.protectedRadius);
@@ -149,7 +163,7 @@ int main()
         game.setBoidsMaxSpeed(IHM.maxSpeed);
 
         game.updateBoids(ctx);
-        game.drawBoids(ctx, viewMatrix, vertices);
+        game.drawBoids(ctx, viewMatrix, *vertices_ptr);
 
         world.RenderBorders(viewMatrix, ctx);
         world.RenderArche(viewMatrix, ctx);

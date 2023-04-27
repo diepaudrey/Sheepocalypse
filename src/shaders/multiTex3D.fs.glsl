@@ -23,9 +23,21 @@ void main() {
     //fFragColor = texture(uTexture1, fCorrectCoords) + texture(uTexture2, fCorrectCoords);
     //fFragColor = texture(uTexture1, fCorrectCoords) + texture(uTexture2, fCorrectCoords) + texture(uTexture3, fCorrectCoords) + texture(uTexture4, fCorrectCoords);
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
-    for (int i = 0; i < uNumTextures; ++i) {
-        color += texture(uTextures[i], fCorrectCoords);
+    if (uNumTextures >= 1) {
+        color += texture(uTextures[0], fCorrectCoords);
     }
+    if (uNumTextures >= 2) {
+        color += texture(uTextures[1], fCorrectCoords);
+    }
+    if (uNumTextures >= 3) {
+        color += texture(uTextures[2], fCorrectCoords);
+    }
+    if (uNumTextures >= 4) {
+        color += texture(uTextures[3], fCorrectCoords);
+    }
+
+    
+
     fFragColor = color;
 
     
