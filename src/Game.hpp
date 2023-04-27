@@ -8,7 +8,6 @@
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
-
 class Game {
 private:
     // Boids
@@ -33,8 +32,8 @@ private:
 
     // OBJLoad
     std::vector<glimac::ShapeVertex>* verticesPtr; // pointeur pour pouvoir rediriger sur le bon lod
-    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/Wolf_One_obj.obj");
-    std::vector<glimac::ShapeVertex>  verticesMedium = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/LowDrake.obj");
+    std::vector<glimac::ShapeVertex>  verticesMedium = LoadOBJ("./assets/models/Night_Fury.obj");
     std::vector<glimac::ShapeVertex>  verticesHigh   = LoadOBJ("./assets/models/Drake_Obj.obj");
 
     // Environnement
