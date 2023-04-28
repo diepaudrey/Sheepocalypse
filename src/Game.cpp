@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "GLFW/glfw3.h"
 
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
@@ -15,38 +16,62 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 void Game::mouseHandler(p6::Context& ctx)
 {
     /*La caméra sans souris*/
-
-    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    // ctx.mouse_moved = [&](p6::MouseMove data) {
-    //     (camera).rotateLeft(data.delta.x * rotationStrength);
-    //     (camera).rotateUp(-data.delta.y * rotationStrength);
-    // };
-
-    /*La caméra avec cliquer + glisser*/
-    ctx.mouse_dragged = [&](p6::MouseDrag data) {
+    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    ctx.mouse_moved = [&](p6::MouseMove data) {
         (m_cam).rotateLeft(data.delta.x * rotationStrength);
         (m_cam).rotateUp(-data.delta.y * rotationStrength);
     };
+
+    /*La caméra avec cliquer + glisser*/
+    // ctx.mouse_dragged = [&](p6::MouseDrag data) {
+    //     (m_cam).rotateLeft(data.delta.x * rotationStrength);
+    //     (m_cam).rotateUp(-data.delta.y * rotationStrength);
+    // };
 }
 
 void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
+        std::cout << "z" << std::endl;
         m_cam.moveFront(ctx.delta_time() * movementStrength);
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
+        std::cout << "s" << std::endl;
         m_cam.moveFront(-ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
+        std::cout << "q" << std::endl;
         m_cam.moveLeft(ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
+        std::cout << "d" << std::endl;
         m_cam.moveLeft(-ctx.delta_time() * movementStrength);
     }
+    ctx.key_pressed = [&](p6::Key data) {
+        if (data.physical == GLFW_KEY_SPACE)
+        {
+            m_cam.togglePause();
+            if (m_cam.isPaused())
+            {
+                glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
+            else
+            {
+                glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            }
+        }
+    };
+    ctx.key_pressed = [&](p6::Key data) {
+        if (data.physical == GLFW_KEY_ESCAPE)
+        {
+            glfwSetWindowShouldClose(ctx.underlying_glfw_window(), GLFW_TRUE);
+        }
+    };
 }
 
 void Game::InitBoids(p6::Context& ctx, BoidsParameters& boidParam)

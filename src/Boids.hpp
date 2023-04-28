@@ -26,6 +26,7 @@ struct BoidsParameters {
     void updateBoidsParam()
     {
         ImGui::Begin("Settings");
+        ImGui::Text("To change settings please press SPACE");
         ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 3.f);
         ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 5.f);
         ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 5.f);

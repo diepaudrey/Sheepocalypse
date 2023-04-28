@@ -17,6 +17,7 @@ private:
     glm::vec3 m_frontVector;
     glm::vec3 m_leftVector;
     glm::vec3 m_upVector;
+    bool      m_paused;
 
     void computeDirectionVectors()
     {
@@ -46,33 +47,56 @@ private:
 
 public:
     FreeflyCamera()
-        : m_position(glm::vec3(-20.f, 0.f, -20.f)), m_phi(glm::pi<float>()), m_theta(0.f)
+        : m_position(glm::vec3(-20.f, 0.f, -20.f)), m_phi(glm::pi<float>()), m_theta(0.f), m_paused(false)
     {
         computeDirectionVectors();
     };
 
     void moveLeft(float t)
     {
-        m_position -= t * m_leftVector;
-        computeDirectionVectors();
+        //  glm::vec3 direction = glm::normalize(glm::cross(m_frontVector, m_upVector));
+        if (!m_paused)
+        {
+            m_position -= t * m_leftVector;
+            computeDirectionVectors();
+        }
     }
 
     void moveFront(float t)
     {
-        m_position += t * m_frontVector;
-        computeDirectionVectors();
+        if (!m_paused)
+        {
+            m_position += t * m_frontVector;
+            computeDirectionVectors();
+        }
     }
 
     void rotateLeft(float degrees)
     {
-        m_phi += glm::radians(degrees);
-        computeDirectionVectors();
+        if (!m_paused)
+        {
+            m_phi += glm::radians(degrees);
+            computeDirectionVectors();
+        }
     }
 
     void rotateUp(float degrees)
     {
-        m_theta += -glm::radians(degrees);
-        computeDirectionVectors();
+        if (!m_paused)
+        {
+            m_theta += -glm::radians(degrees);
+            computeDirectionVectors();
+        }
+    }
+
+    void togglePause()
+    {
+        m_paused = !m_paused;
+    }
+
+    bool isPaused() const
+    {
+        return m_paused;
     }
 
     glm::mat4 getViewMatrix()
