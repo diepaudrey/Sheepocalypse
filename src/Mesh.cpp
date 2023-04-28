@@ -1,14 +1,14 @@
 #include "Mesh.hpp"
 #include "glm/gtx/transform.hpp"
 
-Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP)
     : m_position(position), m_rotation(rotation), m_scale(scale)
 {
     InitVertexData(vertices, vertices.size());
     InitVao();
     InitTextures(textures, textures.size());
-    lightMesh.initLight(Ka, Kd, Ks, shininess, lightIntensity);
     InitUniforms();
+    lightMesh.initLight(lightP);
 }
 
 Mesh::Mesh(const Mesh& mesh)
@@ -17,7 +17,7 @@ Mesh::Mesh(const Mesh& mesh)
     InitVertexData(m_vertices, m_vertices.size());
     InitVao();
     InitTextures(m_textures, m_textures.size());
-    lightMesh.initLight(Ka, Kd, Ks, shininess, lightIntensity);
+    // lightMesh.initLight(lightP);
     InitUniforms();
 }
 
@@ -87,11 +87,14 @@ void Mesh::UpdateUniforms()
     glUniform1i(m_uNumTextures, m_textures.size());
 }
 
-void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx)
+void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     m_shader.use();
+
     UpdateMatrices(viewMatrix, ctx);
+
     UpdateUniforms();
+
     m_vao.Bind();
 
     for (size_t i = 0; i < m_textures.size(); ++i)
@@ -100,13 +103,15 @@ void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx)
         m_textures[i].Bind(i);
     }
 
-    lightMesh.setLight(lightMesh, light, MVMatrix, MVPMatrix);
+    lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
+
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     for (size_t i = 0; i < m_textures.size(); ++i)
     {
         m_textures[i].UnBind(i);
     }
+
     m_vao.UnBind();
 }
 
@@ -114,4 +119,25 @@ Mesh::~Mesh()
 {
     m_vao.DeleteVao();
     m_vbo.DeleteVbo();
+}
+
+Mesh& Mesh::operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP)
+{
+    m_vertices = vertices;
+    m_position = position;
+    m_rotation = rotation;
+    m_scale    = scale;
+    m_textures.clear();
+    for (int i = 0; i < textures.size(); i++)
+    {
+        Texture texture = textures[i];
+        m_textures.push_back(texture);
+    }
+    InitVertexData(m_vertices, m_vertices.size());
+    InitVao();
+    InitTextures(m_textures, m_textures.size());
+    lightMesh.initLight(lightP);
+    InitUniforms();
+
+    return *this;
 }

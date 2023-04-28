@@ -97,7 +97,7 @@ public:
     }
 
     // draw the boid
-    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices);
+    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices, LightParams& lightP);
     void drawBorders(p6::Context& ctx, glm::mat4& viewMatrix);
 
     // Help the boids to avoid edges

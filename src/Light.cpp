@@ -15,13 +15,13 @@ Light::Light(const p6::Shader& shader)
     m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
 }
 
-void Light::initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess, const glm::vec3 lightIntens)
+void Light::initLight(LightParams light)
 {
-    _uKa.emplace_back(Ka);
-    _uKd.emplace_back(Kd);
-    _uKs.emplace_back(Ks);
-    _uShininess.push_back(shininess);
-    m_lightIntensity = lightIntens;
+    _uKa.emplace_back(light.Ka);
+    _uKd.emplace_back(light.Kd);
+    _uKs.emplace_back(light.Ks);
+    _uShininess.push_back(light.shininess);
+    m_lightIntensity = light.lightIntensity;
 }
 
 void Light::setLight(Light light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix)

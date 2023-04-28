@@ -47,16 +47,16 @@ private:
 public:
     Environment() = default;
 
-    void InitBorders();
+    void InitBorders(LightParams& lightP);
 
-    void InitArche();
-    void InitMeshes();
+    void InitArche(LightParams& lightP);
+    void InitMeshes(LightParams& lightP);
 
-    void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx);
+    void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
-    void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx);
+    void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
-    void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx);
+    void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
     void DeleteTextures();
 };

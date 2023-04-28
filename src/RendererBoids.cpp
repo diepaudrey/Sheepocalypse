@@ -1,10 +1,10 @@
 #include "RendererBoids.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
-RendererBoids::RendererBoids(std::vector<glimac::ShapeVertex>& vertices)
+RendererBoids::RendererBoids(std::vector<glimac::ShapeVertex>& vertices, LightParams& lightP)
     : m_vertices(std::move(vertices))
 {
-    initializeBoid();
+    initializeBoid(lightP);
 }
 
 void RendererBoids::InitVao()
@@ -44,14 +44,15 @@ void RendererBoids::UnBindTexture()
     }
 }
 
-void RendererBoids::initializeBoid()
+void RendererBoids::initializeBoid(LightParams& lightP)
 {
     InitVao();
     InitTextures();
-    light_boid.initLight(Ka, Kd, Ks, shininess, lightIntensity);
+    // light_boid.initLight(Ka, Kd, Ks, shininess, lightIntensity);
+    light_boid.initLight(lightP);
 }
 
-void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
+void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glimac::bind_default_shader();
@@ -77,7 +78,7 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         MVMatrix  = glm::scale(MVMatrix, glm::vec3(2.0f));
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
-        light_boid.setLight(light_boid, light, MVMatrix, MVPMatrix);
+        light_boid.setLight(light_boid, lightP.light, MVMatrix, MVPMatrix);
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     }
 

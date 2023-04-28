@@ -6,8 +6,10 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitCamera();
     mouseHandler(ctx);
     InitImGui(boidParam);
+    InitLight();
     InitEnvironment();
-    // std::cout << "Game initialized" << std::endl;
+
+    //  std::cout << "Game initialized" << std::endl;
 }
 
 void Game::mouseHandler(p6::Context& ctx)
@@ -73,7 +75,19 @@ void Game::InitImGui(BoidsParameters& boidParam)
 
 void Game::InitEnvironment()
 {
-    m_environment.InitMeshes();
+    m_environment.InitMeshes(lightP);
+}
+
+void Game::InitLight()
+{
+    lightP.light          = glm::vec3(0.f, 0.f, 0.f);
+    lightP.lightIntensity = glm::vec3(5000.f);
+    lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
+    lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
+    lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
+    lightP.shininess      = 0.5f;
+    std::cout << "ligh p : " << lightP.light.x << " " << lightP.light.y << " " << lightP.light.z << std::endl;
+    lightGame.initLight(lightP);
 }
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
@@ -91,6 +105,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     }
     boidParam.updateBoidsParam();
     m_boids.updateBoids(ctx, boidParam);
-    m_boids.drawBoids(ctx, viewMatrix, *verticesPtr);
-    m_environment.RenderMeshes(viewMatrix, ctx);
+    m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
+    m_environment.RenderMeshes(viewMatrix, ctx, lightP);
 }

@@ -5,6 +5,7 @@
 #include "Boid.hpp"
 #include "Boids.hpp"
 #include "Environment.hpp"
+#include "Light.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
@@ -39,11 +40,17 @@ private:
     // Environnement
     Environment m_environment;
 
+    // Shader
+    p6::Shader  m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
+    Light       lightGame{m_shader};
+    LightParams lightP;
+
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
     void InitCamera();
     void InitImGui(BoidsParameters& boidParam);
     void InitEnvironment();
+    void InitLight();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
