@@ -4,6 +4,7 @@
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
     InitBoids(ctx, boidParam);
+    InitPlayer();
     InitCamera();
     mouseHandler(ctx);
     InitImGui(boidParam);
@@ -79,6 +80,13 @@ void Game::InitBoids(p6::Context& ctx, BoidsParameters& boidParam)
     m_boids.fillBoids(ctx);
 }
 
+void Game::InitPlayer()
+{
+    glm::vec3 playerPosition = m_cam.getPosition();
+    playerPosition.z += 10.f;
+    m_player.InitPlayer(playerPosition, lightP);
+}
+
 void Game::InitCamera()
 {
     m_cam = glimac::FreeflyCamera();
@@ -115,7 +123,9 @@ void Game::InitLight()
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     keyboardHandler(ctx);
+
     viewMatrix  = m_cam.getViewMatrix();
     verticesPtr = &verticesLow;
     if (boidParam.lodMid)
@@ -127,7 +137,14 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
         verticesPtr = &verticesHigh;
     }
     boidParam.updateBoidsParam();
+
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
+
+    m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
+    m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
+    m_player.m_rotation = m_cam.getUpVector() + m_cam.getLeftVector();
+    glm::mat4 vmat      = glm::lookAt(m_cam.getPosition(), m_player.m_position, glm::vec3(0, 1, 0));
+    m_player.RenderPlayer(vmat, ctx, lightP, m_player.m_position, m_player.m_rotation);
 }

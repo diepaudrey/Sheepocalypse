@@ -6,6 +6,7 @@
 #include "Boids.hpp"
 #include "Environment.hpp"
 #include "Light.hpp"
+#include "Player.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
@@ -15,9 +16,12 @@ private:
     int   m_nbBoids = 50;
     Boids m_boids;
 
+    // Player
+    Player m_player;
+
     // Camera
     glimac::FreeflyCamera m_cam;
-    glm::mat4             viewMatrix;
+    glm::mat4             viewMatrix{0.f};
     float                 movementStrength = 100.f;
     float                 rotationStrength = 1000.f;
 
@@ -47,6 +51,7 @@ private:
 
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
+    void InitPlayer();
     void InitCamera();
     void InitImGui(BoidsParameters& boidParam);
     void InitEnvironment();

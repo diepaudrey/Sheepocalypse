@@ -52,6 +52,21 @@ public:
         computeDirectionVectors();
     };
 
+    glm::vec3 getPosition()
+    {
+        return m_position;
+    }
+
+    glm::vec3 getUpVector()
+    {
+        return m_upVector;
+    }
+
+    glm::vec3 getLeftVector()
+    {
+        return m_leftVector;
+    }
+
     void moveLeft(float t)
     {
         //  glm::vec3 direction = glm::normalize(glm::cross(m_frontVector, m_upVector));
