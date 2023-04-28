@@ -21,7 +21,7 @@ void Environment::InitArche(LightParams& lightP)
 {
     m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
 
-    m_archeMesh(m_archeVertices, m_archeTextures, glm::vec3(0.f, -25.f, 25.f), glm::vec3(0.f), glm::vec3(1.f), lightP);
+    m_archeMesh(m_archeVertices, m_archeTextures, glm::vec3(40.f, -80.f, 25.f), glm::vec3(0.f), glm::vec3(0.5f), lightP);
 }
 
 void Environment::InitMeshes(LightParams& lightP)

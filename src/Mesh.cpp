@@ -17,7 +17,6 @@ Mesh::Mesh(const Mesh& mesh)
     InitVertexData(m_vertices, m_vertices.size());
     InitVao();
     InitTextures(m_textures, m_textures.size());
-    // lightMesh.initLight(lightP);
     InitUniforms();
 }
 

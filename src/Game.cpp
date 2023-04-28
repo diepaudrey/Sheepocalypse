@@ -103,13 +103,13 @@ void Game::InitEnvironment()
 
 void Game::InitLight()
 {
-    lightP.light          = glm::vec3(0.f, 0.f, 0.f);
+    lightP.light          = glm::vec3(0.f, 20.f, 0.f);
     lightP.lightIntensity = glm::vec3(5000.f);
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
     lightP.shininess      = 0.5f;
-    std::cout << "ligh p : " << lightP.light.x << " " << lightP.light.y << " " << lightP.light.z << std::endl;
+    // std::cout << "ligh p : " << lightP.light.x << " " << lightP.light.y << " " << lightP.light.z << std::endl;
     lightGame.initLight(lightP);
 }
 

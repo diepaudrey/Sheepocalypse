@@ -60,38 +60,6 @@ public:
 
     void fillBoids(p6::Context& ctx);
 
-    /*Setters for ImGui*/
-    void setProtectedRadius(const float& protecRad)
-    {
-        for (auto& boid : m_boids)
-        {
-            boid.setProtectedRadius(protecRad);
-        }
-    }
-
-    void setSeparationStrength(const float& separation)
-    {
-        this->separationStrength = separation;
-    }
-
-    void setAlignmentStrength(const float& alignment)
-    {
-        this->alignmentStrength = alignment;
-    }
-
-    void setCohesionStrength(const float& cohesion)
-    {
-        this->cohesionStrength = cohesion;
-    }
-
-    void setBoidsMaxSpeed(const float& maxSpeed)
-    {
-        for (auto& boid : m_boids)
-        {
-            boid.setMaxSpeed(maxSpeed);
-        }
-    }
-
     size_t getBoidsSize()
     {
         return m_boids.size();
