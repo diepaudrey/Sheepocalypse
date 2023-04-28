@@ -18,13 +18,13 @@ private:
     std::vector<glimac::ShapeVertex> m_planVertices;
 
     // Floor
-    Texture              floorTex{p6::load_image_buffer("assets/textures/Grass.jpg")};
-    std::vector<Texture> m_floorTextures = {floorTex};
+    Texture              m_floorTex{p6::load_image_buffer("assets/textures/Grass.jpg")};
+    std::vector<Texture> m_floorTextures = {m_floorTex};
     Mesh                 m_floorMesh;
 
     // Sky
-    Texture              skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
-    std::vector<Texture> m_skyTextures = {skyTex};
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
+    std::vector<Texture> m_skyTextures = {m_skyTex};
     Mesh                 m_skyMesh;
     // Walls
     Mesh m_wall1Mesh;
@@ -57,4 +57,6 @@ public:
     void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx);
 
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx);
+
+    void DeleteTextures();
 };

@@ -13,7 +13,6 @@
 #include "glm/geometric.hpp"
 #include "p6/p6.h"
 
-
 struct BoidsParameters {
     float protectedRadius;
     float separationStrength;
@@ -45,15 +44,9 @@ private:
     std::vector<Boid> m_boids;
     int               m_numBoids;
 
-    // BoidsParameters boidParam;
-
     float separationStrength;
     float alignmentStrength;
     float cohesionStrength;
-
-    // float separationStrength = 0.2f;
-    // float alignmentStrength  = 0.1f;
-    // float cohesionStrength   = 0.1f;
 
     float turnfactor = 0.5f;
     float limit      = 50.f;

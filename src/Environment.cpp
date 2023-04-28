@@ -24,8 +24,9 @@ void Environment::InitBorders()
 
 void Environment::InitArche()
 {
-    m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
-    Mesh arche(m_archeVertices, m_archeTextures, glm::vec3(0.f, -25.f, 0.f), glm::vec3(0.f), glm::vec3(0.3f));
+    // m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+    m_archeVertices = LoadOBJ("./assets/models/Night_Fury.obj");
+    Mesh arche(m_archeVertices, m_archeTextures, glm::vec3(0.f, -25.f, 25.f), glm::vec3(0.f), glm::vec3(2.f));
     m_archeMesh = Mesh(arche);
 }
 
@@ -56,4 +57,13 @@ void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx)
 {
     RenderBorders(viewMatrix, ctx);
     RenderArche(viewMatrix, ctx);
+}
+
+void Environment::DeleteTextures()
+{
+    m_textureS.DeleteTexture();
+    m_textureD.DeleteTexture();
+    m_textureH.DeleteTexture();
+    m_floorTex.DeleteTexture();
+    m_skyTex.DeleteTexture();
 }

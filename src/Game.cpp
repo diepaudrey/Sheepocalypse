@@ -80,14 +80,14 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
     keyboardHandler(ctx);
     viewMatrix  = m_cam.getViewMatrix();
-    verticesPtr = &verticesHigh;
-    if (boidParam.lodLow)
-    {
-        verticesPtr = &verticesLow;
-    }
-    else if (boidParam.lodMid)
+    verticesPtr = &verticesLow;
+    if (boidParam.lodMid)
     {
         verticesPtr = &verticesMedium;
+    }
+    else if (boidParam.lodHigh)
+    {
+        verticesPtr = &verticesHigh;
     }
     boidParam.updateBoidsParam();
     m_boids.updateBoids(ctx, boidParam);

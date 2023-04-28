@@ -66,13 +66,14 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
 
     for (auto& boid : m_boids)
     {
-        glm::vec3 start        = glm::vec3(0.f, 1.f, 0.f);
-        glm::vec3 direction    = normalize(boid.getSpeed());
-        glm::vec3 rotationAxis = glm::cross(start, direction);
-        float     angle        = glm::orientedAngle(start, direction, start);
+        glm::vec3 pointingStart = glm::vec3(0.f, 0.f, 1.f);
+        glm::vec3 direction     = normalize(boid.getSpeed());
+        glm::vec3 rotationAxis  = glm::cross(pointingStart, direction);
+        float     angle         = glm::orientedAngle(pointingStart, direction, pointingStart);
 
-        MVMatrix  = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
-        MVMatrix  = glm::rotate(MVMatrix, angle, rotationAxis);
+        MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
+        MVMatrix = glm::rotate(MVMatrix, angle, rotationAxis);
+
         MVMatrix  = glm::scale(MVMatrix, glm::vec3(2.0f));
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
