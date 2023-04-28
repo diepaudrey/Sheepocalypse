@@ -43,6 +43,7 @@ private:
 
     // Environnement
     Environment m_environment;
+    float       m_limit = 100.f;
 
     // Shader
     p6::Shader  m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
@@ -60,12 +61,13 @@ private:
     void InitEnvironment();
     void InitLight();
     void UpdateLightPlayer();
+    void mouseHandler(p6::Context& ctx);
+    void keyboardHandler(p6::Context& ctx);
+
+    bool playerIsOutBorders();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
-
-    void mouseHandler(p6::Context& ctx);
-    void keyboardHandler(p6::Context& ctx);
 
     void Render(p6::Context& ctx, BoidsParameters& boidParam);
 };
