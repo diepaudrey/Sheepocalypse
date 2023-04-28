@@ -6,11 +6,11 @@ void Environment::InitBorders(LightParams& lightP)
 
     m_floorMesh(m_planVertices, m_floorTextures, glm::vec3(0.f, -m_width / 2, 0.f), glm::vec3(0.f), glm::vec3(1.f), lightP);
 
-    m_skyMesh(m_planVertices, m_skyTextures, glm::vec3(0.f, m_width / 2, 0.f), glm::vec3(0.f), glm::vec3(1.f), lightP);
+    m_skyMesh(m_planVertices, m_skyTextures, glm::vec3(0.f, m_width / 2, 0.f), glm::vec3(0.f, 0.f, glm::radians(180.f)), glm::vec3(1.f), lightP);
 
     m_wall1Mesh(m_planVertices, m_skyTextures, glm::vec3(m_width / 2, 0.f, 0.f), glm::vec3(0.f, 0.f, glm::radians(90.f)), glm::vec3(1.f), lightP);
 
-    m_wall2Mesh(m_planVertices, m_skyTextures, glm::vec3(-m_width / 2, 0.f, 0.f), glm::vec3(0.f, 0.f, glm::radians(90.f)), glm::vec3(1.f), lightP);
+    m_wall2Mesh(m_planVertices, m_skyTextures, glm::vec3(-m_width / 2, 0.f, 0.f), glm::vec3(0.f, 0.f, glm::radians(-90.f)), glm::vec3(1.f), lightP);
 
     m_wall3Mesh(m_planVertices, m_skyTextures, glm::vec3(0.f, 0.f, -m_width / 2), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f), lightP);
 

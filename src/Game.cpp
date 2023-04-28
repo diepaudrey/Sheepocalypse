@@ -34,26 +34,30 @@ void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        std::cout << "z" << std::endl;
+        // std::cout << "z" << std::endl;
         m_cam.moveFront(ctx.delta_time() * movementStrength);
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        std::cout << "s" << std::endl;
+        // std::cout << "s" << std::endl;
         m_cam.moveFront(-ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        std::cout << "q" << std::endl;
+        // std::cout << "q" << std::endl;
         m_cam.moveLeft(ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        std::cout << "d" << std::endl;
+        // std::cout << "d" << std::endl;
         m_cam.moveLeft(-ctx.delta_time() * movementStrength);
     }
     ctx.key_pressed = [&](p6::Key data) {
-        if (data.physical == GLFW_KEY_SPACE)
+        if (data.physical == GLFW_KEY_ESCAPE)
+        {
+            glfwSetWindowShouldClose(ctx.underlying_glfw_window(), GLFW_TRUE);
+        }
+        else if (data.physical == GLFW_KEY_SPACE)
         {
             m_cam.togglePause();
             if (m_cam.isPaused())
@@ -64,12 +68,6 @@ void Game::keyboardHandler(p6::Context& ctx)
             {
                 glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             }
-        }
-    };
-    ctx.key_pressed = [&](p6::Key data) {
-        if (data.physical == GLFW_KEY_ESCAPE)
-        {
-            glfwSetWindowShouldClose(ctx.underlying_glfw_window(), GLFW_TRUE);
         }
     };
 }
