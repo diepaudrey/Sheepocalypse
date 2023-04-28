@@ -24,9 +24,9 @@ void Environment::InitBorders()
 
 void Environment::InitArche()
 {
-    // m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
-    m_archeVertices = LoadOBJ("./assets/models/Night_Fury.obj");
-    Mesh arche(m_archeVertices, m_archeTextures, glm::vec3(0.f, -25.f, 25.f), glm::vec3(0.f), glm::vec3(2.f));
+    m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+
+    Mesh arche(m_archeVertices, m_archeTextures, glm::vec3(0.f, -25.f, 25.f), glm::vec3(0.f), glm::vec3(1.f));
     m_archeMesh = Mesh(arche);
 }
 

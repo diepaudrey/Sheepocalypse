@@ -18,14 +18,22 @@ private:
     glm::mat4 NormalMatrix;
     glm::mat4 MVPMatrix;
 
-    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl");
+    p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
 
-    GLuint m_uMVPMatrix;
-    GLuint m_uMVMatrix;
-    GLuint m_uNormalMatrix;
-    GLuint m_uNumTextures;
-    std::vector<GLuint>
-        m_uTextures;
+    // parameters for light
+    Light           lightMesh{m_shader};
+    glm::vec3       light          = glm::vec3(0.f, 50.f, 0.f);
+    glm::vec3       lightIntensity = glm::vec3(5000.f, 5000.f, 5000.f);
+    const glm::vec3 Ka             = glm::vec3(0.05, 0.05, 0.05);
+    const glm::vec3 Kd             = glm::vec3(1.0, 1.0, 1.0);
+    const glm::vec3 Ks             = glm::vec3(1.0, 1.0, 1.0);
+    const float     shininess      = 0.5f;
+
+    GLuint              m_uMVPMatrix;
+    GLuint              m_uMVMatrix;
+    GLuint              m_uNormalMatrix;
+    GLuint              m_uNumTextures;
+    std::vector<GLuint> m_uTextures;
 
     // Fill the m_vertices, instead of copying them
     void InitVertexData(std::vector<glimac::ShapeVertex>& vertices, const unsigned int& nbVertices);
@@ -63,6 +71,7 @@ public:
         InitVertexData(m_vertices, m_vertices.size());
         InitVao();
         InitTextures(m_textures, m_textures.size());
+        lightMesh.initLight(Ka, Kd, Ks, shininess, lightIntensity);
         InitUniforms();
         return *this;
     }

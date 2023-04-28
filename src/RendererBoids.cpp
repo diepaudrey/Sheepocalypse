@@ -48,7 +48,7 @@ void RendererBoids::initializeBoid()
 {
     InitVao();
     InitTextures();
-    light_boid.initLight(Ka, Kd, Ks, shininess);
+    light_boid.initLight(Ka, Kd, Ks, shininess, lightIntensity);
 }
 
 void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx)
@@ -72,7 +72,7 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         float     angle         = glm::orientedAngle(pointingStart, direction, pointingStart);
 
         MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
-        MVMatrix = glm::rotate(MVMatrix, angle, rotationAxis);
+        MVMatrix = glm::rotate(MVMatrix, (angle), rotationAxis);
 
         MVMatrix  = glm::scale(MVMatrix, glm::vec3(2.0f));
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;

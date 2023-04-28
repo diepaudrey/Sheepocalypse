@@ -25,6 +25,7 @@ public:
     GLint m_uLightIntensity;
     GLint m_uLightColor;
 
+    glm::vec3              m_lightIntensity;
     std::vector<glm::vec3> _uKa;
     std::vector<glm::vec3> _uKd;
     std::vector<glm::vec3> _uKs;
@@ -32,6 +33,6 @@ public:
 
 public:
     Light(const p6::Shader& shader);
-    void initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess);
+    void initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess, glm::vec3 lightIntensity);
     void setLight(Light light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
 };

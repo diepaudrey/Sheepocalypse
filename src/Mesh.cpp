@@ -7,6 +7,7 @@ Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& tex
     InitVertexData(vertices, vertices.size());
     InitVao();
     InitTextures(textures, textures.size());
+    lightMesh.initLight(Ka, Kd, Ks, shininess, lightIntensity);
     InitUniforms();
 }
 
@@ -16,6 +17,7 @@ Mesh::Mesh(const Mesh& mesh)
     InitVertexData(m_vertices, m_vertices.size());
     InitVao();
     InitTextures(m_textures, m_textures.size());
+    lightMesh.initLight(Ka, Kd, Ks, shininess, lightIntensity);
     InitUniforms();
 }
 
@@ -98,6 +100,7 @@ void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx)
         m_textures[i].Bind(i);
     }
 
+    lightMesh.setLight(lightMesh, light, MVMatrix, MVPMatrix);
     glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     for (size_t i = 0; i < m_textures.size(); ++i)

@@ -15,12 +15,13 @@ Light::Light(const p6::Shader& shader)
     m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
 }
 
-void Light::initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess)
+void Light::initLight(const glm::vec3 Ka, const glm::vec3 Kd, const glm::vec3 Ks, const float shininess, const glm::vec3 lightIntens)
 {
     _uKa.emplace_back(Ka);
     _uKd.emplace_back(Kd);
     _uKs.emplace_back(Ks);
     _uShininess.push_back(shininess);
+    m_lightIntensity = lightIntens;
 }
 
 void Light::setLight(Light light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix)
@@ -38,6 +39,6 @@ void Light::setLight(Light light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, g
     glUniform1f(light_boid.m_uShininess, _uShininess[0]);
 
     glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uLightPos));
-    glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
-    glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(lightIntensity));
+    // glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
+    glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(m_lightIntensity));
 }
