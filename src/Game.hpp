@@ -49,6 +49,9 @@ private:
     Light       lightGame{m_shader};
     LightParams lightP;
 
+    Light       lightPlayer{m_shader};
+    LightParams lightP2;
+
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
     void InitPlayer();
@@ -56,6 +59,7 @@ private:
     void InitImGui(BoidsParameters& boidParam);
     void InitEnvironment();
     void InitLight();
+    void UpdateLightPlayer();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
