@@ -32,37 +32,30 @@ void Game::mouseHandler(p6::Context& ctx)
     // };
 }
 
-bool Game::playerIsOutBorders()
-{
-    bool exp = m_cam.getPosition().x > m_limit || m_cam.getPosition().y > m_limit || m_cam.getPosition().z > m_limit || m_cam.getPosition().x < -m_limit || m_cam.getPosition().y < -m_limit || m_cam.getPosition().z < -m_limit;
-
-    if (exp)
-    {
-        std::cout << "Player is out borders " << std::endl;
-    }
-    return exp;
-}
-
 void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
         // std::cout << "z" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(ctx.delta_time() * movementStrength);
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
         // std::cout << "s" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(-ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
         // std::cout << "q" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
         // std::cout << "d" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(-ctx.delta_time() * movementStrength);
     }
     ctx.key_pressed = [&](p6::Key data) {
@@ -166,7 +159,7 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
 
-    playerIsOutBorders();
+    // playerIsOutBorders();
     m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
     UpdateLightPlayer();
     m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);

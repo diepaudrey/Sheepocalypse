@@ -43,7 +43,7 @@ private:
 
     // Environnement
     Environment m_environment;
-    float       m_limit = 100.f;
+    float       m_limit = 70.f;
 
     // Shader
     p6::Shader  m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
@@ -68,6 +68,5 @@ private:
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
-
     void Render(p6::Context& ctx, BoidsParameters& boidParam);
 };
