@@ -7,6 +7,7 @@
 #include "Environment.hpp"
 #include "Light.hpp"
 #include "Shadow.hpp"
+#include "Player.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
@@ -16,9 +17,12 @@ private:
     int   m_nbBoids = 50;
     Boids m_boids;
 
+    // Player
+    Player m_player;
+
     // Camera
     glimac::FreeflyCamera m_cam;
-    glm::mat4             viewMatrix;
+    glm::mat4             viewMatrix{0.f};
     float                 movementStrength = 100.f;
     float                 rotationStrength = 1000.f;
 
@@ -40,6 +44,7 @@ private:
 
     // Environnement
     Environment m_environment;
+    float       m_limit = 70.f;
 
     // Shader
     p6::Shader    m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
@@ -47,18 +52,23 @@ private:
     LightParams   lightP;
     ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
 
+    Light       lightPlayer{m_shader};
+    LightParams lightP2;
+
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
+    void InitPlayer();
     void InitCamera();
     void InitImGui(BoidsParameters& boidParam);
     void InitEnvironment();
     void InitLight();
-    // void InitShadow();
+    void UpdateLightPlayer();
+    void mouseHandler(p6::Context& ctx);
+    void keyboardHandler(p6::Context& ctx);
+
+    bool playerIsOutBorders();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
-
-    void mouseHandler(p6::Context& ctx);
-    void keyboardHandler(p6::Context& ctx);
     void Render(p6::Context& ctx, BoidsParameters& boidParam);
 };

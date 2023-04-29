@@ -4,12 +4,14 @@
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
     InitBoids(ctx, boidParam);
+
     InitCamera();
     mouseHandler(ctx);
     InitImGui(boidParam);
     InitLight();
     // InitShadow();
     InitEnvironment();
+    InitPlayer();
 
     //  std::cout << "Game initialized" << std::endl;
 }
@@ -36,21 +38,25 @@ void Game::keyboardHandler(p6::Context& ctx)
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
         // std::cout << "z" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(ctx.delta_time() * movementStrength);
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
         // std::cout << "s" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(-ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
         // std::cout << "q" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
         // std::cout << "d" << std::endl;
+        m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(-ctx.delta_time() * movementStrength);
     }
     ctx.key_pressed = [&](p6::Key data) {
@@ -78,6 +84,13 @@ void Game::InitBoids(p6::Context& ctx, BoidsParameters& boidParam)
     std::vector<Boid> vecBoids;
     m_boids = Boids(vecBoids, m_nbBoids, boidParam);
     m_boids.fillBoids(ctx);
+}
+
+void Game::InitPlayer()
+{
+    glm::vec3 playerPosition = m_cam.getPosition();
+    playerPosition.z += 10.f;
+    m_player.InitPlayer(playerPosition, lightP2);
 }
 
 void Game::InitCamera()
@@ -110,8 +123,20 @@ void Game::InitLight()
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
     lightP.shininess      = 0.5f;
-    // std::cout << "ligh p : " << lightP.light.x << " " << lightP.light.y << " " << lightP.light.z << std::endl;
     lightGame.initLight(lightP);
+
+    lightP2.light          = m_cam.getPosition();
+    lightP2.lightIntensity = glm::vec3(100.f);
+    lightP2.Ka             = glm::vec3(0.05, 0.05, 0.05);
+    lightP2.Kd             = glm::vec3(1.0, 1.0, 1.0);
+    lightP2.Ks             = glm::vec3(1.0, 1.0, 1.0);
+    lightP2.shininess      = 0.5f;
+    lightPlayer.initLight(lightP2);
+}
+
+void Game::UpdateLightPlayer()
+{
+    lightP2.light = m_cam.getPosition();
 }
 
 // void Game::InitShadow()
@@ -125,7 +150,9 @@ void Game::InitLight()
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     keyboardHandler(ctx);
+
     viewMatrix  = m_cam.getViewMatrix();
     verticesPtr = &verticesLow;
     if (boidParam.lodMid)
@@ -137,7 +164,16 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
         verticesPtr = &verticesHigh;
     }
     boidParam.updateBoidsParam();
+
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
+
+    // playerIsOutBorders();
+    m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
+    UpdateLightPlayer();
+    m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
+    m_player.m_rotation = m_cam.getUpVector();
+    glm::mat4 vmat      = glm::lookAt(m_cam.getPosition(), m_player.m_position, glm::vec3(0, 1, 0));
+    m_player.RenderPlayer(vmat, ctx, lightP2, m_player.m_position, m_player.m_rotation);
 }

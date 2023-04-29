@@ -56,6 +56,18 @@ void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
     this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
 }
 
+void Mesh::UpdateMatricesMove(glm::mat4 viewMatrix, p6::Context& ctx)
+{
+    this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
+    this->MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.x, glm::vec3(1.0f, 0.f, 0.f));
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.y, glm::vec3(0.f, 1.f, 0.f));
+    MVMatrix           = glm::rotate(MVMatrix, m_rotation.z, glm::vec3(0.f, 0.f, 1.f));
+    MVMatrix           = glm::scale(MVMatrix, m_scale);
+    this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+    this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
+}
+
 void Mesh::InitUniforms()
 {
     m_uMVPMatrix = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
@@ -86,12 +98,44 @@ void Mesh::UpdateUniforms()
     glUniform1i(m_uNumTextures, m_textures.size());
 }
 
+void Mesh::UpdatePosRot(glm::vec3& position, glm::vec3& rotation)
+{
+    m_position = position;
+    m_rotation = rotation;
+}
+
 void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     m_shader.use();
-
     UpdateMatrices(viewMatrix, ctx);
 
+    UpdateUniforms();
+
+    m_vao.Bind();
+
+    for (size_t i = 0; i < m_textures.size(); ++i)
+    {
+        glUniform1i(m_uTextures[i], i);
+        m_textures[i].Bind(i);
+    }
+
+    lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
+
+    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+
+    for (size_t i = 0; i < m_textures.size(); ++i)
+    {
+        m_textures[i].UnBind(i);
+    }
+
+    m_vao.UnBind();
+}
+
+void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation)
+{
+    m_shader.use();
+    UpdatePosRot(position, rotation);
+    UpdateMatricesMove(viewMatrix, ctx);
     UpdateUniforms();
 
     m_vao.Bind();

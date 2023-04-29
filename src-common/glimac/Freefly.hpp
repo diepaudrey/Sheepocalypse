@@ -45,12 +45,38 @@ private:
         m_leftVector = glm::normalize(m_leftVector);
     }
 
+    bool camIsOutBorders(const float& limit)
+    {
+        bool exp = m_position.x > limit || m_position.y > limit || m_position.z > limit || m_position.x < -limit || m_position.y < -limit || m_position.z < -limit;
+
+        if (exp)
+        {
+            std::cout << "Player is out borders " << std::endl;
+        }
+        return exp;
+    }
+
 public:
     FreeflyCamera()
         : m_position(glm::vec3(-20.f, 0.f, -20.f)), m_phi(glm::pi<float>()), m_theta(0.f), m_paused(false)
     {
         computeDirectionVectors();
     };
+
+    glm::vec3 getPosition()
+    {
+        return m_position;
+    }
+
+    glm::vec3 getUpVector()
+    {
+        return m_upVector;
+    }
+
+    glm::vec3 getLeftVector()
+    {
+        return m_leftVector;
+    }
 
     void moveLeft(float t)
     {
@@ -102,6 +128,34 @@ public:
     glm::mat4 getViewMatrix()
     {
         return glm::lookAt(m_position, m_position + m_frontVector, m_upVector);
+    }
+
+    void fixCamLimit(const float& limit)
+    {
+        if (m_position.x > limit)
+        {
+            m_position.x = limit;
+        }
+        else if (m_position.x < -limit)
+        {
+            m_position.x = -limit;
+        }
+        else if (m_position.y > limit)
+        {
+            m_position.y = limit;
+        }
+        else if (m_position.y < -limit)
+        {
+            m_position.y = -limit;
+        }
+        else if (m_position.z > limit)
+        {
+            m_position.z = limit;
+        }
+        else if (m_position.z < -limit)
+        {
+            m_position.z = -limit;
+        }
     }
 };
 

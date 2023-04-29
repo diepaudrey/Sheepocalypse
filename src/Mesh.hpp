@@ -38,10 +38,12 @@ private:
     void InitVao();
 
     void UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx);
+    void UpdateMatricesMove(glm::mat4 viewMatrix, p6::Context& ctx);
 
     void InitUniforms();
 
     void UpdateUniforms();
+    void UpdatePosRot(glm::vec3& position, glm::vec3& rotation);
 
 public:
     Mesh() = default;
@@ -50,6 +52,8 @@ public:
     ~Mesh();
 
     void Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
+    void RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation);
 
-    Mesh& operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP);
+    Mesh&
+        operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP);
 };
