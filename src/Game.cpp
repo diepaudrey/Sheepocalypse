@@ -8,6 +8,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     mouseHandler(ctx);
     InitImGui(boidParam);
     InitLight();
+    // InitShadow();
     InitEnvironment();
 
     //  std::cout << "Game initialized" << std::endl;
@@ -112,6 +113,15 @@ void Game::InitLight()
     // std::cout << "ligh p : " << lightP.light.x << " " << lightP.light.y << " " << lightP.light.z << std::endl;
     lightGame.initLight(lightP);
 }
+
+// void Game::InitShadow()
+// {
+//     shadow.InitWindow(1280, 720);
+//     glEnable(GL_POLYGON_OFFSET_FILL);
+//     float factor = 1.f;
+//     float units  = 1.f;
+//     glPolygonOffset(factor, units);
+// }
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {

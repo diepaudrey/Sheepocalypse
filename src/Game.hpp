@@ -6,6 +6,7 @@
 #include "Boids.hpp"
 #include "Environment.hpp"
 #include "Light.hpp"
+#include "Shadow.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
@@ -41,9 +42,10 @@ private:
     Environment m_environment;
 
     // Shader
-    p6::Shader  m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
-    Light       lightGame{m_shader};
-    LightParams lightP;
+    p6::Shader    m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
+    Light         lightGame{m_shader};
+    LightParams   lightP;
+    ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
 
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
@@ -51,12 +53,12 @@ private:
     void InitImGui(BoidsParameters& boidParam);
     void InitEnvironment();
     void InitLight();
+    // void InitShadow();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
 
     void mouseHandler(p6::Context& ctx);
     void keyboardHandler(p6::Context& ctx);
-
     void Render(p6::Context& ctx, BoidsParameters& boidParam);
 };
