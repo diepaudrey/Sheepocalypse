@@ -138,12 +138,8 @@ void Game::UpdateLightPlayer()
     lightP2.light = m_cam.getPosition();
 }
 
-void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
+void Game::ChangeLOD(BoidsParameters& boidParam)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    keyboardHandler(ctx);
-
-    viewMatrix  = m_cam.getViewMatrix();
     verticesPtr = &verticesLow;
     if (boidParam.lodMid)
     {
@@ -153,14 +149,22 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     {
         verticesPtr = &verticesHigh;
     }
+}
+
+void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    keyboardHandler(ctx);
+
+    viewMatrix = m_cam.getViewMatrix();
+    ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
 
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
 
-    // playerIsOutBorders();
-    m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
+    // m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
     UpdateLightPlayer();
     m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
     m_player.m_rotation = m_cam.getUpVector();

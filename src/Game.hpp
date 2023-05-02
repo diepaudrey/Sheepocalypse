@@ -31,7 +31,7 @@ private:
     float alignmentStrength  = 0.1f;
     float cohesionStrength   = 0.1f;
     float maxSpeed           = 10.f;
-    bool  lodLow             = false;
+    bool  lodLow             = true;
     bool  lodMid             = false;
     bool  lodHigh            = false;
 
@@ -63,7 +63,7 @@ private:
     void UpdateLightPlayer();
     void mouseHandler(p6::Context& ctx);
     void keyboardHandler(p6::Context& ctx);
-
+    void ChangeLOD(BoidsParameters& boidParam);
     bool playerIsOutBorders();
 
 public:
