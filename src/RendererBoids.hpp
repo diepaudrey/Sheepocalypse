@@ -5,6 +5,7 @@
 #include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
+#include "Shadow.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
@@ -25,7 +26,8 @@ public:
     std::vector<glimac::ShapeVertex> m_vertices;
     Vbo                              m_vbo;
     Vao                              m_vao;
-    p6::Shader                       m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl"); // à changer faire une classe shader
+    p6::Shader                       m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
+    p6::Shader                       m_shadow = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
 
     // parameters for text
     Texture              m_textureD{p6::load_image_buffer("assets/textures/body.png")};
@@ -37,7 +39,8 @@ public:
     std::vector<GLuint>  m_uTextures;
 
     // parameters for light
-    Light light_boid{m_shader};
+    Light         light_boid{m_shader};
+    ShadowMapping shadow_boid{m_shadow};
     // glm::vec3       light          = glm::vec3(0.f, 0.f, 0.f);
     // glm::vec3       lightIntensity = glm::vec3(1000.f, 1000.f, 1000.f);
     // const glm::vec3 Ka             = glm::vec3(0.05, 0.05, 0.05);

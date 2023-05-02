@@ -6,6 +6,7 @@
 #include "Boids.hpp"
 #include "Environment.hpp"
 #include "Light.hpp"
+#include "Shadow.hpp"
 #include "Player.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
@@ -46,9 +47,10 @@ private:
     float       m_limit = 70.f;
 
     // Shader
-    p6::Shader  m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
-    Light       lightGame{m_shader};
-    LightParams lightP;
+    p6::Shader    m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
+    Light         lightGame{m_shader};
+    LightParams   lightP;
+    ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
 
     Light       lightPlayer{m_shader};
     LightParams lightP2;

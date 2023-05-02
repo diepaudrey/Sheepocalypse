@@ -9,6 +9,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     mouseHandler(ctx);
     InitImGui(boidParam);
     InitLight();
+    // InitShadow();
     InitEnvironment();
     InitPlayer();
 
@@ -137,6 +138,15 @@ void Game::UpdateLightPlayer()
 {
     lightP2.light = m_cam.getPosition();
 }
+
+// void Game::InitShadow()
+// {
+//     shadow.InitWindow(1280, 720);
+//     glEnable(GL_POLYGON_OFFSET_FILL);
+//     float factor = 1.f;
+//     float units  = 1.f;
+//     glPolygonOffset(factor, units);
+// }
 
 void Game::ChangeLOD(BoidsParameters& boidParam)
 {
