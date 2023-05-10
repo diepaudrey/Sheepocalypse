@@ -4,16 +4,12 @@
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
-
 class Boid {
 private:
     glm::vec3 m_position;
     glm::vec3 m_speed;
-
-    // float maxSpeed        = 5.f;
-    // float protectedRadius = 1.5f;
-    float maxSpeed;
-    float protectedRadius;
+    float     maxSpeed;
+    float     protectedRadius;
 
 public:
     Boid() = default;
@@ -59,7 +55,6 @@ public:
         protectedRadius = protRad;
     }
 
-    // void draw(p6::Context& ctx, glm::mat4& viewMatrix);
     void updatePosition(p6::Context& ctx);
     void setMaxSpeed(const float& speed);
     void applyForce(const glm::vec3 force);
