@@ -4,7 +4,7 @@ void Player::InitPlayer(glm::vec3 position, LightParams& lightP)
 {
     m_position       = position;
     m_playerVertices = LoadOBJ("./assets/models/Night_Fury.obj");
-    m_playerMesh(m_playerVertices, m_playerTextures, m_position, glm::vec3(0.f), glm::vec3(2.f), lightP);
+    m_playerMesh(m_playerVertices, m_playerTextures, m_position, glm::vec3(0.f), glm::vec3(2.0f), lightP);
 }
 
 // void Player::UpdatePosition(glm::vec3 position)

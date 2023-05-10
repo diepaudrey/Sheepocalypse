@@ -49,17 +49,16 @@ void RendererBoids::initializeBoid(LightParams& lightP)
     InitVao();
     InitTextures();
     // light_boid.initLight(Ka, Kd, Ks, shininess, lightIntensity);
-    shadow_boid.InitWindow(2000, 1500); // change la taille du world
-    glEnable(GL_POLYGON_OFFSET_FILL);
-    float factor = 1.f;
-    float units  = 1.f;
-    glPolygonOffset(factor, units);
+    // shadow_boid.InitWindow(2000, 1500); // change la taille du world
+    // glEnable(GL_POLYGON_OFFSET_FILL);
+    // float factor = 1.f;
+    // float units  = 1.f;
+    // glPolygonOffset(factor, units);
     light_boid.initLight(lightP);
 }
 
 void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glimac::bind_default_shader();
     m_shader.use();
 
@@ -67,9 +66,9 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     glm::mat4 MVPMatrix;
     glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 500.f);
 
-    shadow_boid.BindForWriting();
-    glClear(GL_DEPTH_BUFFER_BIT);
-    shadow_boid.BindForReading(GL_TEXTURE5);
+    // shadow_boid.BindForWriting();
+    // glClear(GL_DEPTH_BUFFER_BIT);
+    // shadow_boid.BindForReading(GL_TEXTURE5);
     m_vao.Bind();
     BindTexture();
 
@@ -86,13 +85,14 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         MVMatrix  = glm::scale(MVMatrix, glm::vec3(2.0f));
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
-        // Calcul de la matrice MVP pour la source de lumière
+        // Calculation of the matrix MVP for the light source
         glm::mat4 depthProjectionMatrix = glm::ortho<float>(-35, 35, -35, 35, -35, 35);
         glm::mat4 lightViewMatrix       = glm::lookAt(lightP.light, boid.getPosition(), glm::vec3(0.f, 1.f, 0.f));
         glm::mat4 lightMVPMatrix        = ProjMatrix * lightViewMatrix * depthProjectionMatrix;
 
-        shadow_boid.setShadow(shadow_boid, lightMVPMatrix);
-        glUniformMatrix4fv(shadow_boid.uMVPLight, 1, GL_FALSE, glm::value_ptr(lightMVPMatrix));
+        // shadow_boid.setShadow(shadow_boid, lightMVPMatrix);
+        // glUniformMatrix4fv(shadow_boid.uMVPLight, 1, GL_FALSE, glm::value_ptr(lightMVPMatrix));
+
         light_boid.setLight(light_boid, lightP.light, MVMatrix, MVPMatrix);
 
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());

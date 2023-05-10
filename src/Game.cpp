@@ -18,7 +18,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 
 void Game::mouseHandler(p6::Context& ctx)
 {
-    /*La caméra sans souris*/
+    /*The camera without mouse*/
     // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     ctx.mouse_moved = [&](p6::MouseMove data) {
@@ -26,7 +26,7 @@ void Game::mouseHandler(p6::Context& ctx)
         (m_cam).rotateUp(-data.delta.y * rotationStrength);
     };
 
-    /*La caméra avec cliquer + glisser*/
+    /*The camera with click + drag*/
     // ctx.mouse_dragged = [&](p6::MouseDrag data) {
     //     (m_cam).rotateLeft(data.delta.x * rotationStrength);
     //     (m_cam).rotateUp(-data.delta.y * rotationStrength);
@@ -118,7 +118,7 @@ void Game::InitEnvironment()
 void Game::InitLight()
 {
     lightP.light          = glm::vec3(0.f, 20.f, 0.f);
-    lightP.lightIntensity = glm::vec3(5000.f);
+    lightP.lightIntensity = glm::vec3(1.f);
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
@@ -126,7 +126,7 @@ void Game::InitLight()
     lightGame.initLight(lightP);
 
     lightP2.light          = m_cam.getPosition();
-    lightP2.lightIntensity = glm::vec3(100.f);
+    lightP2.lightIntensity = glm::vec3(1.f);
     lightP2.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP2.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP2.Ks             = glm::vec3(1.0, 1.0, 1.0);

@@ -43,7 +43,7 @@ bool ShadowMapping::InitWindow(unsigned int WindowWidth, unsigned int WindowHeig
 void ShadowMapping::BindForWriting()
 {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
-    glpp::viewport(0, 0, m_width, m_height); // Width/height of shadow map
+    glViewport(0, 0, m_width, m_height); // Width/height of shadow map
 }
 
 void ShadowMapping::BindForReading(GLenum TextureUnit)

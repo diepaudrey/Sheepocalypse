@@ -6,15 +6,15 @@
 #include "Boids.hpp"
 #include "Environment.hpp"
 #include "Light.hpp"
-#include "Shadow.hpp"
 #include "Player.hpp"
+#include "Shadow.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
 class Game {
 private:
     // Boids
-    int   m_nbBoids = 50;
+    int   m_nbBoids = 1;
     Boids m_boids;
 
     // Player
@@ -37,7 +37,7 @@ private:
     bool  lodHigh            = false;
 
     // OBJLoad
-    std::vector<glimac::ShapeVertex>* verticesPtr; // pointeur pour pouvoir rediriger sur le bon lod
+    std::vector<glimac::ShapeVertex>* verticesPtr; // pointer to redirect the good load
     std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/Night_Fury.obj");
     std::vector<glimac::ShapeVertex>  verticesMedium = LoadOBJ("./assets/models/LowDrake.obj");
     std::vector<glimac::ShapeVertex>  verticesHigh   = LoadOBJ("./assets/models/Drake_Obj.obj");

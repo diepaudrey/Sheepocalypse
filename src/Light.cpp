@@ -39,6 +39,5 @@ void Light::setLight(Light light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, g
     glUniform1f(light_boid.m_uShininess, _uShininess[0]);
 
     glUniform3fv(light_boid.m_uLightPos_vs, 1, glm::value_ptr(uLightPos));
-    // glm::vec3 lightIntensity = glm::vec3(1000.0, 1000.0, 1000.0);
     glUniform3fv(light_boid.m_uLightIntensity, 1, glm::value_ptr(m_lightIntensity));
 }
