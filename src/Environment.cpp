@@ -44,6 +44,7 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
 
 void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
+    m_archeMesh.ShadowMapPass(viewMatrix, lightP.light);
     m_archeMesh.Render(viewMatrix, ctx, lightP);
 }
 

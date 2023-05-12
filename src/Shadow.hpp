@@ -20,7 +20,7 @@ public:
     ShadowMapping(const p6::Shader& shader)
         : m_shader(shader)
     {
-        uMVPLight = glGetUniformLocation(m_shader.id(), "uMVPLight");
+        this->uMVPLight = glGetUniformLocation(m_shader.id(), "depthMVP");
     };
     ~ShadowMapping();
 
@@ -29,6 +29,9 @@ public:
     void BindForWriting();
 
     void BindForReading(GLenum TextureUnit);
+    void UseShader();
 
-    void setShadow(ShadowMapping shadow, glm::mat4 MVMatrix);
+    // void setShadow(ShadowMapping shadow, glm::mat4 MVMatrix);
+
+    void setShadow(glm::mat4 MVMatrix);
 };

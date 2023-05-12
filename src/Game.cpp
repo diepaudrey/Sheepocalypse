@@ -117,7 +117,7 @@ void Game::InitEnvironment()
 
 void Game::InitLight()
 {
-    lightP.light          = glm::vec3(0.f, 20.f, 0.f);
+    lightP.light          = glm::vec3(0.f, 1.f, 0.f);
     lightP.lightIntensity = glm::vec3(0.7f); // 5000 pour pointLight, 0.7 pour direLight
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
@@ -163,7 +163,7 @@ void Game::ChangeLOD(BoidsParameters& boidParam)
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     keyboardHandler(ctx);
 
     viewMatrix = m_cam.getViewMatrix();

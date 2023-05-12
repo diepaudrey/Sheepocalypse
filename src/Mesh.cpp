@@ -1,4 +1,5 @@
 #include "Mesh.hpp"
+#include "glm/fwd.hpp"
 #include "glm/gtx/transform.hpp"
 
 Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP)
@@ -9,6 +10,7 @@ Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& tex
     InitTextures(textures, textures.size());
     InitUniforms();
     lightMesh.initLight(lightP);
+    InitShadow(lightP.light);
 }
 
 Mesh::Mesh(const Mesh& mesh)
@@ -42,6 +44,17 @@ void Mesh::InitVao()
     m_vbo = Vbo(m_vertices.data(), m_vertices.size());
     m_vao.AddBuffer(m_vbo);
     m_vbo.UnBind();
+}
+
+void Mesh::InitShadow(const glm::vec3& lightPos)
+{
+    m_shadowMap.InitWindow(200, 150);
+    glm::mat4 World        = MVMatrix;
+    glm::mat4 LightView    = glm::lookAt(lightPos, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 OrthoProjMat = glm::ortho(-100.f, 100.f, -100.f, 100.f, 0.1f, 100.f);
+    glm::mat4 WVP          = OrthoProjMat * LightView * World;
+    m_shadowShader.use();
+    m_shadowMap.setShadow(WVP);
 }
 
 void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
@@ -106,13 +119,18 @@ void Mesh::UpdatePosRot(glm::vec3& position, glm::vec3& rotation)
 
 void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // glViewport(0, 0, 1280, 720);
+
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     m_shader.use();
     UpdateMatrices(viewMatrix, ctx);
-
     UpdateUniforms();
 
-    m_vao.Bind();
-
+    // m_vao.Bind();
+    m_shadowMap.BindForReading(GL_TEXTURE0 + m_textures.size() - 1);
     for (size_t i = 0; i < m_textures.size(); ++i)
     {
         glUniform1i(m_uTextures[i], i);
@@ -121,14 +139,15 @@ void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 
     lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
 
-    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    BasicRender();
 
     for (size_t i = 0; i < m_textures.size(); ++i)
     {
         m_textures[i].UnBind(i);
     }
 
-    m_vao.UnBind();
+    // m_vao.UnBind();
 }
 
 void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation)
@@ -138,7 +157,7 @@ void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& li
     UpdateMatricesMove(viewMatrix, ctx);
     UpdateUniforms();
 
-    m_vao.Bind();
+    // m_vao.Bind();
 
     for (size_t i = 0; i < m_textures.size(); ++i)
     {
@@ -148,14 +167,31 @@ void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& li
 
     lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
 
-    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    BasicRender();
+    // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     for (size_t i = 0; i < m_textures.size(); ++i)
     {
         m_textures[i].UnBind(i);
     }
 
+    // m_vao.UnBind();
+}
+
+void Mesh::BasicRender()
+{
+    m_vao.Bind();
+    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     m_vao.UnBind();
+}
+
+void Mesh::ShadowMapPass(glm::mat4& viewMatrix, const glm::vec3& lightPos)
+{
+    glEnable(GL_DEPTH_TEST);
+    m_shadowMap.BindForWriting();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    BasicRender();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Mesh::~Mesh()

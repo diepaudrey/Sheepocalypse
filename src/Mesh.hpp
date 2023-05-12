@@ -20,6 +20,8 @@ private:
 
     p6::Shader m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
 
+    p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
+    ShadowMapping m_shadowMap    = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
     // parameters for light
     Light lightMesh{m_shader};
 
@@ -42,8 +44,12 @@ private:
 
     void InitUniforms();
 
+    void InitShadow(const glm::vec3& lightPos);
+
     void UpdateUniforms();
     void UpdatePosRot(glm::vec3& position, glm::vec3& rotation);
+
+    void BasicRender();
 
 public:
     Mesh() = default;
@@ -53,6 +59,7 @@ public:
 
     void Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation);
+    void ShadowMapPass(glm::mat4& viewMatrix, const glm::vec3& lightPos);
 
     Mesh&
         operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP);
