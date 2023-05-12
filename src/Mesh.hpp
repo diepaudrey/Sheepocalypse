@@ -58,6 +58,7 @@ public:
     ~Mesh();
 
     void Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
+    void RenderShadow(const glm::vec3& lightPos);
     void RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation);
     void ShadowMapPass(glm::mat4& viewMatrix, const glm::vec3& lightPos);
 

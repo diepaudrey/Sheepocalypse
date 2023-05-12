@@ -5,7 +5,7 @@
 int main()
 {
     auto ctx = p6::Context{{1280, 720, "Dragons"}};
-    ctx.maximize_window();
+    // ctx.maximize_window();
 
     BoidsParameters dragonParam;
     // LightParams     lighP;

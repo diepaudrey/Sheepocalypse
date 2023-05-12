@@ -29,7 +29,7 @@ void Environment::InitMeshes(LightParams& lightP)
     InitBorders(lightP);
     InitArche(lightP);
 
-    glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_DEPTH_TEST);
 }
 
 void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -44,8 +44,9 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
 
 void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
+    // m_archeMesh.Render(viewMatrix, ctx, lightP);
     m_archeMesh.ShadowMapPass(viewMatrix, lightP.light);
-    m_archeMesh.Render(viewMatrix, ctx, lightP);
+    m_archeMesh.RenderShadow(lightP.light);
 }
 
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
