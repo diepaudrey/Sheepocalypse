@@ -20,7 +20,7 @@ int main()
     /* Loop until the user closes the window */
     ctx.update = [&]() {
         /*Events*/
-        glClearColor(0.2f, 0.2f, 0.2f, 1.f);
+        glClearColor(0.f, 0.5725f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         DragonGame.Render(ctx, dragonParam);
