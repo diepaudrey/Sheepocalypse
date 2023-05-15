@@ -52,8 +52,11 @@ private:
     LightParams   lightP;
     ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
 
-    Light       lightPlayer{m_shader};
-    LightParams lightP2;
+    Light         lightPlayer{m_shader};
+    LightParams   lightP2;
+    p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
+    ShadowMapping m_shadowMap    = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
+    Texture       m_skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
 
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
@@ -67,6 +70,7 @@ private:
     void keyboardHandler(p6::Context& ctx);
     void ChangeLOD(BoidsParameters& boidParam);
     bool playerIsOutBorders();
+    void RenderShadow();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);

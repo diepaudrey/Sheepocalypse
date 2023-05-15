@@ -44,15 +44,25 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
 
 void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
-    // m_archeMesh.Render(viewMatrix, ctx, lightP);
-    m_archeMesh.ShadowMapPass(viewMatrix, lightP.light);
-    m_archeMesh.RenderShadow(lightP.light);
+    m_archeMesh.Render(viewMatrix, ctx, lightP);
+    // m_archeMesh.ShadowMapPass(viewMatrix, lightP.light);
+    // m_archeMesh.RenderShadow(lightP.light);
 }
 
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     RenderBorders(viewMatrix, ctx, lightP);
     RenderArche(viewMatrix, ctx, lightP);
+}
+
+void Environment::ShadowRender()
+{
+    m_floorMesh.BasicRender();
+    m_wall1Mesh.BasicRender();
+    m_wall2Mesh.BasicRender();
+    m_wall3Mesh.BasicRender();
+    m_wall4Mesh.BasicRender();
+    m_archeMesh.BasicRender();
 }
 
 void Environment::DeleteTextures()

@@ -57,11 +57,6 @@ void ShadowMapping::UseShader()
     m_shader.use();
 }
 
-// void ShadowMapping::setShadow(ShadowMapping shadow_shadow, glm::mat4 MVMatrix)
-// {
-//     glUniformMatrix4fv(shadow_shadow.uMVPLight, 1, GL_FALSE, glm::value_ptr(MVMatrix));
-// }
-
 void ShadowMapping::setShadow(glm::mat4 MVMatrix)
 {
     glUniformMatrix4fv(this->uMVPLight, 1, GL_FALSE, glm::value_ptr(MVMatrix));

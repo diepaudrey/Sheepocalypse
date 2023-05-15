@@ -59,4 +59,5 @@ public:
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
     void DeleteTextures();
+    void ShadowRender();
 };
