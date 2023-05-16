@@ -86,9 +86,9 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
         // Calculation of the matrix MVP for the light source
-        glm::mat4 depthProjectionMatrix = glm::ortho<float>(-35, 35, -35, 35, -35, 35);
-        glm::mat4 lightViewMatrix       = glm::lookAt(lightP.light, boid.getPosition(), glm::vec3(0.f, 1.f, 0.f));
-        glm::mat4 lightMVPMatrix        = ProjMatrix * lightViewMatrix * depthProjectionMatrix;
+        // glm::mat4 depthProjectionMatrix = glm::ortho<float>(-35, 35, -35, 35, -35, 35);
+        // glm::mat4 lightViewMatrix       = glm::lookAt(lightP.light, boid.getPosition(), glm::vec3(0.f, 1.f, 0.f));
+        // glm::mat4 lightMVPMatrix        = ProjMatrix * lightViewMatrix * depthProjectionMatrix;
 
         // shadow_boid.setShadow(shadow_boid, lightMVPMatrix);
         // glUniformMatrix4fv(shadow_boid.uMVPLight, 1, GL_FALSE, glm::value_ptr(lightMVPMatrix));

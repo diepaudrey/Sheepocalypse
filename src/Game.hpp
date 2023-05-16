@@ -14,7 +14,7 @@
 class Game {
 private:
     // Boids
-    int   m_nbBoids = 1;
+    int   m_nbBoids = 20;
     Boids m_boids;
 
     // Player
@@ -55,8 +55,8 @@ private:
     Light         lightPlayer{m_shader};
     LightParams   lightP2;
     p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
-    ShadowMapping m_shadowMap    = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
-    Texture       m_skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
+    ShadowMapping m_shadowMap{m_shadowShader};
+    GLuint        m_DepthMap;
 
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
@@ -74,5 +74,6 @@ private:
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);
+    void RenderFinal(p6::Context& ctx, BoidsParameters& boidParam);
     void Render(p6::Context& ctx, BoidsParameters& boidParam);
 };

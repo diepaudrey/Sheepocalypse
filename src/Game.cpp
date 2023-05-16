@@ -15,6 +15,9 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     // InitShadow();
     InitEnvironment();
     InitPlayer();
+    m_DepthMap = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
+    std::cout << m_DepthMap << std::endl;
+
     m_shadowMap.InitWindow(1024, 1024);
     //  std::cout << "Game initialized" << std::endl;
 }
@@ -120,7 +123,7 @@ void Game::InitEnvironment()
 
 void Game::InitLight()
 {
-    lightP.light          = glm::vec3(0.f, 1.f, 0.f);
+    lightP.light          = glm::vec3(45.f, 80.f, 0.f);
     lightP.lightIntensity = glm::vec3(0.7f); // 5000 pour pointLight, 0.7 pour direLight
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
@@ -167,15 +170,15 @@ void Game::ChangeLOD(BoidsParameters& boidParam)
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    RenderShadow();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     keyboardHandler(ctx);
     glViewport(0, 0, ctx.main_canvas_width(), ctx.main_canvas_height());
     // ctx.return_to_main_canvas();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // m_shader.use();
-    m_skyTex.Bind(6);
-    m_shadowMap.BindForReading(GL_TEXTURE7);
+    m_shader.use();
+    // m_skyTex.Bind(6);
+    m_shadowMap.BindForReading(GL_TEXTURE10);
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
@@ -194,14 +197,24 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 
 void Game::RenderShadow()
 {
-    glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
     glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
-    glm::mat4 WVP          = OrthoProjMat * LightView;
+    // glm::mat4 WVP          = OrthoProjMat * LightView;
+    glm::mat4 WVP = OrthoProjMat * LightView;
+
     m_shadowShader.use();
     m_shadowMap.setShadow(WVP);
     m_shadowMap.BindForWriting();
-    glClear(GL_DEPTH_BUFFER_BIT);
-    m_skyTex.Bind(6);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glUniformMatrix4fv(m_DepthMap, 1, GL_FALSE, glm::value_ptr(WVP));
     m_environment.ShadowRender();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Game::RenderFinal(p6::Context& ctx, BoidsParameters& boidParam)
+{
+    RenderShadow();
+    glEnable(GL_DEPTH_TEST);
+    Render(ctx, boidParam);
+    glDisable(GL_DEPTH_TEST);
 }
