@@ -38,7 +38,7 @@ private:
 
     // OBJLoad
     std::vector<glimac::ShapeVertex>* verticesPtr; // pointer to redirect the good load
-    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/Night_Fury.obj");
+    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/enderdragon.obj");
     std::vector<glimac::ShapeVertex>  verticesMedium = LoadOBJ("./assets/models/LowDrake.obj");
     std::vector<glimac::ShapeVertex>  verticesHigh   = LoadOBJ("./assets/models/Drake_Obj.obj");
 

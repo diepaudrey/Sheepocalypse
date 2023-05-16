@@ -58,10 +58,10 @@ void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightPar
 void Environment::ShadowRender()
 {
     m_floorMesh.BasicRender();
-    m_wall1Mesh.BasicRender();
-    m_wall2Mesh.BasicRender();
-    m_wall3Mesh.BasicRender();
-    m_wall4Mesh.BasicRender();
+    // m_wall1Mesh.BasicRender();
+    // m_wall2Mesh.BasicRender();
+    // m_wall3Mesh.BasicRender();
+    // m_wall4Mesh.BasicRender();
     m_archeMesh.BasicRender();
 }
 
@@ -70,6 +70,8 @@ void Environment::DeleteTextures()
     m_textureS.DeleteTexture();
     m_textureD.DeleteTexture();
     m_textureH.DeleteTexture();
-    m_floorTex.DeleteTexture();
+    m_floorDiff.DeleteTexture();
+    // m_floorDisp.DeleteTexture();
+    // m_floorRough.DeleteTexture();
     m_skyTex.DeleteTexture();
 }

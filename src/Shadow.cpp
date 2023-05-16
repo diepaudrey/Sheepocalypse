@@ -51,6 +51,11 @@ void ShadowMapping::BindForReading(GLenum TextureUnit)
     glActiveTexture(TextureUnit);
     glBindTexture(GL_TEXTURE_2D, m_depthTexture);
 }
+void ShadowMapping::UnBind(GLenum TextureUnit)
+{
+    glActiveTexture(TextureUnit);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 void ShadowMapping::UseShader()
 {

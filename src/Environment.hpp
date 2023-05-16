@@ -19,8 +19,10 @@ private:
     std::vector<glimac::ShapeVertex> m_planVertices;
 
     // Floor
-    Texture              m_floorTex{p6::load_image_buffer("assets/textures/Grass.jpg")};
-    std::vector<Texture> m_floorTextures = {m_floorTex};
+    Texture m_floorDiff{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
+    // Texture m_floorDisp{p6::load_image_buffer("assets/textures/environment/floor_disp.png"), 1};
+    // Texture              m_floorRough{p6::load_image_buffer("assets/textures/environment/floor_rough.jpg"), 2};
+    std::vector<Texture> m_floorTextures = {m_floorDiff};
     Mesh                 m_floorMesh;
 
     // Sky

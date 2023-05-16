@@ -44,10 +44,12 @@ void main() {
     // Calcul de la couleur des textures
     vec2 fCorrectCoords = vec2(vTexCoords.x, 1.0 - vTexCoords.y);
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 0.0);
-    for (int i = 0; i < uNumTextures; ++i) {
-        textureColor += texture(uTextures[i], fCorrectCoords);
-    }
     textureColor +=  texture(uDepthTexture, fCorrectCoords);
+    for (int i = 0; i < uNumTextures; ++i) {
+       textureColor += texture(uTextures[i], fCorrectCoords);
+   }
+    
+   
 
     // Combinaison des couleurs de la lumière et des textures
     fFragColor = vec4(lightColor.rgb * textureColor.rgb, 1.0);

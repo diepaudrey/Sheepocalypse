@@ -29,6 +29,7 @@ public:
     void BindForWriting();
 
     void BindForReading(GLenum TextureUnit);
+    void UnBind(GLenum TextureUnit);
     void UseShader();
 
     // void setShadow(ShadowMapping shadow, glm::mat4 MVMatrix);
