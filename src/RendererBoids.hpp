@@ -41,12 +41,6 @@ public:
     // parameters for light
     Light         light_boid{m_shader};
     ShadowMapping shadow_boid{m_shadow};
-    // glm::vec3       light          = glm::vec3(0.f, 0.f, 0.f);
-    // glm::vec3       lightIntensity = glm::vec3(1000.f, 1000.f, 1000.f);
-    // const glm::vec3 Ka             = glm::vec3(0.05, 0.05, 0.05);
-    // const glm::vec3 Kd             = glm::vec3(1.0, 1.0, 1.0);
-    // const glm::vec3 Ks             = glm::vec3(1.0, 1.0, 1.0);
-    // const float     shininess      = 0.5f;
 
 public:
     RendererBoids() = default;

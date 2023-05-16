@@ -83,14 +83,10 @@ void Mesh::UpdateMatricesMove(glm::mat4 viewMatrix, p6::Context& ctx)
 
 void Mesh::InitUniforms()
 {
-    m_uMVPMatrix = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
-    std::cout << m_uMVPMatrix << std::endl;
-    m_uMVMatrix = glGetUniformLocation(m_shader.id(), "uMVMatrix");
-    std::cout << m_uMVMatrix << std::endl;
+    m_uMVPMatrix    = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
+    m_uMVMatrix     = glGetUniformLocation(m_shader.id(), "uMVMatrix");
     m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
-    std::cout << m_uNormalMatrix << std::endl;
-    m_uNumTextures = glGetUniformLocation(m_shader.id(), "uNumTextures");
-    std::cout << m_uNumTextures << std::endl;
+    m_uNumTextures  = glGetUniformLocation(m_shader.id(), "uNumTextures");
     // initialize each of the uniform variable needed
     for (size_t i = 0; i < m_textures.size(); i++)
     {

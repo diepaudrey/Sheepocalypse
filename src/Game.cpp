@@ -15,9 +15,9 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     // InitShadow();
     InitEnvironment();
     InitPlayer();
-    m_DepthMap = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
-    std::cout << m_DepthMap << std::endl;
+    m_DepthMap  = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
     m_DepthText = glGetUniformLocation(m_shader.id(), "uDepthTexture");
+    // std::cout << m_DepthText << std::endl;
 
     m_shadowMap.InitWindow(1024, 1024);
     //  std::cout << "Game initialized" << std::endl;
@@ -175,8 +175,11 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     keyboardHandler(ctx);
-    glUniform1i(m_DepthText, 0);
-    m_shadowMap.BindForReading(GL_TEXTURE10);
+    std::cout << m_DepthText << std::endl;
+    glUniform1i(m_DepthText, 13);
+
+    m_shadowMap.BindForReading(GL_TEXTURE13);
+
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
