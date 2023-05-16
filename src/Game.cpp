@@ -17,6 +17,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitPlayer();
     m_DepthMap = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
     std::cout << m_DepthMap << std::endl;
+    m_DepthText = glGetUniformLocation(m_shader.id(), "uDepthTexture");
 
     m_shadowMap.InitWindow(1024, 1024);
     //  std::cout << "Game initialized" << std::endl;
@@ -170,14 +171,11 @@ void Game::ChangeLOD(BoidsParameters& boidParam)
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
     // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, ctx.main_canvas_width(), ctx.main_canvas_height());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     keyboardHandler(ctx);
-    glViewport(0, 0, ctx.main_canvas_width(), ctx.main_canvas_height());
-    // ctx.return_to_main_canvas();
-
-    m_shader.use();
-    // m_skyTex.Bind(6);
+    glUniform1i(m_DepthText, 0);
     m_shadowMap.BindForReading(GL_TEXTURE10);
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);

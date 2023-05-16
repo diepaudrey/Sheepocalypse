@@ -57,6 +57,7 @@ private:
     p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
     ShadowMapping m_shadowMap{m_shadowShader};
     GLuint        m_DepthMap;
+    GLuint        m_DepthText;
 
     // Init methods
     void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);

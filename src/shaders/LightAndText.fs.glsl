@@ -16,6 +16,7 @@ uniform vec3 uLightIntensity;
 
 uniform int uNumTextures;
 uniform sampler2D uTextures[4];
+uniform sampler2D uDepthTexture;
 
 vec3 blinnPhong(){
 
@@ -46,6 +47,7 @@ void main() {
     for (int i = 0; i < uNumTextures; ++i) {
         textureColor += texture(uTextures[i], fCorrectCoords);
     }
+    textureColor +=  texture(uDepthTexture, fCorrectCoords);
 
     // Combinaison des couleurs de la lumière et des textures
     fFragColor = vec4(lightColor.rgb * textureColor.rgb, 1.0);
