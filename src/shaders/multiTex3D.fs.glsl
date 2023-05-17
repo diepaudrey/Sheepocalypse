@@ -35,6 +35,7 @@ void main() {
     if (uNumTextures >= 4) {
         color += texture(uTextures[3], fCorrectCoords);
     }
+    
 
     
 
