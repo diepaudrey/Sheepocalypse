@@ -44,7 +44,7 @@ vec3 blinnPhong(){
     vec3 N = vNormal_vs;
     vec3 wo = normalize(-vPosition_vs);
     vec3 halfVector =(wo + wi)/2.f;
-    return Li*(uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess));
+    return Li*(uKD*max(dot(wi,N),0.) + (1.0f - ShadowCalculation(vFragPosLight))*uKs*pow(max(dot(halfVector,N), 0.), uShininess));
     
 }
 
@@ -60,14 +60,8 @@ void main() {
     // vec3 halfVector =(wo + wi)/2.f;
     //vec3 lightColor = uKa + Li * (uKD * max(dot(wi,N),0.) + uKs * pow(max(dot(halfVector,N), 0.), uShininess));
 
-    vec3 wi = normalize(uLightPos_vs);
-    vec3 Li =uLightIntensity;
-    vec3 N = vNormal_vs;
-    vec3 wo = normalize(-vPosition_vs);
-    vec3 halfVector =(wo + wi)/2.f;
-    vec3 lightColor =  Li*(uKD*max(dot(wi,N),0.) + (1.0f - ShadowCalculation(vFragPosLight))*uKs*pow(max(dot(halfVector,N), 0.), uShininess));
 
-    //vec3 lightColor = blinnPhong();
+    vec3 lightColor = blinnPhong();
     // Calcul de la couleur des textures
     vec2 fCorrectCoords = vec2(vTexCoords.x, 1.0 - vTexCoords.y);
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 0.0);
