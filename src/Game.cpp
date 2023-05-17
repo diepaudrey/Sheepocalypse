@@ -183,6 +183,10 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
+    glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
+    glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
+    glm::mat4 WVP          = OrthoProjMat * LightView;
+    glUniformMatrix4fv(glGetUniformLocation(m_shader.id(), "uLightProjection"), 1, GL_FALSE, glm::value_ptr(WVP));
     m_shadowMap.BindForReading(GL_TEXTURE13);
     glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 13);
 
@@ -200,13 +204,12 @@ void Game::RenderShadow()
 {
     glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
     glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
-    // glm::mat4 WVP          = OrthoProjMat * LightView;
-    glm::mat4 WVP = OrthoProjMat * LightView;
+    glm::mat4 WVP          = OrthoProjMat * LightView;
 
     m_shadowShader.use();
     m_shadowMap.setShadow(WVP);
     m_shadowMap.BindForWriting();
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     glUniformMatrix4fv(m_DepthMap, 1, GL_FALSE, glm::value_ptr(WVP));
     m_environment.ShadowRender();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -214,8 +217,8 @@ void Game::RenderShadow()
 
 void Game::RenderFinal(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    RenderShadow();
     glEnable(GL_DEPTH_TEST);
+    RenderShadow();
     Render(ctx, boidParam);
     glDisable(GL_DEPTH_TEST);
 }
