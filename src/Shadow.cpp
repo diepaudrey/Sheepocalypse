@@ -15,6 +15,10 @@ bool ShadowMapping::InitWindow(unsigned int WindowWidth, unsigned int WindowHeig
     glGenFramebuffers(1, &m_fbo);
 
     glGenTextures(1, &m_depthTexture);
+    if (m_depthTexture == 0)
+    {
+        std::cout << "Failed to create the FBO" << std::endl;
+    }
     glBindTexture(GL_TEXTURE_2D, m_depthTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, WindowWidth, WindowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -59,5 +63,6 @@ void ShadowMapping::UseShader()
 
 void ShadowMapping::setShadow(glm::mat4 MVMatrix)
 {
+    // std::cout << "setShadow " << glm::value_ptr(MVMatrix) << std::endl;
     glUniformMatrix4fv(this->uMVPLight, 1, GL_FALSE, glm::value_ptr(MVMatrix));
 }

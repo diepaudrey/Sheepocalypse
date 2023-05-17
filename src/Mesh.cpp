@@ -107,6 +107,23 @@ void Mesh::UpdateUniforms()
     glUniform1i(m_uNumTextures, m_textures.size());
 }
 
+void Mesh::BindTextures()
+{
+    for (size_t i = 0; i < m_textures.size(); ++i)
+    {
+        glUniform1i(m_uTextures[i], i);
+        m_textures[i].Bind(i);
+    }
+}
+
+void Mesh::UnBindTextures()
+{
+    for (size_t i = 0; i < m_textures.size(); ++i)
+    {
+        m_textures[i].UnBind(i);
+    }
+}
+
 void Mesh::UpdatePosRot(glm::vec3& position, glm::vec3& rotation)
 {
     m_position = position;
@@ -131,19 +148,10 @@ void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
     m_shader.use();
     UpdateMatrices(viewMatrix, ctx);
     UpdateUniforms();
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        glUniform1i(m_uTextures[i], i);
-        m_textures[i].Bind(i);
-    }
-
+    BindTextures();
     lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
-
     BasicRender();
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        m_textures[i].UnBind(i);
-    }
+    UnBindTextures();
 }
 
 void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP, glm::vec3& position, glm::vec3& rotation)
@@ -155,21 +163,14 @@ void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& li
 
     // m_vao.Bind();
 
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        glUniform1i(m_uTextures[i], i);
-        m_textures[i].Bind(i);
-    }
+    BindTextures();
 
     lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
 
     BasicRender();
     // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
-    for (size_t i = 0; i < m_textures.size(); ++i)
-    {
-        m_textures[i].UnBind(i);
-    }
+    UnBindTextures();
 
     // m_vao.UnBind();
 }

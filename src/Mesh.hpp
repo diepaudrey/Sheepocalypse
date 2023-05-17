@@ -47,6 +47,8 @@ private:
     void InitShadow(const glm::vec3& lightPos);
 
     void UpdateUniforms();
+    void BindTextures();
+    void UnBindTextures();
     void UpdatePosRot(glm::vec3& position, glm::vec3& rotation);
 
 public:

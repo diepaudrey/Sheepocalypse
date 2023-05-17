@@ -17,10 +17,10 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitPlayer();
     m_DepthMap  = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
     m_DepthText = glGetUniformLocation(m_shader.id(), "uDepthTexture");
-    // std::cout << m_DepthText << std::endl;
 
     m_shadowMap.InitWindow(1024, 1024);
     //  std::cout << "Game initialized" << std::endl;
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Game::mouseHandler(p6::Context& ctx)
@@ -175,10 +175,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     keyboardHandler(ctx);
-    std::cout << m_DepthText << std::endl;
-    glUniform1i(m_DepthText, 13);
-
-    m_shadowMap.BindForReading(GL_TEXTURE13);
 
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
@@ -186,6 +182,10 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
+
+    m_shadowMap.BindForReading(GL_TEXTURE13);
+    glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 13);
+
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
 
     // m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));

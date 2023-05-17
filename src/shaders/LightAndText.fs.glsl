@@ -51,4 +51,5 @@ void main() {
 
     // Combinaison des couleurs de la lumière et des textures
     fFragColor = vec4(lightColor.rgb * textureColor.rgb, 1.0);
+    
 }
