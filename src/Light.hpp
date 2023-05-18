@@ -49,7 +49,7 @@ public:
 
 public:
     // Light() = default;
-    Light(const p6::Shader& shader);
+    explicit Light(const p6::Shader& shader);
 
     void initLight(LightParams lightparams);
     void setLight(Light light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);

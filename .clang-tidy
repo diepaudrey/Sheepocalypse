@@ -33,4 +33,5 @@ Checks: '
   -objc-*,
   -openmp-*,
   -zircon-*,
+  -misc-non-private-member-variables-in-classes,
   '

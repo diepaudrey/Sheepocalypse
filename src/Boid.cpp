@@ -5,12 +5,37 @@ void Boid::updatePosition(p6::Context& ctx)
     m_position += ctx.delta_time() * m_speed;
 }
 
-void Boid::setMaxSpeed(const float& speed)
+void Boid::avoidEdges(Boid& boid, const float& limit, const float& turnfactor, const float& protectedRadius)
 {
-    this->maxSpeed = speed;
+    if (boid.getPosition().x + protectedRadius > limit)
+    {
+        boid.m_speed.x -= turnfactor;
+    }
+    if (boid.getPosition().x - protectedRadius < -limit)
+    {
+        boid.m_speed.x += turnfactor;
+    }
+
+    if (boid.getPosition().y + protectedRadius > limit)
+    {
+        boid.m_speed.y -= turnfactor;
+    }
+    if (boid.getPosition().y - protectedRadius < -limit)
+    {
+        boid.m_speed.y += turnfactor;
+    }
+
+    if (boid.getPosition().z + protectedRadius > limit)
+    {
+        boid.m_speed.z -= turnfactor;
+    }
+    if (boid.getPosition().z - protectedRadius < -limit)
+    {
+        boid.m_speed.z += turnfactor;
+    }
 }
 
-void Boid::applyForce(const glm::vec3 force)
+void Boid::applyForce(const glm::vec3& force)
 {
     this->m_speed += force;
 }

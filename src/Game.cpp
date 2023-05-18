@@ -6,8 +6,7 @@
 
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    InitBoids(ctx, boidParam);
-
+    InitBoids();
     InitCamera();
     mouseHandler(ctx);
     InitImGui(boidParam);
@@ -86,11 +85,11 @@ void Game::keyboardHandler(p6::Context& ctx)
     };
 }
 
-void Game::InitBoids(p6::Context& ctx, BoidsParameters& boidParam)
+void Game::InitBoids()
 {
     std::vector<Boid> vecBoids;
-    m_boids = Boids(vecBoids, m_nbBoids, boidParam);
-    m_boids.fillBoids(ctx);
+    m_boids = Boids(vecBoids, m_nbBoids);
+    m_boids.fillBoids();
 }
 
 void Game::InitPlayer()
@@ -105,9 +104,10 @@ void Game::InitCamera()
     m_cam = glimac::FreeflyCamera();
 }
 
-void Game::InitImGui(BoidsParameters& boidParam)
+void Game::InitImGui(BoidsParameters& boidParam) const
 {
     boidParam.protectedRadius    = protectedRadius;
+    boidParam.visualRange        = visualRange;
     boidParam.alignmentStrength  = alignmentStrength;
     boidParam.cohesionStrength   = cohesionStrength;
     boidParam.separationStrength = separationStrength;
@@ -145,15 +145,6 @@ void Game::UpdateLightPlayer()
 {
     lightP2.light = m_cam.getPosition();
 }
-
-// void Game::InitShadow()
-// {
-//     shadow.InitWindow(1280, 720);
-//     glEnable(GL_POLYGON_OFFSET_FILL);
-//     float factor = 1.f;
-//     float units  = 1.f;
-//     glPolygonOffset(factor, units);
-// }
 
 void Game::ChangeLOD(BoidsParameters& boidParam)
 {

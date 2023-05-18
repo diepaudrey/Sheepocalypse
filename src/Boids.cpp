@@ -7,7 +7,7 @@ void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glima
     boidRenderer.deleteBuffers();
 }
 
-void Boids::fillBoids(p6::Context& ctx)
+void Boids::fillBoids()
 {
     const float& min = 20.f;
     const float& max = 20.f;
@@ -22,50 +22,19 @@ void Boids::fillBoids(p6::Context& ctx)
     }
 }
 
-void Boids::avoidEdges(Boid& boid, const float& limit, const float& turnfactor, BoidsParameters& boidParam)
-{
-    if (boid.getPosition().x + boidParam.protectedRadius > limit)
-    {
-        boid.addSpeedX(-turnfactor);
-    }
-    if (boid.getPosition().x - boidParam.protectedRadius < -limit)
-    {
-        boid.addSpeedX(turnfactor);
-    }
-
-    if (boid.getPosition().y + boidParam.protectedRadius > limit)
-    {
-        boid.addSpeedY(-turnfactor);
-    }
-    if (boid.getPosition().y - boidParam.protectedRadius < -limit)
-    {
-        boid.addSpeedY(turnfactor);
-    }
-
-    if (boid.getPosition().z + boidParam.protectedRadius > limit)
-    {
-        boid.addSpeedZ(-turnfactor);
-    }
-    if (boid.getPosition().z - boidParam.protectedRadius < -limit)
-    {
-        boid.addSpeedZ(turnfactor);
-    }
-}
-
 bool Boids::isTooClose(const Boid& boid1, const Boid& boid2, const float& radius)
 {
     return glm::distance(boid1.getPosition(), boid2.getPosition()) < radius && boid1 != boid2;
 }
 
-std::vector<Boid> Boids::fillNeighbors(const Boid& boid, p6::Context& ctx)
+std::vector<Boid> Boids::fillNeighbors(const Boid& boid, BoidsParameters& boidParam)
 {
     std::vector<Boid> neighbors;
     for (const auto& otherBoid : m_boids)
     {
-        if (isTooClose(boid, otherBoid, boid.getProtectedRadius()))
+        if (isTooClose(boid, otherBoid, boidParam.visualRange))
         {
             neighbors.push_back(otherBoid);
-            ctx.fill = {1.f, 0.f, 0.f, 0.3f};
         }
     }
     return neighbors;
@@ -73,15 +42,14 @@ std::vector<Boid> Boids::fillNeighbors(const Boid& boid, p6::Context& ctx)
 
 /* 3 Rules of the game*/
 
-glm::vec3 Boids::separation(const Boid& boid, BoidsParameters& boidParam) const
+glm::vec3 Boids::separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors)
 {
-    glm::vec3   steeringForce(0.f, 0.f, 0.f);
-    const float separationRange   = 8.f;
-    int         numberOfNeighbors = 0;
+    glm::vec3 steeringForce(0.f, 0.f, 0.f);
+    int       numberOfNeighbors = 0;
 
-    for (const auto& otherBoid : m_boids)
+    for (const auto& otherBoid : neighbors)
     {
-        if (isTooClose(boid, otherBoid, separationRange))
+        if (isTooClose(boid, otherBoid, boidParam.protectedRadius))
 
         {
             float distance = glm::distance(boid.getPosition(), otherBoid.getPosition());
@@ -99,15 +67,14 @@ glm::vec3 Boids::separation(const Boid& boid, BoidsParameters& boidParam) const
     return steeringForce;
 }
 
-glm::vec3 Boids::alignment(const Boid& boid, BoidsParameters& boidParam) const
+glm::vec3 Boids::alignment(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors)
 {
     glm::vec3 averageDirection(0.f, 0.f, 0.f);
-    float     alignmentRange    = 10.f;
     int       numberOfNeighbors = 0;
 
-    for (const auto& otherBoid : m_boids)
+    for (const auto& otherBoid : neighbors)
     {
-        if (isTooClose(boid, otherBoid, alignmentRange))
+        if (isTooClose(boid, otherBoid, boidParam.visualRange))
         {
             float distance = glm::distance(boid.getPosition(), otherBoid.getPosition());
 
@@ -125,15 +92,14 @@ glm::vec3 Boids::alignment(const Boid& boid, BoidsParameters& boidParam) const
     return averageDirection;
 }
 
-glm::vec3 Boids::cohesion(const Boid& boid, BoidsParameters& boidParam) const
+glm::vec3 Boids::cohesion(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors)
 {
     glm::vec3 averageLocation(0.f, 0.f, 0.f);
-    float     cohesionRange     = 25.f;
     int       numberOfNeighbors = 0;
 
-    for (const auto& otherBoid : m_boids)
+    for (const auto& otherBoid : neighbors)
     {
-        if (isTooClose(boid, otherBoid, cohesionRange))
+        if (isTooClose(boid, otherBoid, boidParam.visualRange))
         {
             averageLocation += otherBoid.getPosition();
             numberOfNeighbors++;
@@ -149,22 +115,23 @@ glm::vec3 Boids::cohesion(const Boid& boid, BoidsParameters& boidParam) const
     return averageLocation;
 }
 
-void Boids::applySteeringForces(Boid& boid, BoidsParameters& boidParam)
+void Boids::applySteeringForces(Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors)
 {
-    boid.applyForce(alignment(boid, boidParam));
-    boid.applyForce(cohesion(boid, boidParam));
-    boid.applyForce(separation(boid, boidParam));
+    boid.applyForce(alignment(boid, boidParam, neighbors));
+    boid.applyForce(cohesion(boid, boidParam, neighbors));
+    boid.applyForce(separation(boid, boidParam, neighbors));
     boid.limitSpeed(boidParam.maxSpeed);
 }
 
 void Boids::updateBoids(p6::Context& ctx, BoidsParameters& boidParam)
 {
+    boidParam.updateBoidsParam();
     for (auto& boid : m_boids)
     {
-        std::vector<Boid> neighbors = fillNeighbors(boid, ctx);
+        std::vector<Boid> neighbors = fillNeighbors(boid, boidParam);
         boid.updatePosition(ctx);
-        applySteeringForces(boid, boidParam);
-        avoidEdges(boid, limit, turnfactor, boidParam);
+        applySteeringForces(boid, boidParam, neighbors);
+        boid.avoidEdges(boid, limit, turnfactor, boidParam.protectedRadius);
         neighbors.clear();
     }
 };

@@ -27,7 +27,8 @@ private:
     float                 rotationStrength = 1000.f;
 
     // ImGui
-    float protectedRadius    = 0.1f;
+    float protectedRadius    = 10.f;
+    float visualRange        = 25.f;
     float separationStrength = 0.1f;
     float alignmentStrength  = 0.1f;
     float cohesionStrength   = 0.1f;
@@ -60,10 +61,10 @@ private:
     GLuint        m_DepthText;
 
     // Init methods
-    void InitBoids(p6::Context& ctx, BoidsParameters& boidParam);
+    void InitBoids();
     void InitPlayer();
     void InitCamera();
-    void InitImGui(BoidsParameters& boidParam);
+    void InitImGui(BoidsParameters& boidParam) const;
     void InitEnvironment();
     void InitLight();
     void UpdateLightPlayer();

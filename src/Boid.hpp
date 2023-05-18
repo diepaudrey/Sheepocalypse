@@ -8,8 +8,6 @@ class Boid {
 private:
     glm::vec3 m_position;
     glm::vec3 m_speed;
-    float     maxSpeed;
-    float     protectedRadius;
 
 public:
     Boid() = default;
@@ -25,39 +23,10 @@ public:
         return m_speed;
     }
 
-    float getProtectedRadius() const
-    {
-        return protectedRadius;
-    }
-
-    float getMaxSpeed() const
-    {
-        return maxSpeed;
-    }
-
-    void addSpeedX(const float speed)
-    {
-        m_speed.x += speed;
-    }
-
-    void addSpeedY(const float speed)
-    {
-        m_speed.y += speed;
-    }
-
-    void addSpeedZ(const float speed)
-    {
-        m_speed.z += speed;
-    }
-
-    void setProtectedRadius(const float protRad)
-    {
-        protectedRadius = protRad;
-    }
-
-    void updatePosition(p6::Context& ctx);
-    void setMaxSpeed(const float& speed);
-    void applyForce(const glm::vec3 force);
+    void        updatePosition(p6::Context& ctx);
+    void        setMaxSpeed(const float& speed);
+    void        applyForce(const glm::vec3& force);
+    static void avoidEdges(Boid& boid, const float& limit, const float& turnfactor, const float& protectedRadius);
 
     // limit the speed
     void limitSpeed(const float& maxSpeed);
