@@ -184,14 +184,14 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
     glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
-    glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
+    glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
     glm::mat4 WVP          = OrthoProjMat * LightView;
     glUniformMatrix4fv(glGetUniformLocation(m_shader.id(), "uLightProjection"), 1, GL_FALSE, glm::value_ptr(WVP));
-    m_shadowMap.BindForReading(GL_TEXTURE13);
-    glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 13);
+    m_shadowMap.BindForReading(GL_TEXTURE10);
+    glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 10);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
 
-    m_shadowMap.UnBind(GL_TEXTURE13);
+    m_shadowMap.UnBind(GL_TEXTURE10);
 
     // m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
     UpdateLightPlayer();
@@ -204,7 +204,7 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 void Game::RenderShadow()
 {
     glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
-    glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
+    glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
     glm::mat4 WVP          = OrthoProjMat * LightView;
 
     m_shadowShader.use();
