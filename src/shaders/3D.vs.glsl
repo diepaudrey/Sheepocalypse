@@ -27,7 +27,7 @@ void main() {
     vPosition_vs = vec3(uMVMatrix * vertexPosition);
     vNormal_vs = vec3(uNormalMatrix * vertexNormal);
     vTexCoords = aVertexTexCoords;
-    vFragPosLight = vec4(uLightProjection * vertexPosition);
+    vFragPosLight = uLightProjection * vec4(aVertexPosition, 1.0f);
 
     // Calcul de la position projetée
     gl_Position = uMVPMatrix * vertexPosition;

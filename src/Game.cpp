@@ -189,9 +189,9 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glUniformMatrix4fv(glGetUniformLocation(m_shader.id(), "uLightProjection"), 1, GL_FALSE, glm::value_ptr(WVP));
     m_shadowMap.BindForReading(GL_TEXTURE13);
     glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 13);
-
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
-    m_shadowMap.UnBind(GL_TEXTURE0);
+
+    m_shadowMap.UnBind(GL_TEXTURE13);
 
     // m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
     UpdateLightPlayer();
@@ -209,16 +209,15 @@ void Game::RenderShadow()
 
     m_shadowShader.use();
     m_shadowMap.setShadow(WVP);
+    glEnable(GL_DEPTH_TEST);
     m_shadowMap.BindForWriting();
     glClear(GL_DEPTH_BUFFER_BIT);
-    glUniformMatrix4fv(m_DepthMap, 1, GL_FALSE, glm::value_ptr(WVP));
     m_environment.ShadowRender();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Game::RenderFinal(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    glEnable(GL_DEPTH_TEST);
     RenderShadow();
     Render(ctx, boidParam);
     glDisable(GL_DEPTH_TEST);
