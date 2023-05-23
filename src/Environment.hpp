@@ -26,7 +26,7 @@ private:
     Mesh                 m_floorMesh;
 
     // Sky
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/Sky.jpg")};
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/test.jpg")};
     std::vector<Texture> m_skyTextures = {m_skyTex};
     Mesh                 m_skyMesh;
     // Walls
