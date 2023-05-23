@@ -24,10 +24,27 @@ void Environment::InitArche(LightParams& lightP)
     m_archeMesh(m_archeVertices, m_archeTextures, glm::vec3(40.f, -80.f, 25.f), glm::vec3(0.f), glm::vec3(0.5f), lightP);
 }
 
+void Environment::InitMountain(LightParams& lightP)
+{
+    m_mountainVertices = LoadOBJ("./assets/models/Mountain.obj");
+
+    m_mountainMesh(m_mountainVertices, m_mountainTextures, glm::vec3(50.f, -95.f, 50.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
+    m_mountainMesh2(m_mountainVertices, m_mountainTextures, glm::vec3(-50.f, -95.f, -50.f), glm::vec3(0.f), glm::vec3(25.f), lightP);
+}
+
+void Environment::InitTrees(LightParams& lightP)
+{
+    m_treeVertices = LoadOBJ("./assets/models/Mountain.obj");
+    m_treeMesh1(m_treeVertices, m_treeTextures, glm::vec3(-50.f, -100.f, 50.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
+    m_treeMesh2(m_treeVertices, m_treeTextures, glm::vec3(50.f, -100.f, -40.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
+}
+
 void Environment::InitMeshes(LightParams& lightP)
 {
     InitBorders(lightP);
     InitArche(lightP);
+    InitMountain(lightP);
+    InitTrees(lightP);
 }
 
 void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -42,9 +59,11 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
 
 void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
-    m_archeMesh.Render(viewMatrix, ctx, lightP);
-    // m_archeMesh.ShadowMapPass(viewMatrix, lightP.light);
-    // m_archeMesh.RenderShadow(lightP.light);
+    m_mountainMesh.Render(viewMatrix, ctx, lightP);
+    m_mountainMesh2.Render(viewMatrix, ctx, lightP);
+    // m_archeMesh.Render(viewMatrix, ctx, lightP);
+    m_treeMesh1.Render(viewMatrix, ctx, lightP);
+    m_treeMesh2.Render(viewMatrix, ctx, lightP);
 }
 
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -61,6 +80,7 @@ void Environment::ShadowRender()
     // m_wall3Mesh.BasicRender();
     // m_wall4Mesh.BasicRender();
     m_archeMesh.BasicRender();
+    m_mountainMesh.BasicRender();
 }
 
 void Environment::DeleteTextures()

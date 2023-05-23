@@ -47,14 +47,27 @@ private:
     std::vector<Texture> m_archeTextures = {m_textureD, m_textureH, m_textureS};
     Mesh                 m_archeMesh;
 
-public:
-    Environment() = default;
+    // Mountains
+    std::vector<glimac::ShapeVertex> m_mountainVertices;
+    std::vector<Texture>             m_mountainTextures = {m_floorDiff};
+    Mesh                             m_mountainMesh;
+    Mesh                             m_mountainMesh2;
+
+    // Trees
+    std::vector<glimac::ShapeVertex> m_treeVertices;
+    Texture                          m_treeTexture{p6::load_image_buffer("assets/textures/environment/tree.jpg")};
+    std::vector<Texture>             m_treeTextures = {m_treeTexture};
+    Mesh                             m_treeMesh1;
+    Mesh                             m_treeMesh2;
 
     void InitBorders(LightParams& lightP);
-
     void InitArche(LightParams& lightP);
-    void InitMeshes(LightParams& lightP);
+    void InitMountain(LightParams& lightP);
+    void InitTrees(LightParams& lightP);
 
+public:
+    Environment() = default;
+    void InitMeshes(LightParams& lightP);
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
     void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
