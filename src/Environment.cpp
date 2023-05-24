@@ -1,4 +1,5 @@
 #include "Environment.hpp"
+#include "glimac/sphere_vertices.hpp"
 
 void Environment::InitBorders(LightParams& lightP)
 {

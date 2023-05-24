@@ -131,7 +131,8 @@ void Boids::updateBoids(p6::Context& ctx, BoidsParameters& boidParam)
         std::vector<Boid> neighbors = fillNeighbors(boid, boidParam);
         boid.updatePosition(ctx);
         applySteeringForces(boid, boidParam, neighbors);
-        boid.avoidEdges(boid, limit, turnfactor, boidParam.protectedRadius);
+        Boid::avoidEdges(boid, limit, turnfactor, boidParam.protectedRadius);
+        Boid::avoidMapElements(boid, turnfactor);
         neighbors.clear();
     }
 };
