@@ -27,6 +27,8 @@ public:
     void        setMaxSpeed(const float& speed);
     void        applyForce(const glm::vec3& force);
     static void avoidEdges(Boid& boid, const float& limit, const float& turnfactor, const float& protectedRadius);
+    static void avoidElement(Boid& boid, const glm::vec3& position, const float& radius, const float& turnfactor);
+    static void avoidMapElements(Boid& boid, const float& turnfactor);
 
     void limitSpeed(const float& maxSpeed);
 

@@ -52,7 +52,7 @@ private:
     float cohesionStrength;
 
     float turnfactor = 0.5f;
-    float limit      = 50.f;
+    float limit      = 500.f;
 
     /*Methods*/
 
@@ -63,9 +63,6 @@ private:
 
     // apply the 3 rules(separation, alignment, cohesion)
     static void applySteeringForces(Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
-
-    // help the boids to avoid edges
-    void avoidEdges(Boid& boid, const float& limit, const float& turnfactor, BoidsParameters& boidParam);
 
     // check distance between this boid and the boid in argument
     static bool isTooClose(const Boid& boid1, const Boid& boid2, const float& radius);

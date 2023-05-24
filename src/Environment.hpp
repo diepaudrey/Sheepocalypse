@@ -17,6 +17,7 @@
 class Environment {
 private:
     std::vector<glimac::ShapeVertex> m_planVertices;
+    std::vector<glimac::ShapeVertex> sphere_vertices(float radius, size_t discretization_latitude, size_t discretization_longitude);
 
     // Floor
     Texture              m_floorDiff{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
@@ -26,8 +27,10 @@ private:
     // Sky
     Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
     Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain_mirrored.jpg")};
+    Texture              m_skyTex3{p6::load_image_buffer("assets/textures/environment/cloud.jpg")};
     std::vector<Texture> m_skyTextures  = {m_skyTex};
     std::vector<Texture> m_skyTextures2 = {m_skyTex2};
+    std::vector<Texture> m_skyTextures3 = {m_skyTex3};
     Mesh                 m_skyMesh;
     // Walls
     Mesh m_wall1Mesh;
@@ -35,7 +38,7 @@ private:
     Mesh m_wall3Mesh;
     Mesh m_wall4Mesh;
 
-    const float        m_width         = 250.f;
+    const float        m_width         = 1200.f;
     const unsigned int m_widthSegments = 200;
 
     // Arche
@@ -68,6 +71,9 @@ private:
     Mesh                             m_islandMesh2;
     Mesh                             m_islandMesh3;
 
+    // Collision
+    std::vector<glm::vec3> m_verticesCollision;
+
     void InitBorders(LightParams& lightP);
     void InitArche(LightParams& lightP);
     void InitMountain(LightParams& lightP);
@@ -77,9 +83,10 @@ private:
 public:
     Environment() = default;
     void InitMeshes(LightParams& lightP);
+    void fillVerticesCollision();
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
-    void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
+    void RenderObjects(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 

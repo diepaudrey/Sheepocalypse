@@ -147,7 +147,7 @@ public:
             m_position.y = limit - 1;
             return true;
         }
-        else if (m_position.y < -limit + 12)
+        else if (m_position.y < -limit + 30)
         {
             m_position.y = -limit + 13;
             return true;

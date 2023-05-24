@@ -118,7 +118,7 @@ void Game::InitEnvironment()
 void Game::InitLight()
 {
     lightP.light          = glm::vec3(45.f, 80.f, 0.f);
-    lightP.lightIntensity = glm::vec3(0.7f); // 5000 pour pointLight, 0.7 pour direLight
+    lightP.lightIntensity = glm::vec3(3.f); // 5000 pour pointLight, 0.7 pour direLight
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
