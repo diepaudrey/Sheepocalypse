@@ -18,12 +18,12 @@ void Environment::InitBorders(LightParams& lightP)
     m_wall4Mesh(m_planVertices, m_skyTextures2, glm::vec3(0.f, 0.f, m_width / 2 - 10), glm::vec3(glm::radians(-90.f), glm::radians(-180.f), 0.f), glm::vec3(1.f), lightP);
 }
 
-void Environment::InitArche(LightParams& lightP)
-{
-    m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
+// void Environment::InitArche(LightParams& lightP)
+// {
+//     m_archeVertices = LoadOBJ("./assets/models/SmallArch_Obj.obj");
 
-    m_archeMesh(m_archeVertices, m_archeTextures, glm::vec3(40.f, -80.f, 25.f), glm::vec3(0.f), glm::vec3(0.5f), lightP);
-}
+//     m_archeMesh(m_archeVertices, m_archeTextures, glm::vec3(40.f, -80.f, 25.f), glm::vec3(0.f), glm::vec3(0.5f), lightP);
+// }
 
 void Environment::InitMountain(LightParams& lightP)
 {
@@ -51,7 +51,7 @@ void Environment::InitIsland(LightParams& lightP)
 void Environment::InitMeshes(LightParams& lightP)
 {
     InitBorders(lightP);
-    InitArche(lightP);
+    // InitArche(lightP);
     InitMountain(lightP);
     InitTrees(lightP);
     InitIsland(lightP);
@@ -67,11 +67,10 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
     m_wall4Mesh.Render(viewMatrix, ctx, lightP);
 }
 
-void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
+void Environment::RenderElements(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     m_mountainMesh.Render(viewMatrix, ctx, lightP);
     m_mountainMesh2.Render(viewMatrix, ctx, lightP);
-    // m_archeMesh.Render(viewMatrix, ctx, lightP);
     m_treeMesh1.Render(viewMatrix, ctx, lightP);
     m_treeMesh2.Render(viewMatrix, ctx, lightP);
     m_islandMesh1.Render(viewMatrix, ctx, lightP);
@@ -82,19 +81,19 @@ void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightPara
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     RenderBorders(viewMatrix, ctx, lightP);
-    RenderArche(viewMatrix, ctx, lightP);
+    RenderElements(viewMatrix, ctx, lightP);
 }
 
-void Environment::ShadowRender()
-{
-    m_archeMesh.BasicRender();
-}
+// void Environment::ShadowRender()
+// {
+//     m_archeMesh.BasicRender();
+// }
 
 void Environment::DeleteTextures()
 {
-    m_textureS.DeleteTexture();
-    m_textureD.DeleteTexture();
-    m_textureH.DeleteTexture();
+    // m_textureS.DeleteTexture();
+    // m_textureD.DeleteTexture();
+    // m_textureH.DeleteTexture();
     m_floorDiff.DeleteTexture();
     m_skyTex.DeleteTexture();
 }

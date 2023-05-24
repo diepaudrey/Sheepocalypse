@@ -29,6 +29,7 @@ private:
     std::vector<Texture> m_skyTextures  = {m_skyTex};
     std::vector<Texture> m_skyTextures2 = {m_skyTex2};
     Mesh                 m_skyMesh;
+
     // Walls
     Mesh m_wall1Mesh;
     Mesh m_wall2Mesh;
@@ -39,13 +40,13 @@ private:
     const unsigned int m_widthSegments = 200;
 
     // Arche
-    std::vector<glimac::ShapeVertex> m_archeVertices;
+    // std::vector<glimac::ShapeVertex> m_archeVertices;
 
-    Texture              m_textureD{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
-    Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
-    Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 2};
-    std::vector<Texture> m_archeTextures = {m_textureD, m_textureH, m_textureS};
-    Mesh                 m_archeMesh;
+    // Texture              m_textureD{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
+    // Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
+    // Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 2};
+    // std::vector<Texture> m_archeTextures = {m_textureD, m_textureH, m_textureS};
+    // Mesh                 m_archeMesh;
 
     // Mountains
     std::vector<glimac::ShapeVertex> m_mountainVertices;
@@ -80,13 +81,9 @@ private:
 public:
     Environment() = default;
     void InitMeshes(LightParams& lightP);
-    void fillVerticesCollision();
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
-
-    void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
-
+    void RenderElements(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
-
     void DeleteTextures();
     void ShadowRender();
 };

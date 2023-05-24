@@ -15,8 +15,8 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitEnvironment();
     InitPlayer();
 
-    m_shadowMap.InitWindow(1024, 1024);
-    glEnable(GL_DEPTH_TEST);
+    // m_shadowMap.InitWindow(1024, 1024);
+    // glEnable(GL_DEPTH_TEST);
 }
 
 void Game::mouseHandler(p6::Context& ctx)
@@ -162,18 +162,17 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
 
+    // glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
+    // glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
+    // glm::mat4 WVP          = OrthoProjMat * LightView;
+    // glUniformMatrix4fv(glGetUniformLocation(m_shader.id(), "uLightProjection"), 1, GL_FALSE, glm::value_ptr(WVP));
+    // m_shadowMap.BindForReading(GL_TEXTURE10);
+    // glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 10);
+    m_environment.RenderMeshes(viewMatrix, ctx, lightP);
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
-    glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
-    glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
-    glm::mat4 WVP          = OrthoProjMat * LightView;
-    glUniformMatrix4fv(glGetUniformLocation(m_shader.id(), "uLightProjection"), 1, GL_FALSE, glm::value_ptr(WVP));
-    m_shadowMap.BindForReading(GL_TEXTURE10);
-    glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 10);
-    m_environment.RenderMeshes(viewMatrix, ctx, lightP);
-
-    m_shadowMap.UnBind(GL_TEXTURE10);
+    // m_shadowMap.UnBind(GL_TEXTURE10);
 
     UpdateLightPlayer();
     m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
@@ -181,27 +180,28 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glm::mat4 vmat      = glm::lookAt(m_cam.getPosition(), m_player.m_position, glm::vec3(0, 1, 0));
     m_player.RenderPlayer(vmat, ctx, lightP2, m_player.m_position, m_player.m_rotation);
 
-    std::cout << m_player.m_position.x << " " << m_player.m_position.y << " " << m_player.m_position.z << std::endl;
+    // std::cout << m_player.m_position.x << " " << m_player.m_position.y << " " << m_player.m_position.z << std::endl;
 }
 
-void Game::RenderShadow()
-{
-    glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
-    glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
-    glm::mat4 WVP          = OrthoProjMat * LightView;
+// void Game::RenderShadow()
+// {
+//     glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
+//     glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
+//     glm::mat4 WVP          = OrthoProjMat * LightView;
 
-    m_shadowShader.use();
-    m_shadowMap.setShadow(WVP);
-    glEnable(GL_DEPTH_TEST);
-    m_shadowMap.BindForWriting();
-    glClear(GL_DEPTH_BUFFER_BIT);
-    m_environment.ShadowRender();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+//     m_shadowShader.use();
+//     m_shadowMap.setShadow(WVP);
+//     glEnable(GL_DEPTH_TEST);
+//     m_shadowMap.BindForWriting();
+//     glClear(GL_DEPTH_BUFFER_BIT);
+//     m_environment.ShadowRender();
+//     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// }
 
 void Game::RenderFinal(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    RenderShadow();
+    glEnable(GL_DEPTH_TEST);
+    // RenderShadow();
     Render(ctx, boidParam);
     glDisable(GL_DEPTH_TEST);
 }

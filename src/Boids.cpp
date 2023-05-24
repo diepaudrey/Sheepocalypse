@@ -3,8 +3,8 @@
 void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices, LightParams& lightP)
 {
     RendererBoids boidRenderer(vertices, lightP);
-    boidRenderer.renderBoids(m_boids, viewMatrix, ctx, lightP);
-    boidRenderer.deleteBuffers();
+    boidRenderer.RenderBoids(m_boids, viewMatrix, ctx, lightP);
+    boidRenderer.DeleteBuffers();
 }
 
 void Boids::fillBoids()

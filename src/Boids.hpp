@@ -47,10 +47,6 @@ private:
     std::vector<Boid> m_boids;
     int               m_numBoids;
 
-    float separationStrength;
-    float alignmentStrength;
-    float cohesionStrength;
-
     float turnfactor = 0.5f;
     float limit      = 75.f;
 

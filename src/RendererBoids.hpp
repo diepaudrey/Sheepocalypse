@@ -42,22 +42,21 @@ public:
     Light         light_boid{m_shader};
     ShadowMapping shadow_boid{m_shadow};
 
-public:
-    RendererBoids() = default;
-
-    RendererBoids(std::vector<glimac::ShapeVertex>& vertices, LightParams& lightP);
-
     void InitVao();
 
     void InitTextures();
 
-    void initializeBoid(LightParams& lightP);
+    void InitializeBoid(LightParams& lightP);
 
     void BindTexture();
 
     void UnBindTexture();
 
-    void renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP);
+public:
+    RendererBoids() = default;
 
-    void deleteBuffers();
+    RendererBoids(std::vector<glimac::ShapeVertex>& vertices, LightParams& lightP);
+
+    void RenderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP);
+    void DeleteBuffers();
 };
