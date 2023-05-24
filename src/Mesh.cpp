@@ -171,8 +171,6 @@ void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& li
     // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
     UnBindTextures();
-
-    // m_vao.UnBind();
 }
 
 void Mesh::BasicRender()
