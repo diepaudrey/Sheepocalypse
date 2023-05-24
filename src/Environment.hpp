@@ -62,10 +62,19 @@ private:
     Mesh                             m_treeMesh1;
     Mesh                             m_treeMesh2;
 
+    // Floating Island
+    std::vector<glimac::ShapeVertex> m_islandVertices;
+    Texture                          m_islandTexture{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
+    std::vector<Texture>             m_islandTextures = {m_islandTexture};
+    Mesh                             m_islandMesh1;
+    Mesh                             m_islandMesh2;
+    Mesh                             m_islandMesh3;
+
     void InitBorders(LightParams& lightP);
     void InitArche(LightParams& lightP);
     void InitMountain(LightParams& lightP);
     void InitTrees(LightParams& lightP);
+    void InitIsland(LightParams& lightP);
 
 public:
     Environment() = default;

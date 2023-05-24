@@ -39,12 +39,21 @@ void Environment::InitTrees(LightParams& lightP)
     m_treeMesh2(m_treeVertices, m_treeTextures, glm::vec3(50.f, -100.f, -40.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
 }
 
+void Environment::InitIsland(LightParams& lightP)
+{
+    m_islandVertices = LoadOBJ("./assets/models/FloatingIsland.obj");
+    m_islandMesh1(m_islandVertices, m_islandTextures, glm::vec3(-40.f, 30.f, -80.f), glm::vec3(0.f), glm::vec3(10.f), lightP);
+    m_islandMesh2(m_islandVertices, m_islandTextures, glm::vec3(60.f, 50.f, 35.f), glm::vec3(0.f), glm::vec3(7.f), lightP);
+    m_islandMesh3(m_islandVertices, m_islandTextures, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(15.f), lightP);
+}
+
 void Environment::InitMeshes(LightParams& lightP)
 {
     InitBorders(lightP);
     InitArche(lightP);
     InitMountain(lightP);
     InitTrees(lightP);
+    InitIsland(lightP);
 }
 
 void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -64,6 +73,9 @@ void Environment::RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightPara
     // m_archeMesh.Render(viewMatrix, ctx, lightP);
     m_treeMesh1.Render(viewMatrix, ctx, lightP);
     m_treeMesh2.Render(viewMatrix, ctx, lightP);
+    m_islandMesh1.Render(viewMatrix, ctx, lightP);
+    m_islandMesh2.Render(viewMatrix, ctx, lightP);
+    m_islandMesh3.Render(viewMatrix, ctx, lightP);
 }
 
 void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -74,13 +86,7 @@ void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightPar
 
 void Environment::ShadowRender()
 {
-    // m_floorMesh.BasicRender();
-    // m_wall1Mesh.BasicRender();
-    // m_wall2Mesh.BasicRender();
-    // m_wall3Mesh.BasicRender();
-    // m_wall4Mesh.BasicRender();
     m_archeMesh.BasicRender();
-    m_mountainMesh.BasicRender();
 }
 
 void Environment::DeleteTextures()
