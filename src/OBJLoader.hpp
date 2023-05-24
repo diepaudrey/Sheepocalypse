@@ -9,7 +9,6 @@
 #include <vector>
 
 // OpenGL
-// #include "glfw/src/internal.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/glm.hpp"
@@ -136,9 +135,6 @@ static std::vector<glimac::ShapeVertex> LoadOBJ(const char* fileName)
         vertices[i].normal    = vertexNormals[vertexNormalIndices[i] - 1];
         vertices[i].texCoords = vertexTexCoords[vertexTexCoordIndices[i] - 1];
     }
-    // DEBUG
-    // std::cout << line << "\n";
-    // std::cout << "Nb of vertices" << vertices.size() << std::endl;
     std::cout << "OBJ file loaded" << std::endl;
     return vertices;
 }

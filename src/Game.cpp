@@ -151,7 +151,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     keyboardHandler(ctx);
-
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();

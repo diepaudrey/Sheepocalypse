@@ -28,7 +28,6 @@ public:
     void        applyForce(const glm::vec3& force);
     static void avoidEdges(Boid& boid, const float& limit, const float& turnfactor, const float& protectedRadius);
 
-    // limit the speed
     void limitSpeed(const float& maxSpeed);
 
     friend bool operator==(const Boid& a, const Boid& b);

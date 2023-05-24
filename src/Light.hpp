@@ -10,13 +10,6 @@
 #include "p6/p6.h"
 
 struct LightParams {
-    // glm::vec3 light          = glm::vec3(0.f, 50.f, 0.f);
-    // glm::vec3 lightIntensity = glm::vec3(5000.f, 5000.f, 5000.f);
-    // glm::vec3 Ka             = glm::vec3(0.05, 0.05, 0.05);
-    // glm::vec3 Kd             = glm::vec3(1.0, 1.0, 1.0);
-    // glm::vec3 Ks             = glm::vec3(1.0, 1.0, 1.0);
-    // float     shininess      = 0.5f;
-
     glm::vec3 light;
     glm::vec3 lightIntensity;
     glm::vec3 Ka;
@@ -48,7 +41,6 @@ public:
     std::vector<float>     _uShininess;
 
 public:
-    // Light() = default;
     explicit Light(const p6::Shader& shader);
 
     void initLight(LightParams lightparams);

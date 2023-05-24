@@ -9,8 +9,6 @@ Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& tex
     InitVao();
     InitTextures(textures, textures.size());
     InitUniforms();
-    lightMesh.initLight(lightP);
-    // InitShadow(lightP.light);
 }
 
 Mesh::Mesh(const Mesh& mesh)
@@ -46,17 +44,6 @@ void Mesh::InitVao()
     m_vbo.UnBind();
 }
 
-// void Mesh::InitShadow(const glm::vec3& lightPos)
-// {
-//     m_shadowShader.use();
-//     m_shadowMap.InitWindow(1024, 1024);
-//     // glm::mat4 World        = MVMatrix;
-//     // glm::mat4 LightView    = glm::lookAt(lightPos, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
-//     // glm::mat4 OrthoProjMat = glm::ortho(-35.f, 35.f, -35.f, 35.f, 0.1f, 75.f);
-//     // glm::mat4 WVP          = OrthoProjMat * LightView;
-//     // m_shadowMap.setShadow(WVP);
-// }
-
 void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
 {
     this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
@@ -87,7 +74,6 @@ void Mesh::InitUniforms()
     m_uMVMatrix     = glGetUniformLocation(m_shader.id(), "uMVMatrix");
     m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
     m_uNumTextures  = glGetUniformLocation(m_shader.id(), "uNumTextures");
-    // initialize each of the uniform variable needed
     for (size_t i = 0; i < m_textures.size(); i++)
     {
         std::string name     = "uTextures[" + std::to_string(i) + "]";

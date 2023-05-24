@@ -22,8 +22,7 @@ private:
 
     p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
     ShadowMapping m_shadowMap    = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
-    // parameters for light
-    Light lightMesh{m_shader};
+    Light         lightMesh{m_shader};
 
     GLuint              m_uMVPMatrix;
     GLuint              m_uMVMatrix;

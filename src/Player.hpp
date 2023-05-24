@@ -4,8 +4,6 @@
 #include <vector>
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
-// #include "glimac/common.hpp"
-// a trier
 #include "glimac/plan_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
 #include "glm/ext/scalar_constants.hpp"
