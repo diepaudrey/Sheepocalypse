@@ -32,7 +32,5 @@ public:
     void UnBind(GLenum TextureUnit);
     void UseShader();
 
-    // void setShadow(ShadowMapping shadow, glm::mat4 MVMatrix);
-
     void setShadow(glm::mat4 MVMatrix);
 };

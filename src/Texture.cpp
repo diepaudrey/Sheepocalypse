@@ -5,7 +5,6 @@ Texture::Texture(img::Image img, unsigned int slot)
     : m_Image(img)
 {
     stbi_set_flip_vertically_on_load(1);
-    // instead of bot left -> top left
     glGenTextures(1, &m_RendererID);
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_RendererID);

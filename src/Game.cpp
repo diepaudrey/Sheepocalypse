@@ -11,57 +11,44 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     mouseHandler(ctx);
     InitImGui(boidParam);
     InitLight();
-    // InitShadow();
     InitEnvironment();
     InitPlayer();
     m_DepthMap  = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
     m_DepthText = glGetUniformLocation(m_shader.id(), "uDepthTexture");
 
     m_shadowMap.InitWindow(1024, 1024);
-    //  std::cout << "Game initialized" << std::endl;
     glEnable(GL_DEPTH_TEST);
 }
 
 void Game::mouseHandler(p6::Context& ctx)
 {
     /*The camera without mouse*/
-    // glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     ctx.mouse_moved = [&](p6::MouseMove data) {
         (m_cam).rotateLeft(data.delta.x * rotationStrength);
         (m_cam).rotateUp(-data.delta.y * rotationStrength);
     };
-
-    /*The camera with click + drag*/
-    // ctx.mouse_dragged = [&](p6::MouseDrag data) {
-    //     (m_cam).rotateLeft(data.delta.x * rotationStrength);
-    //     (m_cam).rotateUp(-data.delta.y * rotationStrength);
-    // };
 }
 
 void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        // std::cout << "z" << std::endl;
         m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(ctx.delta_time() * movementStrength);
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        // std::cout << "s" << std::endl;
         m_cam.fixCamLimit(m_limit);
         m_cam.moveFront(-ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        // std::cout << "q" << std::endl;
         m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(ctx.delta_time() * movementStrength);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        // std::cout << "d" << std::endl;
         m_cam.fixCamLimit(m_limit);
         m_cam.moveLeft(-ctx.delta_time() * movementStrength);
     }
@@ -161,12 +148,10 @@ void Game::ChangeLOD(BoidsParameters& boidParam)
 
 void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 {
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, ctx.main_canvas_width(), ctx.main_canvas_height());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     keyboardHandler(ctx);
-
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
@@ -184,7 +169,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 
     m_shadowMap.UnBind(GL_TEXTURE10);
 
-    // m_player.UpdatePosition(m_cam.getPosition() + glm::vec3(0.f, 0.f, 5.f));
     UpdateLightPlayer();
     m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
     m_player.m_rotation = m_cam.getUpVector();

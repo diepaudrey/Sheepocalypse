@@ -8,14 +8,7 @@ int main()
     ctx.maximize_window();
 
     BoidsParameters dragonParam;
-    // LightParams     lighP;
-    // lighP.light          = glm::vec3(0.f, 50.f, 0.f);
-    // lighP.lightIntensity = glm::vec3(100.f, 100.f, 100.f);
-    // lighP.Ka             = glm::vec3(0.05, 0.05, 0.05);
-    // lighP.Kd             = glm::vec3(1.0, 1.0, 1.0);
-    // lighP.Ks             = glm::vec3(1.0, 1.0, 1.0);
-    // lighP.shininess      = 0.5f;
-    Game DragonGame(ctx, dragonParam);
+    Game            DragonGame(ctx, dragonParam);
 
     /* Loop until the user closes the window */
     ctx.update = [&]() {
@@ -23,8 +16,6 @@ int main()
         ctx.main_canvas_width();
         ctx.main_canvas_height();
         glClearColor(0.188235294f, 0.364705882f, 0.631372549f, 1.f);
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         DragonGame.RenderFinal(ctx, dragonParam);
     };
 
