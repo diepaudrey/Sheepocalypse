@@ -180,6 +180,8 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     m_player.m_rotation = m_cam.getUpVector();
     glm::mat4 vmat      = glm::lookAt(m_cam.getPosition(), m_player.m_position, glm::vec3(0, 1, 0));
     m_player.RenderPlayer(vmat, ctx, lightP2, m_player.m_position, m_player.m_rotation);
+
+    std::cout << m_player.m_position.x << " " << m_player.m_position.y << " " << m_player.m_position.z << std::endl;
 }
 
 void Game::RenderShadow()
