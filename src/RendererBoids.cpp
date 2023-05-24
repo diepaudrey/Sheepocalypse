@@ -58,7 +58,7 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
 
     glm::mat4 MVMatrix;
     glm::mat4 MVPMatrix;
-    glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 500.f);
+    glm::mat4 ProjMatrix = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 5000.f);
 
     m_vao.Bind();
     BindTexture();

@@ -30,7 +30,7 @@ public:
     p6::Shader                       m_shadow = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
 
     // parameters for text
-    Texture              m_textureD{p6::load_image_buffer("assets/textures/Drake.jpg")};
+    Texture              m_textureD{p6::load_image_buffer("assets/textures/DrakeBoids.jpg")};
     Texture              m_textureS{p6::load_image_buffer("assets/textures/Shiny.jpg"), 1};
     std::vector<Texture> m_textures = {m_textureD, m_textureS};
     GLuint               m_uNumTextures;

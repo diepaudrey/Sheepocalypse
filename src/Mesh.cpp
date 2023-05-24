@@ -46,7 +46,7 @@ void Mesh::InitVao()
 
 void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
 {
-    this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
+    this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 10000.f);
     this->MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
     MVMatrix           = glm::rotate(MVMatrix, m_rotation.x, glm::vec3(1.0f, 0.f, 0.f));
     MVMatrix           = glm::rotate(MVMatrix, m_rotation.y, glm::vec3(0.f, 1.f, 0.f));
@@ -58,7 +58,7 @@ void Mesh::UpdateMatrices(glm::mat4 viewMatrix, p6::Context& ctx)
 
 void Mesh::UpdateMatricesMove(glm::mat4 viewMatrix, p6::Context& ctx)
 {
-    this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 1000.f);
+    this->ProjMatrix   = glm::perspective(glm::radians(70.f), ctx.aspect_ratio(), 0.1f, 10000.f);
     this->MVMatrix     = glm::translate(glm::mat4(1.f), m_position);
     MVMatrix           = glm::rotate(MVMatrix, m_rotation.x, glm::vec3(1.0f, 0.f, 0.f));
     MVMatrix           = glm::rotate(MVMatrix, m_rotation.y, glm::vec3(0.f, 1.f, 0.f));

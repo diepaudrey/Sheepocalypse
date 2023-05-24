@@ -25,12 +25,10 @@ private:
     Mesh                 m_floorMesh;
 
     // Sky
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
-    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain_mirrored.jpg")};
-    Texture              m_skyTex3{p6::load_image_buffer("assets/textures/environment/cloud.jpg")};
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/moutainbis.png")};
+    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/moutainbis2.png")};
     std::vector<Texture> m_skyTextures  = {m_skyTex};
     std::vector<Texture> m_skyTextures2 = {m_skyTex2};
-    std::vector<Texture> m_skyTextures3 = {m_skyTex3};
     Mesh                 m_skyMesh;
     // Walls
     Mesh m_wall1Mesh;
