@@ -72,7 +72,7 @@ private:
     void keyboardHandler(p6::Context& ctx);
     void ChangeLOD(BoidsParameters& boidParam);
     bool playerIsOutBorders();
-    void RenderShadow();
+    // void RenderShadow();
 
 public:
     Game(p6::Context& ctx, BoidsParameters& boidParam);

@@ -4,7 +4,7 @@
 RendererBoids::RendererBoids(std::vector<glimac::ShapeVertex>& vertices, LightParams& lightP)
     : m_vertices(std::move(vertices))
 {
-    initializeBoid(lightP);
+    InitializeBoid(lightP);
 }
 
 void RendererBoids::InitVao()
@@ -44,14 +44,14 @@ void RendererBoids::UnBindTexture()
     }
 }
 
-void RendererBoids::initializeBoid(LightParams& lightP)
+void RendererBoids::InitializeBoid(LightParams& lightP)
 {
     InitVao();
     InitTextures();
     light_boid.initLight(lightP);
 }
 
-void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
+void RendererBoids::RenderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     glimac::bind_default_shader();
     m_shader.use();
@@ -85,7 +85,7 @@ void RendererBoids::renderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     m_vao.UnBind();
 };
 
-void RendererBoids::deleteBuffers()
+void RendererBoids::DeleteBuffers()
 {
     m_vbo.DeleteVbo();
     m_vao.DeleteVao();

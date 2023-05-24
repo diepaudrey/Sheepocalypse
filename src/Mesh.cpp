@@ -36,6 +36,20 @@ void Mesh::InitTextures(std::vector<Texture>& textures, const unsigned int& nbTe
     }
 }
 
+void Mesh::InitUniforms()
+{
+    m_uMVPMatrix    = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
+    m_uMVMatrix     = glGetUniformLocation(m_shader.id(), "uMVMatrix");
+    m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
+    m_uNumTextures  = glGetUniformLocation(m_shader.id(), "uNumTextures");
+    for (size_t i = 0; i < m_textures.size(); i++)
+    {
+        std::string name     = "uTextures[" + std::to_string(i) + "]";
+        GLuint      location = glGetUniformLocation(m_shader.id(), name.c_str());
+        m_uTextures.push_back(location);
+    }
+}
+
 void Mesh::InitVao()
 {
     m_vao;
@@ -66,20 +80,6 @@ void Mesh::UpdateMatricesMove(glm::mat4 viewMatrix, p6::Context& ctx)
     MVMatrix           = glm::scale(MVMatrix, m_scale);
     this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
     this->MVPMatrix    = ProjMatrix * viewMatrix * MVMatrix;
-}
-
-void Mesh::InitUniforms()
-{
-    m_uMVPMatrix    = glGetUniformLocation(m_shader.id(), "uMVPMatrix");
-    m_uMVMatrix     = glGetUniformLocation(m_shader.id(), "uMVMatrix");
-    m_uNormalMatrix = glGetUniformLocation(m_shader.id(), "uNormalMatrix");
-    m_uNumTextures  = glGetUniformLocation(m_shader.id(), "uNumTextures");
-    for (size_t i = 0; i < m_textures.size(); i++)
-    {
-        std::string name     = "uTextures[" + std::to_string(i) + "]";
-        GLuint      location = glGetUniformLocation(m_shader.id(), name.c_str());
-        m_uTextures.push_back(location);
-    }
 }
 
 void Mesh::UpdateUniforms()
