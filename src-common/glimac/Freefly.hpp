@@ -130,32 +130,39 @@ public:
         return glm::lookAt(m_position, m_position + m_frontVector, m_upVector);
     }
 
-    void fixCamLimit(const float& limit)
+    bool fixCamLimit(const float& limit)
     {
         if (m_position.x > limit)
         {
-            m_position.x = limit;
+            m_position.x = limit - 1;
+            return true;
         }
         else if (m_position.x < -limit)
         {
-            m_position.x = -limit;
+            m_position.x = -limit + 1;
+            return true;
         }
         else if (m_position.y > limit)
         {
-            m_position.y = limit;
+            m_position.y = limit - 1;
+            return true;
         }
-        else if (m_position.y < -limit)
+        else if (m_position.y < -limit + 12)
         {
-            m_position.y = -limit;
+            m_position.y = -limit + 13;
+            return true;
         }
         else if (m_position.z > limit)
         {
-            m_position.z = limit;
+            m_position.z = limit - 1;
+            return true;
         }
         else if (m_position.z < -limit)
         {
-            m_position.z = -limit;
+            m_position.z = -limit + 1;
+            return true;
         }
+        return false;
     }
 };
 

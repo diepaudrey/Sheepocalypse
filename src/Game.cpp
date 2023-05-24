@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
+    : m_DepthMap(glGetUniformLocation(m_shadowShader.id(), "depthMVP")), m_DepthText(glGetUniformLocation(m_shader.id(), "uDepthTexture"))
 {
     InitBoids();
     InitCamera();
@@ -13,8 +14,6 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitLight();
     InitEnvironment();
     InitPlayer();
-    m_DepthMap  = glGetUniformLocation(m_shadowShader.id(), "depthMVP");
-    m_DepthText = glGetUniformLocation(m_shader.id(), "uDepthTexture");
 
     m_shadowMap.InitWindow(1024, 1024);
     glEnable(GL_DEPTH_TEST);
@@ -33,25 +32,33 @@ void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        m_cam.fixCamLimit(m_limit);
-        m_cam.moveFront(ctx.delta_time() * movementStrength);
+        if (m_cam.fixCamLimit(m_limit) == false)
+        {
+            m_cam.moveFront(ctx.delta_time() * movementStrength);
+        }
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        m_cam.fixCamLimit(m_limit);
-        m_cam.moveFront(-ctx.delta_time() * movementStrength);
+        if (m_cam.fixCamLimit(m_limit) == false)
+        {
+            m_cam.moveFront(-ctx.delta_time() * movementStrength);
+        }
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        m_cam.fixCamLimit(m_limit);
-        m_cam.moveLeft(ctx.delta_time() * movementStrength);
+        if (m_cam.fixCamLimit(m_limit) == false)
+        {
+            m_cam.moveLeft(ctx.delta_time() * movementStrength);
+        }
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        m_cam.fixCamLimit(m_limit);
-        m_cam.moveLeft(-ctx.delta_time() * movementStrength);
+        if (m_cam.fixCamLimit(m_limit) == false)
+        {
+            m_cam.moveLeft(-ctx.delta_time() * movementStrength);
+        }
     }
-    ctx.key_pressed = [&](p6::Key data) {
+    ctx.key_pressed = [&](const p6::Key& data) {
         if (data.physical == GLFW_KEY_ESCAPE)
         {
             glfwSetWindowShouldClose(ctx.underlying_glfw_window(), GLFW_TRUE);
