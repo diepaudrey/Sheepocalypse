@@ -22,7 +22,7 @@ int main()
         /*Events*/
         ctx.main_canvas_width();
         ctx.main_canvas_height();
-        glClearColor(0.f, 0.5725f, 1.f, 1.f);
+        glClearColor(0.188235294f, 0.364705882f, 0.631372549f, 1.f);
         // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         DragonGame.RenderFinal(ctx, dragonParam);

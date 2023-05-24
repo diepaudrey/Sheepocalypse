@@ -26,8 +26,10 @@ private:
     Mesh                 m_floorMesh;
 
     // Sky
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/test.jpg")};
-    std::vector<Texture> m_skyTextures = {m_skyTex};
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
+    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain_mirrored.jpg")};
+    std::vector<Texture> m_skyTextures  = {m_skyTex};
+    std::vector<Texture> m_skyTextures2 = {m_skyTex2};
     Mesh                 m_skyMesh;
     // Walls
     Mesh m_wall1Mesh;
@@ -35,8 +37,8 @@ private:
     Mesh m_wall3Mesh;
     Mesh m_wall4Mesh;
 
-    const float        m_width         = 200.f;
-    const unsigned int m_widthSegments = 100;
+    const float        m_width         = 250.f;
+    const unsigned int m_widthSegments = 200;
 
     // Arche
     std::vector<glimac::ShapeVertex> m_archeVertices;

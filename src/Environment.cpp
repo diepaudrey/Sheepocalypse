@@ -12,9 +12,9 @@ void Environment::InitBorders(LightParams& lightP)
 
     m_wall2Mesh(m_planVertices, m_skyTextures, glm::vec3(-m_width / 2 + 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(-90.f)), glm::vec3(1.f), lightP);
 
-    m_wall3Mesh(m_planVertices, m_skyTextures, glm::vec3(0.f, 0.f, -m_width / 2 + 10), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f), lightP);
+    m_wall3Mesh(m_planVertices, m_skyTextures2, glm::vec3(0.f, 0.f, -m_width / 2 + 10), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f), lightP);
 
-    m_wall4Mesh(m_planVertices, m_skyTextures, glm::vec3(0.f, 0.f, m_width / 2 - 10), glm::vec3(glm::radians(-90.f), glm::radians(-180.f), 0.f), glm::vec3(1.f), lightP);
+    m_wall4Mesh(m_planVertices, m_skyTextures2, glm::vec3(0.f, 0.f, m_width / 2 - 10), glm::vec3(glm::radians(-90.f), glm::radians(-180.f), 0.f), glm::vec3(1.f), lightP);
 }
 
 void Environment::InitArche(LightParams& lightP)
@@ -28,8 +28,8 @@ void Environment::InitMountain(LightParams& lightP)
 {
     m_mountainVertices = LoadOBJ("./assets/models/Mountain.obj");
 
-    m_mountainMesh(m_mountainVertices, m_mountainTextures, glm::vec3(50.f, -95.f, 50.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
-    m_mountainMesh2(m_mountainVertices, m_mountainTextures, glm::vec3(-50.f, -95.f, -50.f), glm::vec3(0.f), glm::vec3(25.f), lightP);
+    m_mountainMesh(m_mountainVertices, m_mountainTextures, glm::vec3(50.f, -100.f, 50.f), glm::vec3(0.f), glm::vec3(20.f), lightP);
+    m_mountainMesh2(m_mountainVertices, m_mountainTextures, glm::vec3(-50.f, -100.f, -50.f), glm::vec3(0.f), glm::vec3(25.f), lightP);
 }
 
 void Environment::InitTrees(LightParams& lightP)
