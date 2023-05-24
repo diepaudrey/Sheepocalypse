@@ -14,7 +14,7 @@
 class Game {
 private:
     // Boids
-    int   m_nbBoids = 20;
+    int   m_nbBoids = 50;
     Boids m_boids;
 
     // Player
@@ -32,7 +32,7 @@ private:
     float separationStrength = 0.1f;
     float alignmentStrength  = 0.1f;
     float cohesionStrength   = 0.1f;
-    float maxSpeed           = 10.f;
+    float maxSpeed           = 20.f;
     bool  lodLow             = true;
     bool  lodMid             = false;
     bool  lodHigh            = false;

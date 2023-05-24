@@ -68,6 +68,9 @@ private:
     Mesh                             m_islandMesh2;
     Mesh                             m_islandMesh3;
 
+    // Collision
+    std::vector<glm::vec3> m_verticesCollision;
+
     void InitBorders(LightParams& lightP);
     void InitArche(LightParams& lightP);
     void InitMountain(LightParams& lightP);
@@ -77,6 +80,7 @@ private:
 public:
     Environment() = default;
     void InitMeshes(LightParams& lightP);
+    void fillVerticesCollision();
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
 
     void RenderArche(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
