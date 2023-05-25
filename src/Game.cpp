@@ -14,9 +14,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitLight();
     InitEnvironment();
     InitPlayer();
-
     // m_shadowMap.InitWindow(1024, 1024);
-    // glEnable(GL_DEPTH_TEST);
 }
 
 void Game::mouseHandler(p6::Context& ctx)
@@ -126,7 +124,7 @@ void Game::InitLight()
     lightGame.initLight(lightP);
 
     lightP2.light          = m_cam.getPosition();
-    lightP2.lightIntensity = glm::vec3(3.f);
+    lightP2.lightIntensity = glm::vec3(2.f);
     lightP2.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP2.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP2.Ks             = glm::vec3(1.0, 1.0, 1.0);
@@ -161,6 +159,8 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
     boidParam.updateBoidsParam();
+    m_boids.updateBoids(ctx, boidParam);
+    m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
     // glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
     // glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
@@ -169,8 +169,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     // m_shadowMap.BindForReading(GL_TEXTURE10);
     // glUniform1i(glGetUniformLocation(m_shader.id(), "uDepthTexture"), 10);
     m_environment.RenderMeshes(viewMatrix, ctx, lightP);
-    m_boids.updateBoids(ctx, boidParam);
-    m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
     // m_shadowMap.UnBind(GL_TEXTURE10);
 
@@ -189,7 +187,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
 
 //     m_shadowShader.use();
 //     m_shadowMap.setShadow(WVP);
-//     glEnable(GL_DEPTH_TEST);
 //     m_shadowMap.BindForWriting();
 //     glClear(GL_DEPTH_BUFFER_BIT);
 //     m_environment.ShadowRender();
