@@ -9,8 +9,8 @@ void Boids::drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glima
 
 void Boids::fillBoids()
 {
-    const float& min = 20.f;
-    const float& max = 20.f;
+    const float& min = 400.f;
+    const float& max = 400.f;
 
     for (int i = 0; i < m_numBoids; i++)
     {
