@@ -48,10 +48,10 @@ void RendererBoids::InitializeBoid(LightParams& lightP)
 {
     InitVao();
     InitTextures();
-    light_boid.initLight(lightP);
+    light_boid.InitializeLight(lightP);
 }
 
-void RendererBoids::RenderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
+void RendererBoids::RenderBoids(const std::vector<Boid>& m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
     glimac::bind_default_shader();
     m_shader.use();
@@ -63,20 +63,20 @@ void RendererBoids::RenderBoids(std::vector<Boid> m_boids, glm::mat4 viewMatrix,
     m_vao.Bind();
     BindTexture();
 
-    for (auto& boid : m_boids)
+    for (const auto& boid : m_boids)
     {
         glm::vec3 pointingStart = glm::vec3(0.f, 0.f, 1.f);
-        glm::vec3 direction     = normalize(boid.getSpeed());
+        glm::vec3 direction     = normalize(boid.GetSpeed());
         glm::vec3 rotationAxis  = glm::cross(pointingStart, direction);
         float     angle         = glm::orientedAngle(pointingStart, direction, pointingStart);
 
-        MVMatrix = glm::translate(glm::mat4(1.f), boid.getPosition() + boid.getSpeed());
+        MVMatrix = glm::translate(glm::mat4(1.f), boid.GetPosition() + boid.GetSpeed());
         MVMatrix = glm::rotate(MVMatrix, (angle), rotationAxis);
 
         MVMatrix  = glm::scale(MVMatrix, glm::vec3(15.0f));
         MVPMatrix = ProjMatrix * viewMatrix * MVMatrix;
 
-        light_boid.setLight(light_boid, lightP.light, MVMatrix, MVPMatrix);
+        light_boid.SetLight(light_boid, lightP.light, MVMatrix, MVPMatrix);
 
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     }
@@ -89,8 +89,8 @@ void RendererBoids::DeleteBuffers()
 {
     m_vbo.DeleteVbo();
     m_vao.DeleteVao();
-    for (unsigned int i = 0; i < m_textures.size(); ++i)
+    for (auto& m_texture : m_textures)
     {
-        m_textures[i].DeleteTexture();
+        m_texture.DeleteTexture();
     }
 }

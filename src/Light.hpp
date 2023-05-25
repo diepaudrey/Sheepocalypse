@@ -41,6 +41,6 @@ public:
 public:
     explicit Light(const p6::Shader& shader);
 
-    void initLight(LightParams lightparams);
-    void setLight(const Light& light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
+    void InitializeLight(LightParams lightparams);
+    void SetLight(const Light& light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
 };

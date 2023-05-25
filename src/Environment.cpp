@@ -34,7 +34,7 @@ void Environment::InitTrees(LightParams& lightP)
 
 void Environment::InitIsland(LightParams& lightP)
 {
-    m_islandVertices = LoadOBJ("./assets/models/FloatingIsland2.obj");
+    m_islandVertices = LoadOBJ("./assets/models/FloatingIsland.obj");
     m_islandMesh1(m_islandVertices, m_islandTextures, glm::vec3(-150.f, -30.f, -200.f), glm::vec3(0.f), glm::vec3(70.f), lightP);
     m_islandMesh2(m_islandVertices, m_islandTextures, glm::vec3(180.f, 160.f, 100.f), glm::vec3(0.f), glm::vec3(50.f), lightP);
     m_islandMesh3(m_islandVertices, m_islandTextures, glm::vec3(-30.f, -150.f, 400.f), glm::vec3(0.f), glm::vec3(30.f), lightP);

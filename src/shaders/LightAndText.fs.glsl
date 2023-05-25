@@ -37,7 +37,7 @@ uniform sampler2D uDepthTexture;
     //return shadow;
 //}
 
-//Utilisation pour DirectionalLight
+//Use for DirectionalLight
 vec3 blinnPhong(){
 
     vec3 wi = normalize(uLightPos_vs);
@@ -49,7 +49,7 @@ vec3 blinnPhong(){
     return (uKa + Li*((uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess))));   
 }
 
-//Utilisation pour pointLight
+//Use for pointLight
 //vec3 blinnPhong(){
 
    // float d = distance(uLightPos_vs, vPosition_vs);
@@ -66,16 +66,14 @@ vec3 blinnPhong(){
 void main() {
 
     vec3 lightColor = blinnPhong();
-    // Calcul de la couleur des textures
+
+    // Calculate the color of the texture
     vec2 fCorrectCoords = vec2(vTexCoords.x, 1.0 - vTexCoords.y);
     vec4 textureColor = vec4(0.0, 0.0, 0.0, 0.0);
-    
     for (int i = 0; i < uNumTextures; ++i) {
         textureColor += texture(uTextures[i], fCorrectCoords);
     }
-    // Combinaison des couleurs de la lumière et des textures
-    fFragColor = vec4(lightColor.rgb * textureColor.rgb, 1.0);
-    // fFragColor = vec4(lightColor.rgb, 1.0);
 
-    
+    // Combine Texture and Light
+    fFragColor = vec4(lightColor.rgb * textureColor.rgb, 1.0);
 }

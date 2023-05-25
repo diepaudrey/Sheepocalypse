@@ -8,7 +8,7 @@ public:
     Vbo() = default;
     Vbo(const void* data, unsigned int size);
 
-    void Bind() const;
-    void UnBind() const;
-    void DeleteVbo() const;
+    void        Bind() const;
+    static void UnBind();
+    void        DeleteVbo() const;
 };

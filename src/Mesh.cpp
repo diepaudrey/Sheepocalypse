@@ -121,7 +121,7 @@ void Mesh::Render(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
     UpdateMatrices(viewMatrix, ctx);
     UpdateUniforms();
     BindTextures();
-    lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
+    lightMesh.SetLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
     BasicRender();
     UnBindTextures();
 }
@@ -133,7 +133,7 @@ void Mesh::RenderMoving(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& li
     UpdateMatricesMove(viewMatrix, ctx);
     UpdateUniforms();
     BindTextures();
-    lightMesh.setLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
+    lightMesh.SetLight(lightMesh, lightP.light, MVMatrix, MVPMatrix);
     BasicRender();
     UnBindTextures();
 }
@@ -149,9 +149,9 @@ Mesh::~Mesh()
 {
     m_vao.DeleteVao();
     m_vbo.DeleteVbo();
-    for (size_t i = 0; i < m_textures.size(); ++i)
+    for (auto& m_texture : m_textures)
     {
-        m_textures[i].DeleteTexture();
+        m_texture.DeleteTexture();
     }
 }
 
@@ -162,15 +162,14 @@ Mesh& Mesh::operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<T
     m_rotation = rotation;
     m_scale    = scale;
     m_textures.clear();
-    for (int i = 0; i < textures.size(); i++)
+    for (auto texture : textures)
     {
-        Texture texture = textures[i];
         m_textures.push_back(texture);
     }
     InitVertexData(m_vertices, m_vertices.size());
     InitVao();
     InitTextures(m_textures, m_textures.size());
-    lightMesh.initLight(lightP);
+    lightMesh.InitializeLight(lightP);
     InitUniforms();
 
     return *this;

@@ -8,7 +8,7 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {
     InitBoids();
     InitCamera();
-    mouseHandler(ctx);
+    MouseHandler(ctx);
     InitImGui(boidParam);
     InitLight();
     InitEnvironment();
@@ -18,43 +18,43 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     // m_shadowMap.InitWindow(1024, 1024);
 }
 
-void Game::mouseHandler(p6::Context& ctx)
+void Game::MouseHandler(p6::Context& ctx)
 {
     glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     ctx.mouse_moved = [&](p6::MouseMove data) {
-        (m_cam).rotateLeft(data.delta.x * rotationStrength);
-        (m_cam).rotateUp(-data.delta.y * rotationStrength);
+        (m_cam).RotateLeft(data.delta.x * rotationStrength);
+        (m_cam).RotateUp(-data.delta.y * rotationStrength);
     };
 }
 
-void Game::keyboardHandler(p6::Context& ctx)
+void Game::KeyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        if (!m_cam.fixCamLimit(m_limit))
+        if (!m_cam.FixCamLimit(m_limit))
         {
-            m_cam.moveFront(ctx.delta_time() * movementStrength);
+            m_cam.MoveFront(ctx.delta_time() * movementStrength);
         }
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        if (!m_cam.fixCamLimit(m_limit))
+        if (!m_cam.FixCamLimit(m_limit))
         {
-            m_cam.moveFront(-ctx.delta_time() * movementStrength);
+            m_cam.MoveFront(-ctx.delta_time() * movementStrength);
         }
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        if (!m_cam.fixCamLimit(m_limit))
+        if (!m_cam.FixCamLimit(m_limit))
         {
-            m_cam.moveLeft(ctx.delta_time() * movementStrength);
+            m_cam.MoveLeft(ctx.delta_time() * movementStrength);
         }
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        if (!m_cam.fixCamLimit(m_limit))
+        if (!m_cam.FixCamLimit(m_limit))
         {
-            m_cam.moveLeft(-ctx.delta_time() * movementStrength);
+            m_cam.MoveLeft(-ctx.delta_time() * movementStrength);
         }
     }
     ctx.key_pressed = [&](const p6::Key& data) {
@@ -64,8 +64,8 @@ void Game::keyboardHandler(p6::Context& ctx)
         }
         else if (data.physical == GLFW_KEY_SPACE)
         {
-            m_cam.togglePause();
-            if (m_cam.isPaused())
+            m_cam.TogglePause();
+            if (m_cam.IsPaused())
             {
                 glfwSetInputMode(ctx.underlying_glfw_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             }
@@ -81,12 +81,12 @@ void Game::InitBoids()
 {
     std::vector<Boid> vecBoids;
     m_boids = Boids(vecBoids, m_nbBoids);
-    m_boids.fillBoids();
+    m_boids.FillBoids();
 }
 
 void Game::InitPlayer()
 {
-    glm::vec3 playerPosition = m_cam.getPosition();
+    glm::vec3 playerPosition = m_cam.GetPosition();
     playerPosition.z += 10.f;
     m_player.InitPlayer(playerPosition, lightP2);
 }
@@ -122,20 +122,20 @@ void Game::InitLight()
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
     lightP.shininess      = 0.2f;
-    lightGame.initLight(lightP);
+    lightGame.InitializeLight(lightP);
 
-    lightP2.light          = m_cam.getPosition();
+    lightP2.light          = m_cam.GetPosition();
     lightP2.lightIntensity = glm::vec3(2.f);
     lightP2.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP2.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP2.Ks             = glm::vec3(1.0, 1.0, 1.0);
     lightP2.shininess      = 0.4f;
-    lightPlayer.initLight(lightP2);
+    lightPlayer.InitializeLight(lightP2);
 }
 
 void Game::UpdateLightPlayer()
 {
-    lightP2.light = m_cam.getPosition();
+    lightP2.light = m_cam.GetPosition();
 }
 
 void Game::ChangeLOD(BoidsParameters& boidParam)
@@ -156,11 +156,11 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     glViewport(0, 0, ctx.main_canvas_width(), ctx.main_canvas_height());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    keyboardHandler(ctx);
-    viewMatrix = m_cam.getViewMatrix();
+    KeyboardHandler(ctx);
+    viewMatrix = m_cam.GetViewMatrix();
     ChangeLOD(boidParam);
-    m_boids.updateBoids(ctx, boidParam);
-    m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
+    m_boids.UpdateBoids(ctx, boidParam);
+    m_boids.DrawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 
     // glm::mat4 LightView    = glm::lookAt(lightP.light, glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
     // glm::mat4 OrthoProjMat = glm::ortho(-80.f, 80.f, -80.f, 80.f, 0.1f, 75.f);
@@ -173,9 +173,9 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     // m_shadowMap.UnBind(GL_TEXTURE10);
 
     UpdateLightPlayer();
-    m_player.m_position = m_cam.getPosition() + glm::vec3(5.f, -10.f, 5.f);
-    m_player.m_rotation = m_cam.getUpVector();
-    glm::mat4 vmat      = glm::lookAt(m_cam.getPosition(), m_player.m_position, glm::vec3(0, 1, 0));
+    m_player.m_position = m_cam.GetPosition() + glm::vec3(5.f, -10.f, 5.f);
+    m_player.m_rotation = m_cam.GetUpVector();
+    glm::mat4 vmat      = glm::lookAt(m_cam.GetPosition(), m_player.m_position, glm::vec3(0, 1, 0));
     m_player.RenderPlayer(vmat, ctx, lightP2, m_player.m_position, m_player.m_rotation);
 }
 

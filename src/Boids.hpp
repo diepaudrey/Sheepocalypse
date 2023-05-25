@@ -24,7 +24,7 @@ struct BoidsParameters {
     bool  lodMid  = false;
     bool  lodHigh = false;
 
-    void updateBoidsParam()
+    void UpdateBoidsParam()
     {
         ImGui::Begin("Settings");
         ImGui::Text("To change settings please press SPACE");
@@ -51,18 +51,18 @@ private:
     float limit      = 500.f;
 
     /*3 rules*/
-    static glm::vec3 separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
-    static glm::vec3 alignment(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
-    static glm::vec3 cohesion(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
+    static glm::vec3 Separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
+    static glm::vec3 Alignment(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
+    static glm::vec3 Cohesion(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
 
     // apply the 3 rules(separation, alignment, cohesion)
-    static void applySteeringForces(Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
+    static void ApplySteeringForces(Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
 
     // check distance between this boid and the boid in argument
-    static bool isTooClose(const Boid& boid1, const Boid& boid2, const float& radius);
+    static bool IsTooClose(const Boid& boid1, const Boid& boid2, const float& radius);
 
     // fill a vector of the neighbor
-    std::vector<Boid> fillNeighbors(const Boid& boid, BoidsParameters& boidParam);
+    std::vector<Boid> FillNeighbors(const Boid& boid, BoidsParameters& boidParam);
 
 public:
     Boids() = default;
@@ -70,7 +70,7 @@ public:
     Boids(const std::vector<Boid>& boids, const int& numBoids)
         : m_boids(boids), m_numBoids(numBoids){};
 
-    void fillBoids();
-    void drawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices, LightParams& lightP);
-    void updateBoids(p6::Context& ctx, BoidsParameters& boidParam);
+    void FillBoids();
+    void DrawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glimac::ShapeVertex> vertices, LightParams& lightP);
+    void UpdateBoids(p6::Context& ctx, BoidsParameters& boidParam);
 };

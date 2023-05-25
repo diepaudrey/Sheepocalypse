@@ -19,7 +19,7 @@ private:
     glm::vec3 m_upVector;
     bool      m_paused;
 
-    void computeDirectionVectors()
+    void ComputeDirectionVectors()
     {
         m_frontVector.x = cos(glm::radians(m_phi)) * cos(glm::radians(m_theta));
         m_frontVector.y = sin(glm::radians(m_theta));
@@ -35,7 +35,7 @@ private:
         m_leftVector = glm::normalize(m_leftVector);
     }
 
-    bool camIsOutBorders(const float& limit)
+    bool CamIsOutBorders(const float& limit) const
     {
         bool exp = m_position.x > limit || m_position.y > limit || m_position.z > limit || m_position.x < -limit || m_position.y < -limit || m_position.z < -limit;
 
@@ -50,103 +50,103 @@ public:
     FreeflyCamera()
         : m_position(glm::vec3(-20.f, 0.f, -20.f)), m_phi(glm::pi<float>()), m_theta(0.f), m_paused(false)
     {
-        computeDirectionVectors();
+        ComputeDirectionVectors();
     };
 
-    glm::vec3 getPosition()
+    glm::vec3 GetPosition()
     {
         return m_position;
     }
 
-    glm::vec3 getUpVector()
+    glm::vec3 GetUpVector()
     {
         return m_upVector;
     }
 
-    glm::vec3 getLeftVector()
+    glm::vec3 GetLeftVector()
     {
         return m_leftVector;
     }
 
-    void moveLeft(float t)
+    void MoveLeft(float t)
     {
         if (!m_paused)
         {
             m_position -= t * m_leftVector;
-            computeDirectionVectors();
+            ComputeDirectionVectors();
         }
     }
 
-    void moveFront(float t)
+    void MoveFront(float t)
     {
         if (!m_paused)
         {
             m_position += t * m_frontVector;
-            computeDirectionVectors();
+            ComputeDirectionVectors();
         }
     }
 
-    void rotateLeft(float degrees)
+    void RotateLeft(float degrees)
     {
         if (!m_paused)
         {
             m_phi += glm::radians(degrees);
-            computeDirectionVectors();
+            ComputeDirectionVectors();
         }
     }
 
-    void rotateUp(float degrees)
+    void RotateUp(float degrees)
     {
         if (!m_paused)
         {
             m_theta += -glm::radians(degrees);
-            computeDirectionVectors();
+            ComputeDirectionVectors();
         }
     }
 
-    void togglePause()
+    void TogglePause()
     {
         m_paused = !m_paused;
     }
 
-    bool isPaused() const
+    bool IsPaused() const
     {
         return m_paused;
     }
 
-    glm::mat4 getViewMatrix()
+    glm::mat4 GetViewMatrix()
     {
         return glm::lookAt(m_position, m_position + m_frontVector, m_upVector);
     }
 
-    bool fixCamLimit(const float& limit)
+    bool FixCamLimit(const float& limit)
     {
         if (m_position.x > limit)
         {
             m_position.x = limit - 1;
             return true;
         }
-        else if (m_position.x < -limit)
+        if (m_position.x < -limit)
         {
             m_position.x = -limit + 1;
             return true;
         }
-        else if (m_position.y > limit)
+        if (m_position.y > limit)
         {
             m_position.y = limit - 1;
             return true;
         }
-        else if (m_position.y < -limit + 200)
+        if (m_position.y < -limit + 200)
         {
             m_position.y = -limit + 201;
             return true;
         }
-        else if (m_position.z > limit)
+        if (m_position.z > limit)
         {
             m_position.z = limit - 1;
             return true;
         }
-        else if (m_position.z < -limit)
+        if (m_position.z < -limit)
         {
             m_position.z = -limit + 1;
             return true;

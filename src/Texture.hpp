@@ -7,12 +7,11 @@ private:
     const img::Image& m_Image;
 
 public:
-    Texture() = default;
-    Texture(img::Image img, unsigned int slot = 0);
+    explicit Texture(img::Image img, unsigned int slot = 0);
 
-    void DeleteTexture();
-    void Bind(unsigned int slot = 0) const;
-    void UnBind(unsigned int slot = 0) const;
+    void        DeleteTexture();
+    void        Bind(unsigned int slot = 0) const;
+    static void UnBind(unsigned int slot = 0);
 
     inline int GetWidth() const { return m_Image.width(); }
     inline int GetHeight() const { return m_Image.height(); }

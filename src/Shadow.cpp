@@ -44,13 +44,13 @@ bool ShadowMapping::InitWindow(unsigned int WindowWidth, unsigned int WindowHeig
     return true;
 }
 
-void ShadowMapping::BindForWriting()
+void ShadowMapping::BindForWriting() const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glViewport(0, 0, m_width, m_height); // Width/height of shadow map
 }
 
-void ShadowMapping::BindForReading(GLenum TextureUnit)
+void ShadowMapping::BindForReading(GLenum TextureUnit) const
 {
     glActiveTexture(TextureUnit);
     glBindTexture(GL_TEXTURE_2D, m_depthTexture);
@@ -66,7 +66,7 @@ void ShadowMapping::UseShader()
     m_shader.use();
 }
 
-void ShadowMapping::setShadow(glm::mat4 MVMatrix)
+void ShadowMapping::SetShadow(glm::mat4 MVMatrix) const
 {
     // std::cout << "setShadow " << glm::value_ptr(MVMatrix) << std::endl;
     glUniformMatrix4fv(this->uMVPLight, 1, GL_FALSE, glm::value_ptr(MVMatrix));

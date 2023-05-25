@@ -28,7 +28,7 @@ void Texture::Bind(unsigned int slot) const
     glBindTexture(GL_TEXTURE_2D, m_RendererID);
 }
 
-void Texture::UnBind(unsigned int slot) const
+void Texture::UnBind(unsigned int slot)
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, 0);

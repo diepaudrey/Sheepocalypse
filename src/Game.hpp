@@ -39,7 +39,7 @@ private:
 
     // OBJLoad
     std::vector<glimac::ShapeVertex>* verticesPtr; // pointer to redirect the good load
-    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/enderdragon.obj");
+    std::vector<glimac::ShapeVertex>  verticesLow    = LoadOBJ("./assets/models/EnderDragon.obj");
     std::vector<glimac::ShapeVertex>  verticesMedium = LoadOBJ("./assets/models/Night_Fury.obj");
     std::vector<glimac::ShapeVertex>  verticesHigh   = LoadOBJ("./assets/models/Drake_Obj.obj");
 
@@ -72,8 +72,8 @@ private:
     void InitEnvironment();
     void InitLight();
     void UpdateLightPlayer();
-    void mouseHandler(p6::Context& ctx);
-    void keyboardHandler(p6::Context& ctx);
+    void MouseHandler(p6::Context& ctx);
+    void KeyboardHandler(p6::Context& ctx);
     void ChangeLOD(BoidsParameters& boidParam);
     // void RenderShadow();
 

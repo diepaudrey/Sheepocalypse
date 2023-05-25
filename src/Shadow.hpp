@@ -17,7 +17,7 @@ public:
     GLint             uMVPLight;
 
 public:
-    ShadowMapping(const p6::Shader& shader)
+    explicit ShadowMapping(const p6::Shader& shader)
         : m_shader(shader)
     {
         this->uMVPLight = glGetUniformLocation(m_shader.id(), "depthMVP");
@@ -26,11 +26,9 @@ public:
 
     bool InitWindow(unsigned int WindowWidth, unsigned int WindowHeight);
 
-    void BindForWriting();
-
-    void BindForReading(GLenum TextureUnit);
-    void UnBind(GLenum TextureUnit);
-    void UseShader();
-
-    void setShadow(glm::mat4 MVMatrix);
+    void        BindForWriting() const;
+    void        BindForReading(GLenum TextureUnit) const;
+    static void UnBind(GLenum TextureUnit);
+    void        UseShader();
+    void        SetShadow(glm::mat4 MVMatrix) const;
 };

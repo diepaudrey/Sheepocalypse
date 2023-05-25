@@ -8,8 +8,8 @@ private:
 public:
     Vao();
 
-    void AddBuffer(const Vbo& vbo);
-    void Bind() const;
-    void UnBind() const;
-    void DeleteVao() const;
+    void        AddBuffer(const Vbo& vbo) const;
+    void        Bind() const;
+    static void UnBind();
+    void        DeleteVao() const;
 };
