@@ -24,30 +24,18 @@ private:
     std::vector<Texture> m_floorTextures = {m_floorDiff};
     Mesh                 m_floorMesh;
 
-    // Sky
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/moutainbis.png")};
-    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/moutainbis2.png")};
+    // Walls
+    Mesh                 m_wall1Mesh;
+    Mesh                 m_wall2Mesh;
+    Mesh                 m_wall3Mesh;
+    Mesh                 m_wall4Mesh;
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.png")};
+    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain2.png")};
     std::vector<Texture> m_skyTextures  = {m_skyTex};
     std::vector<Texture> m_skyTextures2 = {m_skyTex2};
-    Mesh                 m_skyMesh;
-
-    // Walls
-    Mesh m_wall1Mesh;
-    Mesh m_wall2Mesh;
-    Mesh m_wall3Mesh;
-    Mesh m_wall4Mesh;
 
     const float        m_width         = 1200.f;
     const unsigned int m_widthSegments = 200;
-
-    // Arche
-    // std::vector<glimac::ShapeVertex> m_archeVertices;
-
-    // Texture              m_textureD{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Diffuse.png")};
-    // Texture              m_textureH{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Height.png"), 1};
-    // Texture              m_textureS{p6::load_image_buffer("assets/textures/environment/ArchSmall_Moss1-Specular.png"), 2};
-    // std::vector<Texture> m_archeTextures = {m_textureD, m_textureH, m_textureS};
-    // Mesh                 m_archeMesh;
 
     // Mountains
     std::vector<glimac::ShapeVertex> m_mountainVertices;

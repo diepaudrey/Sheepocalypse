@@ -39,8 +39,11 @@ float ShadowCalculation(vec4 vFragPosLight)
 
 vec3 blinnPhong(){
 
-    vec3 wi = normalize(uLightPos_vs);
-    vec3 Li =uLightIntensity;
+    float d = distance(uLightPos_vs, vPosition_vs);
+    vec3 wi = normalize(uLightPos_vs - vPosition_vs);
+    vec3 Li = (uLightIntensity / (d * d) );
+    //vec3 wi = normalize(uLightPos_vs);
+    //vec3 Li =uLightIntensity;
     vec3 N = vNormal_vs;
     vec3 wo = normalize(-vPosition_vs);
     vec3 halfVector =(wo + wi)/2.f;
