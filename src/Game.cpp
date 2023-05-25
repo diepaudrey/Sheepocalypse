@@ -32,28 +32,28 @@ void Game::keyboardHandler(p6::Context& ctx)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        if (m_cam.fixCamLimit(m_limit) == false)
+        if (!m_cam.fixCamLimit(m_limit))
         {
             m_cam.moveFront(ctx.delta_time() * movementStrength);
         }
     };
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        if (m_cam.fixCamLimit(m_limit) == false)
+        if (!m_cam.fixCamLimit(m_limit))
         {
             m_cam.moveFront(-ctx.delta_time() * movementStrength);
         }
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        if (m_cam.fixCamLimit(m_limit) == false)
+        if (!m_cam.fixCamLimit(m_limit))
         {
             m_cam.moveLeft(ctx.delta_time() * movementStrength);
         }
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        if (m_cam.fixCamLimit(m_limit) == false)
+        if (!m_cam.fixCamLimit(m_limit))
         {
             m_cam.moveLeft(-ctx.delta_time() * movementStrength);
         }
