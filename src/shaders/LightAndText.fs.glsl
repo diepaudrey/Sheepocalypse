@@ -19,39 +19,49 @@ uniform int uNumTextures;
 uniform sampler2D uTextures[4];
 uniform sampler2D uDepthTexture;
 
-float ShadowCalculation(vec4 vFragPosLight)
-{
-    float shadow = 0.f;
-    vec3 lightCoords = vFragPosLight.xyz/vFragPosLight.w;
+//float ShadowCalculation(vec4 vFragPosLight)
+//{
+    //float shadow = 0.f;
+    //vec3 lightCoords = vFragPosLight.xyz/vFragPosLight.w;
    // lightCoords = lightCoords * 0.5 + 0.5;
-    if(lightCoords.z <= 1.0f)
-    {
-        lightCoords = (lightCoords + 1.0f) / 2.0f;
-        float closestDepth = texture(uDepthTexture,lightCoords.xy).r;
-        float currentDepth = lightCoords.z;
-        float bias = 0.005f;
-        if(currentDepth > closestDepth + bias){
-            shadow = 1.0f ;
-        }
-    }
-    return shadow;
-}
+    //if(lightCoords.z <= 1.0f)
+    //{
+        //lightCoords = (lightCoords + 1.0f) / 2.0f;
+        //float closestDepth = texture(uDepthTexture,lightCoords.xy).r;
+        //float currentDepth = lightCoords.z;
+        //float bias = 0.005f;
+       // if(currentDepth > closestDepth + bias){
+       //     shadow = 1.0f ;
+       // }
+    //}
+    //return shadow;
+//}
 
+//Utilisation pour DirectionalLight
 vec3 blinnPhong(){
 
-    float d = distance(uLightPos_vs, vPosition_vs);
-    vec3 wi = normalize(uLightPos_vs - vPosition_vs);
-    vec3 Li = (uLightIntensity / (d * d) );
-    //vec3 wi = normalize(uLightPos_vs);
-    //vec3 Li =uLightIntensity;
+    vec3 wi = normalize(uLightPos_vs);
+    vec3 Li =uLightIntensity;
     vec3 N = vNormal_vs;
     vec3 wo = normalize(-vPosition_vs);
     vec3 halfVector =(wo + wi)/2.f;
     // specular = uks , ukd = diffuse , uka = ambient ;
-    return (uKa +  (1.0f - ShadowCalculation(vFragPosLight))*Li*((uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess))));
-    
+    return (uKa + Li*((uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess))));   
 }
 
+//Utilisation pour pointLight
+//vec3 blinnPhong(){
+
+   // float d = distance(uLightPos_vs, vPosition_vs);
+   // vec3 wi = normalize(uLightPos_vs - vPosition_vs);
+    //vec3 Li = (uLightIntensity / (d * d) );
+    //vec3 N = vNormal_vs;
+    //vec3 wo = normalize(-vPosition_vs);
+    //vec3 halfVector =(wo + wi)/2.f;
+    // specular = uks , ukd = diffuse , uka = ambient ;
+    //return (uKa +  (1.0f - ShadowCalculation(vFragPosLight))*Li*((uKD*max(dot(wi,N),0.) + uKs*pow(max(dot(halfVector,N), 0.), uShininess))));
+    
+//}
 
 void main() {
 

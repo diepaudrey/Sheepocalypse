@@ -19,18 +19,13 @@ private:
     std::vector<glimac::ShapeVertex> m_planVertices;
     std::vector<glimac::ShapeVertex> sphere_vertices(float radius, size_t discretization_latitude, size_t discretization_longitude);
 
-    // Floor
-    Texture              m_floorDiff{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
-    std::vector<Texture> m_floorTextures = {m_floorDiff};
-    Mesh                 m_floorMesh;
-
     // Walls
     Mesh                 m_wall1Mesh;
     Mesh                 m_wall2Mesh;
     Mesh                 m_wall3Mesh;
     Mesh                 m_wall4Mesh;
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.png")};
-    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain2.png")};
+    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
+    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain2.jpg")};
     std::vector<Texture> m_skyTextures  = {m_skyTex};
     std::vector<Texture> m_skyTextures2 = {m_skyTex2};
 
@@ -39,9 +34,10 @@ private:
 
     // Mountains
     std::vector<glimac::ShapeVertex> m_mountainVertices;
-    std::vector<Texture>             m_mountainTextures = {m_floorDiff};
     Mesh                             m_mountainMesh;
     Mesh                             m_mountainMesh2;
+    Texture                          m_floorDiff{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
+    std::vector<Texture>             m_mountainTextures = {m_floorDiff};
 
     // Trees
     std::vector<glimac::ShapeVertex> m_treeVertices;

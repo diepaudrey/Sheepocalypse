@@ -117,20 +117,20 @@ void Game::InitEnvironment()
 
 void Game::InitLight()
 {
-    lightP.light          = glm::vec3(45.f, 80.f, 0.f);
-    lightP.lightIntensity = glm::vec3(150000.f); // 5000 pour pointLight, 0.7 pour direLight
+    lightP.light          = glm::vec3(0.f, 600.f, 0.f);
+    lightP.lightIntensity = glm::vec3(1.0f);
     lightP.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP.Ks             = glm::vec3(1.0, 1.0, 1.0);
-    lightP.shininess      = 0.5f;
+    lightP.shininess      = 0.2f;
     lightGame.initLight(lightP);
 
     lightP2.light          = m_cam.getPosition();
-    lightP2.lightIntensity = glm::vec3(100.f); // 100 dir light, 3 dir light
+    lightP2.lightIntensity = glm::vec3(3.f);
     lightP2.Ka             = glm::vec3(0.05, 0.05, 0.05);
     lightP2.Kd             = glm::vec3(1.0, 1.0, 1.0);
     lightP2.Ks             = glm::vec3(1.0, 1.0, 1.0);
-    lightP2.shininess      = 0.5f;
+    lightP2.shininess      = 0.4f;
     lightPlayer.initLight(lightP2);
 }
 

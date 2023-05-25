@@ -5,8 +5,6 @@ void Environment::InitBorders(LightParams& lightP)
 {
     m_planVertices = glimac::plan_vertices(m_width, m_width, m_widthSegments, m_widthSegments);
 
-    m_floorMesh(m_planVertices, m_floorTextures, glm::vec3(0.f, -m_width / 2, 0.f), glm::vec3(0.f), glm::vec3(1.f), lightP);
-
     m_wall1Mesh(m_planVertices, m_skyTextures2, glm::vec3(m_width / 2 - 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(90.f)), glm::vec3(1.f), lightP);
 
     m_wall2Mesh(m_planVertices, m_skyTextures2, glm::vec3(-m_width / 2 + 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(-90.f)), glm::vec3(1.f), lightP);
@@ -20,15 +18,15 @@ void Environment::InitMountain(LightParams& lightP)
 {
     m_mountainVertices = LoadOBJ("./assets/models/Mountain.obj");
 
-    m_mountainMesh(m_mountainVertices, m_mountainTextures, glm::vec3(-300.f, -595.f, 300.f), glm::vec3(0.f), glm::vec3(110.f), lightP);
-    m_mountainMesh2(m_mountainVertices, m_mountainTextures, glm::vec3(300.f, -595.f, -300.f), glm::vec3(0.f), glm::vec3(110.f), lightP);
+    m_mountainMesh(m_mountainVertices, m_mountainTextures, glm::vec3(-300.f, -595.f, 300.f), glm::vec3(0.f), glm::vec3(120.f), lightP);
+    m_mountainMesh2(m_mountainVertices, m_mountainTextures, glm::vec3(300.f, -595.f, -300.f), glm::vec3(0.f), glm::vec3(120.f), lightP);
 }
 
 void Environment::InitTrees(LightParams& lightP)
 {
     m_treeVertices = LoadOBJ("./assets/models/Mountain.obj");
-    m_treeMesh1(m_treeVertices, m_treeTextures, glm::vec3(-300.f, -595.f, -300.f), glm::vec3(0.f), glm::vec3(110.f), lightP);
-    m_treeMesh2(m_treeVertices, m_treeTextures, glm::vec3(300.f, -595.f, 300.f), glm::vec3(0.f), glm::vec3(110.f), lightP);
+    m_treeMesh1(m_treeVertices, m_treeTextures, glm::vec3(-300.f, -595.f, -300.f), glm::vec3(0.f), glm::vec3(120.f), lightP);
+    m_treeMesh2(m_treeVertices, m_treeTextures, glm::vec3(300.f, -595.f, 300.f), glm::vec3(0.f), glm::vec3(120.f), lightP);
 }
 
 void Environment::InitIsland(LightParams& lightP)
@@ -49,7 +47,6 @@ void Environment::InitMeshes(LightParams& lightP)
 
 void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
-    m_floorMesh.Render(viewMatrix, ctx, lightP);
     m_wall1Mesh.Render(viewMatrix, ctx, lightP);
     m_wall2Mesh.Render(viewMatrix, ctx, lightP);
     m_wall3Mesh.Render(viewMatrix, ctx, lightP);
