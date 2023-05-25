@@ -20,7 +20,7 @@ void Boid::avoidEdges(Boid& boid, const float& limit, const float& turnfactor, c
     {
         boid.m_speed.y -= turnfactor;
     }
-    if (boid.getPosition().y - protectedRadius < -limit + 150)
+    if (boid.getPosition().y - protectedRadius < -limit + 200)
     {
         boid.m_speed.y += turnfactor;
     }
