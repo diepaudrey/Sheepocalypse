@@ -150,6 +150,10 @@ Mesh::~Mesh()
 {
     m_vao.DeleteVao();
     m_vbo.DeleteVbo();
+    for (size_t i = 0; i < m_textures.size(); ++i)
+    {
+        m_textures[i].DeleteTexture();
+    }
 }
 
 Mesh& Mesh::operator()(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP)

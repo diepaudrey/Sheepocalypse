@@ -89,4 +89,8 @@ void RendererBoids::DeleteBuffers()
 {
     m_vbo.DeleteVbo();
     m_vao.DeleteVao();
+    for (unsigned int i = 0; i < m_textures.size(); ++i)
+    {
+        m_textures[i].DeleteTexture();
+    }
 }
