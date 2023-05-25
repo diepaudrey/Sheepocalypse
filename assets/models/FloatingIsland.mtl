@@ -1,12 +1,12 @@
-# Blender 3.3.1 MTL File: 'None'
+# Blender 3.3.1 MTL File: 'LargeCaveRock_Blend.blend'
 # www.blender.org
 
 newmtl Large_Cave_Rock
-Ns 0.000000
+Ns 250.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.000000 0.000000 0.000000
+Kd 0.592000 0.592000 0.592000
+Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
-Ni 1.450000
+Ni 1.000000
 d 1.000000
-illum 1
+illum 2

@@ -48,7 +48,7 @@ private:
 
     // Floating Island
     std::vector<glimac::ShapeVertex> m_islandVertices;
-    Texture                          m_islandTexture{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
+    Texture                          m_islandTexture{p6::load_image_buffer("assets/textures/environment/island_diff.jpg")};
     std::vector<Texture>             m_islandTextures = {m_islandTexture};
     Mesh                             m_islandMesh1;
     Mesh                             m_islandMesh2;
