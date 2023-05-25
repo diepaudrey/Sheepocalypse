@@ -21,20 +21,10 @@ private:
 
     void computeDirectionVectors()
     {
-        // m_frontVector
         m_frontVector.x = cos(glm::radians(m_phi)) * cos(glm::radians(m_theta));
         m_frontVector.y = sin(glm::radians(m_theta));
         m_frontVector.z = sin(glm::radians(m_phi)) * cos(glm::radians(m_theta));
-
-        m_frontVector = glm::normalize(m_frontVector);
-
-        // m_leftVector
-        // m_leftVector.x = sin(glm::radians(m_phi + glm::half_pi<float>()));
-        // m_leftVector.y = 0.f;
-        // m_leftVector.z = cos(glm::radians(m_phi + glm::half_pi<float>()));
-
-        // m_upVector
-        // m_upVector = glm::cross(m_frontVector, m_leftVector);
+        m_frontVector   = glm::normalize(m_frontVector);
 
         m_upVector.x = -cos(glm::radians(m_phi)) * sin(glm::radians(m_theta));
         m_upVector.y = cos(glm::radians(m_theta));
@@ -80,7 +70,6 @@ public:
 
     void moveLeft(float t)
     {
-        //  glm::vec3 direction = glm::normalize(glm::cross(m_frontVector, m_upVector));
         if (!m_paused)
         {
             m_position -= t * m_leftVector;
