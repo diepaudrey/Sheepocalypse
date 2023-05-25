@@ -5,7 +5,6 @@
 #include "glm/glm.hpp"
 
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
-    : m_DepthMap(glGetUniformLocation(m_shadowShader.id(), "depthMVP")), m_DepthText(glGetUniformLocation(m_shader.id(), "uDepthTexture"))
 {
     InitBoids();
     InitCamera();
@@ -14,6 +13,8 @@ Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
     InitLight();
     InitEnvironment();
     InitPlayer();
+    // m_DepthMap(glGetUniformLocation(m_shadowShader.id(), "depthMVP"));
+    // m_DepthText(glGetUniformLocation(m_shader.id(), "uDepthTexture"));
     // m_shadowMap.InitWindow(1024, 1024);
 }
 
@@ -158,7 +159,6 @@ void Game::Render(p6::Context& ctx, BoidsParameters& boidParam)
     keyboardHandler(ctx);
     viewMatrix = m_cam.getViewMatrix();
     ChangeLOD(boidParam);
-    boidParam.updateBoidsParam();
     m_boids.updateBoids(ctx, boidParam);
     m_boids.drawBoids(ctx, viewMatrix, *verticesPtr, lightP);
 

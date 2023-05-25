@@ -12,7 +12,6 @@ Light::Light(const p6::Shader& shader)
     m_uShininess      = glGetUniformLocation(this->m_shader.id(), "uShininess");
     m_uLightPos_vs    = glGetUniformLocation(this->m_shader.id(), "uLightPos_vs");
     m_uLightIntensity = glGetUniformLocation(this->m_shader.id(), "uLightIntensity");
-    m_uLightColor     = glGetUniformLocation(this->m_shader.id(), "uLightColor");
 }
 
 void Light::initLight(LightParams light)
@@ -24,7 +23,7 @@ void Light::initLight(LightParams light)
     m_lightIntensity = light.lightIntensity;
 }
 
-void Light::setLight(Light light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix)
+void Light::setLight(const Light& light_boid, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix)
 {
     glm::vec3 uLightPos          = glm::vec4(posLight, 1);
     glm::mat4 NormalMatrix_light = glm::transpose(glm::inverse(MVMatrix));

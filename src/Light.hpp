@@ -25,14 +25,12 @@ public:
     GLint uMVPMatrix;
     GLint uMVMatrix;
     GLint uNormalMatrix;
-
     GLint m_uKa;
     GLint m_uKd;
     GLint m_uKs;
     GLint m_uShininess;
     GLint m_uLightPos_vs;
     GLint m_uLightIntensity;
-    GLint m_uLightColor;
 
     glm::vec3              m_lightIntensity;
     std::vector<glm::vec3> _uKa;
@@ -44,5 +42,5 @@ public:
     explicit Light(const p6::Shader& shader);
 
     void initLight(LightParams lightparams);
-    void setLight(Light light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
+    void setLight(const Light& light, glm::vec3 posLight, glm::mat4 MVMatrix, glm::mat4 MVPMatrix);
 };

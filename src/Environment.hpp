@@ -23,6 +23,7 @@ private:
     Mesh                 m_skyMesh;
     Texture              m_skyText{p6::load_image_buffer("assets/textures/environment/sky.jpg")};
     std::vector<Texture> m_skyTextures = {m_skyText};
+
     // Walls
     Mesh                 m_wall1Mesh;
     Mesh                 m_wall2Mesh;
@@ -62,7 +63,6 @@ private:
     std::vector<glm::vec3> m_verticesCollision;
 
     void InitBorders(LightParams& lightP);
-    void InitArche(LightParams& lightP);
     void InitMountain(LightParams& lightP);
     void InitTrees(LightParams& lightP);
     void InitIsland(LightParams& lightP);
@@ -70,9 +70,8 @@ private:
 public:
     Environment() = default;
     void InitMeshes(LightParams& lightP);
-    void fillVerticesCollision();
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderElements(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
-    void ShadowRender();
+    // void ShadowRender();
 };

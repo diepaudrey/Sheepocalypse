@@ -45,12 +45,10 @@ class Boids {
 private:
     /*Attributes*/
     std::vector<Boid> m_boids;
-    int               m_numBoids;
+    int               m_numBoids{};
 
     float turnfactor = 0.5f;
     float limit      = 500.f;
-
-    /*Methods*/
 
     /*3 rules*/
     static glm::vec3 separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
@@ -62,6 +60,7 @@ private:
 
     // check distance between this boid and the boid in argument
     static bool isTooClose(const Boid& boid1, const Boid& boid2, const float& radius);
+
     // fill a vector of the neighbor
     std::vector<Boid> fillNeighbors(const Boid& boid, BoidsParameters& boidParam);
 

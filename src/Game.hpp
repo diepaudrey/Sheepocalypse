@@ -48,17 +48,21 @@ private:
     float       m_limit = 570.f;
 
     // Shader
-    p6::Shader    m_shader = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
-    Light         lightGame{m_shader};
-    LightParams   lightP;
-    ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
+    p6::Shader m_shader       = p6::load_shader("shaders/3D.vs.glsl", "shaders/LightAndText.fs.glsl");
+    p6::Shader m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
 
-    Light         lightPlayer{m_shader};
-    LightParams   lightP2;
-    p6::Shader    m_shadowShader = p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl");
-    ShadowMapping m_shadowMap{m_shadowShader};
-    GLuint        m_DepthMap;
-    GLuint        m_DepthText;
+    // Light
+    Light       lightGame{m_shader};
+    LightParams lightP;
+    Light       lightPlayer{m_shader};
+    LightParams lightP2;
+
+    // Shadow
+    //  ShadowMapping m_shadowMap{m_shadowShader};
+    //  ShadowMapping shadow{p6::load_shader("shaders/shadow.vs.glsl", "shaders/shadow.fs.glsl")};
+
+    // GLuint        m_DepthMap;
+    // GLuint        m_DepthText;
 
     // Init methods
     void InitBoids();
@@ -71,7 +75,6 @@ private:
     void mouseHandler(p6::Context& ctx);
     void keyboardHandler(p6::Context& ctx);
     void ChangeLOD(BoidsParameters& boidParam);
-    bool playerIsOutBorders();
     // void RenderShadow();
 
 public:

@@ -51,7 +51,7 @@ private:
 
 public:
     Mesh() = default;
-    Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP);
+    Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
     Mesh(const Mesh& mesh);
     ~Mesh();
 

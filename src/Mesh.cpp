@@ -2,7 +2,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtx/transform.hpp"
 
-Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, LightParams& lightP)
+Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : m_position(position), m_rotation(rotation), m_scale(scale)
 {
     InitVertexData(vertices, vertices.size());
@@ -52,7 +52,6 @@ void Mesh::InitUniforms()
 
 void Mesh::InitVao()
 {
-    m_vao;
     m_vbo = Vbo(m_vertices.data(), m_vertices.size());
     m_vao.AddBuffer(m_vbo);
     m_vbo.UnBind();
