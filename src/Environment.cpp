@@ -1,17 +1,20 @@
 #include "Environment.hpp"
 #include "glimac/sphere_vertices.hpp"
+#include "glm/fwd.hpp"
 
 void Environment::InitBorders(LightParams& lightP)
 {
     m_planVertices = glimac::plan_vertices(m_width, m_width, m_widthSegments, m_widthSegments);
 
-    m_wall1Mesh(m_planVertices, m_skyTextures2, glm::vec3(m_width / 2 - 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(90.f)), glm::vec3(1.f), lightP);
+    m_skyMesh(m_planVertices, m_skyTextures, glm::vec3(0.0f, m_width / 2 - 10, 0.0f), glm::vec3(glm::radians(0.f), 0.f, glm::radians(0.f)), glm::vec3(1.f), lightP);
 
-    m_wall2Mesh(m_planVertices, m_skyTextures2, glm::vec3(-m_width / 2 + 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(-90.f)), glm::vec3(1.f), lightP);
+    m_wall1Mesh(m_planVertices, m_wallTextures2, glm::vec3(m_width / 2 - 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(90.f)), glm::vec3(1.f), lightP);
 
-    m_wall3Mesh(m_planVertices, m_skyTextures, glm::vec3(0.f, 0.f, -m_width / 2 + 10), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f), lightP);
+    m_wall2Mesh(m_planVertices, m_wallTextures2, glm::vec3(-m_width / 2 + 10, 0.f, 0.f), glm::vec3(glm::radians(90.f), 0.f, glm::radians(-90.f)), glm::vec3(1.f), lightP);
 
-    m_wall4Mesh(m_planVertices, m_skyTextures, glm::vec3(0.f, 0.f, m_width / 2 - 10), glm::vec3(glm::radians(-90.f), glm::radians(-180.f), 0.f), glm::vec3(1.f), lightP);
+    m_wall3Mesh(m_planVertices, m_wallTextures, glm::vec3(0.f, 0.f, -m_width / 2 + 10), glm::vec3(glm::radians(90.f), 0.f, 0.f), glm::vec3(1.f), lightP);
+
+    m_wall4Mesh(m_planVertices, m_wallTextures, glm::vec3(0.f, 0.f, m_width / 2 - 10), glm::vec3(glm::radians(-90.f), glm::radians(-180.f), 0.f), glm::vec3(1.f), lightP);
 }
 
 void Environment::InitMountain(LightParams& lightP)
@@ -51,6 +54,7 @@ void Environment::RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightPa
     m_wall2Mesh.Render(viewMatrix, ctx, lightP);
     m_wall3Mesh.Render(viewMatrix, ctx, lightP);
     m_wall4Mesh.Render(viewMatrix, ctx, lightP);
+    m_skyMesh.Render(viewMatrix, ctx, lightP);
 }
 
 void Environment::RenderElements(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP)
@@ -72,14 +76,8 @@ void Environment::RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightPar
 
 // void Environment::ShadowRender()
 // {
-//     m_archeMesh.BasicRender();
+//     m_islandMesh1.BasicRender();
+//     m_islandMesh2.BasicRender();
+//     m_islandMesh3.BasicRender();
+//
 // }
-
-void Environment::DeleteTextures()
-{
-    // m_textureS.DeleteTexture();
-    // m_textureD.DeleteTexture();
-    // m_textureH.DeleteTexture();
-    m_floorDiff.DeleteTexture();
-    m_skyTex.DeleteTexture();
-}

@@ -19,15 +19,19 @@ private:
     std::vector<glimac::ShapeVertex> m_planVertices;
     std::vector<glimac::ShapeVertex> sphere_vertices(float radius, size_t discretization_latitude, size_t discretization_longitude);
 
+    // Sky
+    Mesh                 m_skyMesh;
+    Texture              m_skyText{p6::load_image_buffer("assets/textures/environment/sky.jpg")};
+    std::vector<Texture> m_skyTextures = {m_skyText};
     // Walls
     Mesh                 m_wall1Mesh;
     Mesh                 m_wall2Mesh;
     Mesh                 m_wall3Mesh;
     Mesh                 m_wall4Mesh;
-    Texture              m_skyTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
-    Texture              m_skyTex2{p6::load_image_buffer("assets/textures/environment/mountain2.jpg")};
-    std::vector<Texture> m_skyTextures  = {m_skyTex};
-    std::vector<Texture> m_skyTextures2 = {m_skyTex2};
+    Texture              m_wallTex{p6::load_image_buffer("assets/textures/environment/mountain.jpg")};
+    Texture              m_wallTex2{p6::load_image_buffer("assets/textures/environment/mountain2.jpg")};
+    std::vector<Texture> m_wallTextures  = {m_wallTex};
+    std::vector<Texture> m_wallTextures2 = {m_wallTex2};
 
     const float        m_width         = 1200.f;
     const unsigned int m_widthSegments = 200;
@@ -36,8 +40,8 @@ private:
     std::vector<glimac::ShapeVertex> m_mountainVertices;
     Mesh                             m_mountainMesh;
     Mesh                             m_mountainMesh2;
-    Texture                          m_floorDiff{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
-    std::vector<Texture>             m_mountainTextures = {m_floorDiff};
+    Texture                          m_mountainText{p6::load_image_buffer("assets/textures/environment/floor_diff.jpg")};
+    std::vector<Texture>             m_mountainTextures = {m_mountainText};
 
     // Trees
     std::vector<glimac::ShapeVertex> m_treeVertices;
@@ -70,6 +74,5 @@ public:
     void RenderBorders(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderElements(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
     void RenderMeshes(glm::mat4& viewMatrix, p6::Context& ctx, LightParams& lightP);
-    void DeleteTextures();
     void ShadowRender();
 };
