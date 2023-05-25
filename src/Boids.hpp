@@ -28,12 +28,12 @@ struct BoidsParameters {
     {
         ImGui::Begin("Settings");
         ImGui::Text("To change settings please press SPACE");
-        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 50.f);
-        ImGui::SliderFloat("Visual Range", &this->visualRange, 0.f, 50.f);
-        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 5.f);
-        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 5.f);
-        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 5.f);
-        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.f, 30.f);
+        ImGui::SliderFloat("Protected Radius", &this->protectedRadius, 0.f, 200.f);
+        ImGui::SliderFloat("Visual Range", &this->visualRange, 0.f, 200.f);
+        ImGui::SliderFloat("Separation Strength", &this->separationStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Alignment Strength", &this->alignmentStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Cohesion Strength", &this->cohesionStrength, 0.f, 10.f);
+        ImGui::SliderFloat("Max Speed", &this->maxSpeed, 0.f, 200.f);
         ImGui::Checkbox("LoD Low", &lodLow);
         ImGui::Checkbox("LoD Medium", &lodMid);
         ImGui::Checkbox("LoD High", &lodHigh);

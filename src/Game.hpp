@@ -27,12 +27,12 @@ private:
     float                 rotationStrength = 1000.f;
 
     // ImGui
-    float protectedRadius    = 10.f;
-    float visualRange        = 25.f;
-    float separationStrength = 0.1f;
-    float alignmentStrength  = 0.1f;
-    float cohesionStrength   = 0.1f;
-    float maxSpeed           = 20.f;
+    float protectedRadius    = 50.f;
+    float visualRange        = 50.f;
+    float separationStrength = 1.f;
+    float alignmentStrength  = 0.2f;
+    float cohesionStrength   = 0.2f;
+    float maxSpeed           = 30.f;
     bool  lodLow             = true;
     bool  lodMid             = false;
     bool  lodHigh            = false;
