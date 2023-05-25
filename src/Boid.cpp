@@ -20,7 +20,7 @@ void Boid::avoidEdges(Boid& boid, const float& limit, const float& turnfactor, c
     {
         boid.m_speed.y -= turnfactor;
     }
-    if (boid.getPosition().y - protectedRadius < -limit)
+    if (boid.getPosition().y - protectedRadius < -limit + 150)
     {
         boid.m_speed.y += turnfactor;
     }
@@ -47,8 +47,8 @@ void Boid::avoidElement(Boid& boid, const glm::vec3& position, const float& radi
 void Boid::avoidMapElements(Boid& boid, const float& turnfactor)
 {
     Boid::avoidElement(boid, glm::vec3(-150.f, -30.f, -200.f), 300.f, turnfactor);
-    Boid::avoidElement(boid, glm::vec3(180.f, 160.f, 100.f), 200.f, turnfactor);
-    Boid::avoidElement(boid, glm::vec3(-30.f, -150.f, 400.f), 100.f, turnfactor);
+    Boid::avoidElement(boid, glm::vec3(160.f, 220.f, 110.f), 300.f, turnfactor);
+    Boid::avoidElement(boid, glm::vec3(-30.f, -150.f, 400.f), 200.f, turnfactor);
 }
 
 void Boid::applyForce(const glm::vec3& force)
