@@ -129,7 +129,7 @@ void Boids::UpdateBoids(p6::Context& ctx, BoidsParameters& boidParam)
         boid.UpdatePosition(ctx);
         ApplySteeringForces(boid, boidParam, neighbors);
         Boid::AvoidEdges(boid, limit, turnfactor, boidParam.protectedRadius);
-        // Boid::AvoidMapElements(boid, turnfactor);
+        Boid::AvoidMapElements(boid, turnfactor);
         neighbors.clear();
     }
 };

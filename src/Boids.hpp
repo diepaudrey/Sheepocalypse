@@ -36,7 +36,7 @@ private:
     int               m_numBoids{};
 
     float turnfactor = 2.f;
-    float limit      = 300.f;
+    float limit      = 400.f;
 
     /*3 rules*/
     static glm::vec3 Separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);

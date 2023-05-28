@@ -6,7 +6,6 @@
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
 
-
 class Game {
 private:
     // Boids
@@ -24,10 +23,10 @@ private:
 
     // ImGui
     float protectedRadius    = 50.f;
-    float visualRange        = 50.f;
-    float separationStrength = 1.f;
-    float alignmentStrength  = 0.2f;
-    float cohesionStrength   = 0.2f;
+    float visualRange        = 80.f;
+    float separationStrength = 2.f;
+    float alignmentStrength  = 1.f;
+    float cohesionStrength   = 1.f;
     float maxSpeed           = 30.f;
     bool  lodLow             = true;
     bool  lodMid             = false;

@@ -46,9 +46,9 @@ void Boid::AvoidElement(Boid& boid, const glm::vec3& position, const float& radi
 
 void Boid::AvoidMapElements(Boid& boid, const float& turnfactor)
 {
-    Boid::AvoidElement(boid, glm::vec3(-150.f, -30.f, -200.f), 300.f, turnfactor);
-    Boid::AvoidElement(boid, glm::vec3(160.f, 220.f, 110.f), 300.f, turnfactor);
-    Boid::AvoidElement(boid, glm::vec3(-30.f, -150.f, 400.f), 200.f, turnfactor);
+    Boid::AvoidElement(boid, glm::vec3(-150.f, -30.f, -200.f), 150.f, turnfactor * 1.5f);
+    Boid::AvoidElement(boid, glm::vec3(180.f, 160.f, 100.f), 150.f, turnfactor * 1.5f);
+    Boid::AvoidElement(boid, glm::vec3(-30.f, -150.f, 400.f), 150.f, turnfactor * 1.5f);
 }
 
 void Boid::ApplyForce(const glm::vec3& force)
