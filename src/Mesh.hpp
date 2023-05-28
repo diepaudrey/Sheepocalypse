@@ -1,5 +1,9 @@
 #pragma once
-#include "RendererBoids.hpp"
+#include "Light.hpp"
+#include "Texture.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
+#include "p6/p6.h"
 
 class Mesh {
 private:

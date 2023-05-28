@@ -1,20 +1,7 @@
 #pragma once
 
-#include <stddef.h>
-#include <algorithm>
 #include <fstream>
-#include <iostream>
 #include <sstream>
-#include <string>
-#include <vector>
-
-// OpenGL
-#include "glm/ext/matrix_transform.hpp"
-#include "glm/fwd.hpp"
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
-// glimac
 #include "glimac/common.hpp"
 #include "p6/p6.h"
 

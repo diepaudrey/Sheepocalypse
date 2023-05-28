@@ -1,11 +1,6 @@
 #pragma once
-#include "cstddef"
-#include "glimac/common.hpp"
-#include "glimac/cone_vertices.hpp"
-#include "glimac/default_shader.hpp"
+
 #include "glimac/sphere_vertices.hpp"
-#include "glm/ext.hpp"
-#include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 

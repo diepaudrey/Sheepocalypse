@@ -1,24 +1,10 @@
 #pragma once
 #include <glm/gtx/vector_angle.hpp>
-#include <iostream>
-#include <utility>
-#include <vector>
 #include "Boid.hpp"
 #include "Light.hpp"
-#include "Shadow.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
-#include "cstddef"
-#include "glimac/common.hpp"
-#include "glimac/cone_vertices.hpp"
-#include "glimac/default_shader.hpp"
-#include "glm/detail/qualifier.hpp"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/matrix_transform.hpp"
-#include "glm/geometric.hpp"
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
 #include "p6/p6.h"
 
 class RendererBoids {

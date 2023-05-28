@@ -1,8 +1,4 @@
 #include "Game.hpp"
-#include "GLFW/glfw3.h"
-#include "glm/fwd.hpp"
-#include "glm/geometric.hpp"
-#include "glm/glm.hpp"
 
 Game::Game(p6::Context& ctx, BoidsParameters& boidParam)
 {

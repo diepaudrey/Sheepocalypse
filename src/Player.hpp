@@ -1,15 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
-#include "glimac/plan_vertices.hpp"
-#include "glimac/sphere_vertices.hpp"
-#include "glm/ext/scalar_constants.hpp"
-#include "glm/gtc/random.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "img/src/Image.h"
 
 class Player {
 public:

@@ -1,5 +1,6 @@
 #pragma once
 #include "p6/p6.h"
+#include "vender/stb_image/stb_image.hpp"
 
 class Texture {
 private:

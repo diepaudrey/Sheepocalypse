@@ -1,7 +1,4 @@
 #pragma once
-#include <cstdlib>
-#include <vector>
-#include "glm/fwd.hpp"
 #include "p6/p6.h"
 
 class Boid {

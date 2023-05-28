@@ -1,5 +1,4 @@
 #include "RendererBoids.hpp"
-#include "glm/ext/matrix_transform.hpp"
 
 RendererBoids::RendererBoids(std::vector<glimac::ShapeVertex>& vertices, LightParams& lightP)
     : m_vertices(std::move(vertices))
@@ -53,7 +52,6 @@ void RendererBoids::InitializeBoid(LightParams& lightP)
 
 void RendererBoids::RenderBoids(const std::vector<Boid>& m_boids, glm::mat4 viewMatrix, p6::Context& ctx, LightParams& lightP)
 {
-    glimac::bind_default_shader();
     m_shader.use();
 
     glm::mat4 MVMatrix;

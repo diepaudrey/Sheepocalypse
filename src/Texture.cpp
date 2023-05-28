@@ -1,5 +1,4 @@
 #include "Texture.hpp"
-#include "vender/stb_image/stb_image.hpp"
 
 Texture::Texture(img::Image img, unsigned int slot)
     : m_Image(img)

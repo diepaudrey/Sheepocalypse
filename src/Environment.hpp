@@ -1,18 +1,10 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
 #include "Mesh.hpp"
 #include "OBJLoader.hpp"
-// #include "glimac/common.hpp"
-// a trier
-#include "Shadow.hpp"
 #include "glimac/plan_vertices.hpp"
-#include "glimac/sphere_vertices.hpp"
-#include "glm/ext/scalar_constants.hpp"
-#include "glm/gtc/random.hpp"
-#include "glm/gtc/type_ptr.hpp"
 #include "img/src/Image.h"
+// #include "Shadow.hpp"
 
 class Environment {
 private:
@@ -35,7 +27,7 @@ private:
     std::vector<Texture> m_wallTextures2 = {m_wallTex2};
 
     const float        m_width         = 1200.f;
-    const unsigned int m_widthSegments = 200;
+    const unsigned int m_widthSegments = 500;
 
     // Mountains
     std::vector<glimac::ShapeVertex> m_mountainVertices;

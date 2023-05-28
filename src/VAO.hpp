@@ -1,5 +1,9 @@
 #pragma once
+
 #include "VBO.hpp"
+#include "glimac/common.hpp"
+#include "p6/p6.h"
+
 
 class Vao {
 private:

@@ -1,5 +1,4 @@
 #include "VAO.hpp"
-#include "RendererBoids.hpp"
 
 Vao::Vao()
 {

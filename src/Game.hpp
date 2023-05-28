@@ -1,15 +1,11 @@
 #pragma once
-#include <imgui.h>
-#include <iostream>
-#include <vector>
-#include "Boid.hpp"
+
 #include "Boids.hpp"
 #include "Environment.hpp"
-#include "Light.hpp"
 #include "Player.hpp"
-#include "Shadow.hpp"
 #include "glimac/Freefly.hpp"
 #include "p6/p6.h"
+
 
 class Game {
 private:

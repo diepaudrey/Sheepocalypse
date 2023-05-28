@@ -9,13 +9,10 @@ void Boids::DrawBoids(p6::Context& ctx, glm::mat4& viewMatrix, std::vector<glima
 
 void Boids::FillBoids()
 {
-    const float& min = 400.f;
-    const float& max = 400.f;
-
     for (int i = 0; i < m_numBoids; i++)
     {
-        glm::vec3 pos(p6::random::number(-min, max), p6::random::number(-min, max), p6::random::number(-min, max));
-        glm::vec3 speed(p6::random::number(-min, max), p6::random::number(-min, max), p6::random::number(-min, max));
+        glm::vec3 pos(p6::random::number(-limit, limit), p6::random::number(-limit, limit), p6::random::number(-limit, limit));
+        glm::vec3 speed(p6::random::number(-limit, limit), p6::random::number(-limit, limit), p6::random::number(-limit, limit));
         Boid      boid(pos, speed);
 
         m_boids.push_back(boid);
@@ -132,7 +129,7 @@ void Boids::UpdateBoids(p6::Context& ctx, BoidsParameters& boidParam)
         boid.UpdatePosition(ctx);
         ApplySteeringForces(boid, boidParam, neighbors);
         Boid::AvoidEdges(boid, limit, turnfactor, boidParam.protectedRadius);
-        Boid::AvoidMapElements(boid, turnfactor);
+        // Boid::AvoidMapElements(boid, turnfactor);
         neighbors.clear();
     }
 };

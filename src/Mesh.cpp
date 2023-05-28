@@ -1,6 +1,4 @@
 #include "Mesh.hpp"
-#include "glm/fwd.hpp"
-#include "glm/gtx/transform.hpp"
 
 Mesh::Mesh(std::vector<glimac::ShapeVertex>& vertices, std::vector<Texture>& textures, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
     : m_position(position), m_rotation(rotation), m_scale(scale)

@@ -1,17 +1,5 @@
 #pragma once
-#include <imgui.h>
-#include <vcruntime.h>
-#include <cstdlib>
-#include <iterator>
-#include <vector>
-#include "Boid.hpp"
-#include "OBJLoader.hpp"
 #include "RendererBoids.hpp"
-#include "glimac/plan_vertices.hpp"
-#include "glimac/sphere_vertices.hpp"
-#include "glm/fwd.hpp"
-#include "glm/geometric.hpp"
-#include "p6/p6.h"
 
 struct BoidsParameters {
     float protectedRadius;
@@ -47,8 +35,8 @@ private:
     std::vector<Boid> m_boids;
     int               m_numBoids{};
 
-    float turnfactor = 0.5f;
-    float limit      = 500.f;
+    float turnfactor = 2.f;
+    float limit      = 300.f;
 
     /*3 rules*/
     static glm::vec3 Separation(const Boid& boid, BoidsParameters& boidParam, const std::vector<Boid>& neighbors);
